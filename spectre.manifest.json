@@ -1,0 +1,259 @@
+{
+  "$schema": "./packages/spectre-manifest/schema/spectre.manifest.schema.json",
+  "$id": "urn:phcdevworks:spectre:manifest:current",
+  "system": {
+    "name": "Spectre",
+    "version": "0.1.0",
+    "manifestVersion": "0.1",
+    "summary": "Package-level architecture contract for the Spectre ecosystem.",
+    "packageManager": "pnpm",
+    "notes": [
+      "System version is assumed for the v0.1 bootstrap because no published monorepo version was provided.",
+      "Concrete Spectre UI adapter package names were not provided, so they are intentionally omitted from this example registry.",
+      "A governance layer is introduced so the manifest package is not forced into a UI or runtime role."
+    ]
+  },
+  "layers": {
+    "foundation": {
+      "title": "Foundation",
+      "description": "Base design-system packages and adapters that higher layers build on.",
+      "order": 10,
+      "dependsOn": [],
+      "notes": [
+        "Foundation packages should remain reusable, framework-light, and safe for broad consumption."
+      ]
+    },
+    "build": {
+      "title": "Build",
+      "description": "Composition and application-facing packages built on top of the foundation layer.",
+      "order": 20,
+      "dependsOn": ["foundation"]
+    },
+    "governance": {
+      "title": "Governance",
+      "description": "Cross-system tooling and contract packages for validation, scaffolding, CI, docs, and AI workflows.",
+      "order": 30,
+      "dependsOn": [],
+      "notes": [
+        "This layer exists so manifest, validation, and automation concerns stay separate from runtime packages."
+      ]
+    }
+  },
+  "packages": {
+    "@phcdevworks/spectre-tokens": {
+      "role": "design-tokens",
+      "layer": "foundation",
+      "stability": "stable",
+      "description": "Canonical design token source for the Spectre ecosystem.",
+      "exports": ["."],
+      "dependencies": [],
+      "consumers": ["@phcdevworks/spectre-ui"],
+      "allowedTargets": ["external"]
+    },
+    "@phcdevworks/spectre-ui": {
+      "role": "foundation-ui",
+      "layer": "foundation",
+      "stability": "stable",
+      "description": "Core Spectre UI package consumed by higher-level composition packages and adapters.",
+      "exports": ["."],
+      "dependencies": ["@phcdevworks/spectre-tokens"],
+      "consumers": [
+        "@phcdevworks/spectre-components",
+        "@phcdevworks/spectre-shell"
+      ],
+      "allowedTargets": [
+        "package:@phcdevworks/spectre-tokens",
+        "external"
+      ]
+    },
+    "@phcdevworks/spectre-components": {
+      "role": "composed-ui",
+      "layer": "build",
+      "stability": "beta",
+      "description": "Reusable, product-facing component compositions built from Spectre foundation packages.",
+      "exports": ["."],
+      "dependencies": ["@phcdevworks/spectre-ui"],
+      "consumers": ["@phcdevworks/spectre-shell"],
+      "allowedTargets": ["layer:foundation", "external"]
+    },
+    "@phcdevworks/spectre-shell": {
+      "role": "application-shell",
+      "layer": "build",
+      "stability": "beta",
+      "description": "Shell primitives and composition for Spectre application experiences.",
+      "exports": ["."],
+      "dependencies": ["@phcdevworks/spectre-components"],
+      "consumers": [
+        "@phcdevworks/spectre-shell-router",
+        "@phcdevworks/spectre-shell-signals"
+      ],
+      "allowedTargets": [
+        "package:@phcdevworks/spectre-components",
+        "layer:foundation",
+        "external"
+      ]
+    },
+    "@phcdevworks/spectre-shell-router": {
+      "role": "shell-routing",
+      "layer": "build",
+      "stability": "beta",
+      "description": "Routing integration package for Spectre shell-based applications.",
+      "exports": ["."],
+      "dependencies": ["@phcdevworks/spectre-shell"],
+      "consumers": [],
+      "allowedTargets": [
+        "package:@phcdevworks/spectre-shell",
+        "external"
+      ]
+    },
+    "@phcdevworks/spectre-shell-signals": {
+      "role": "shell-state-signals",
+      "layer": "build",
+      "stability": "beta",
+      "description": "Signal-driven state integration package for Spectre shell usage.",
+      "exports": ["."],
+      "dependencies": ["@phcdevworks/spectre-shell"],
+      "consumers": [],
+      "allowedTargets": [
+        "package:@phcdevworks/spectre-shell",
+        "external"
+      ]
+    },
+    "@phcdevworks/spectre-init": {
+      "role": "workspace-scaffolding",
+      "layer": "build",
+      "stability": "beta",
+      "description": "Workspace scaffolding entrypoint for creating new Spectre-aligned projects.",
+      "exports": ["."],
+      "dependencies": [],
+      "consumers": [],
+      "allowedTargets": [
+        "layer:foundation",
+        "layer:build",
+        "external"
+      ],
+      "notes": [
+        "If spectre-init starts consuming governance packages later, it should either move into a tooling/governance layer or receive an explicit boundary exception."
+      ]
+    },
+    "@phcdevworks/spectre-manifest": {
+      "role": "architecture-manifest",
+      "layer": "governance",
+      "stability": "experimental",
+      "description": "Machine-readable contract layer for Spectre tooling, validation, docs, and AI workflows.",
+      "exports": [".", "./schema"],
+      "dependencies": [],
+      "consumers": [],
+      "allowedTargets": ["external"],
+      "notes": [
+        "This package is consumed by tooling and automation first; runtime packages should not depend on it in v0.1."
+      ]
+    }
+  },
+  "rules": {
+    "dependencyDirection": [
+      {
+        "fromLayer": "foundation",
+        "allowedLayers": ["foundation"],
+        "notes": [
+          "Foundation packages may depend on other foundation packages but should not reach upward."
+        ]
+      },
+      {
+        "fromLayer": "build",
+        "allowedLayers": ["foundation", "build"],
+        "notes": [
+          "Build packages compose foundation packages and may collaborate within the build layer."
+        ]
+      },
+      {
+        "fromLayer": "governance",
+        "allowedLayers": ["governance"],
+        "notes": [
+          "Governance packages stay self-contained so they remain safe for CI, docs, and AI workflows."
+        ]
+      }
+    ],
+    "forbiddenImports": [
+      {
+        "source": "layer:foundation",
+        "target": "layer:build",
+        "reason": "Foundation must stay reusable and must not depend on composed application packages."
+      },
+      {
+        "source": "layer:foundation",
+        "target": "layer:governance",
+        "reason": "Foundation should not be coupled to tooling or manifest infrastructure."
+      },
+      {
+        "source": "layer:build",
+        "target": "layer:governance",
+        "reason": "Build packages are runtime-facing in v0.1 and should not import governance tooling."
+      }
+    ],
+    "boundaryConstraints": [
+      {
+        "scope": "layer:foundation",
+        "rule": "Consume and publish through public package exports only; no deep imports across package internals.",
+        "reason": "Keeps foundation packages stable for adapters and higher-level consumers."
+      },
+      {
+        "scope": "layer:build",
+        "rule": "Compose runtime features here, but keep package responsibilities narrow and package-layer ownership explicit.",
+        "reason": "Prevents shell, routing, signals, and components from collapsing into a single grab-bag layer."
+      },
+      {
+        "scope": "package:@phcdevworks/spectre-manifest",
+        "rule": "Model only system-level and package-level governance in v0.1.",
+        "reason": "Avoids premature expansion into tokens, component props, routes, or runtime metadata."
+      }
+    ]
+  },
+  "ai": {
+    "preferredEntrypoints": [
+      {
+        "task": "Read or validate the Spectre architecture contract",
+        "kind": "package",
+        "entrypoint": "@phcdevworks/spectre-manifest",
+        "notes": [
+          "Use this package first for architecture metadata, boundary rules, and safe defaults."
+        ]
+      },
+      {
+        "task": "Scaffold a new Spectre-aligned workspace",
+        "kind": "package",
+        "entrypoint": "@phcdevworks/spectre-init",
+        "notes": [
+          "Prefer the scaffolding package over ad hoc repository copying."
+        ]
+      },
+      {
+        "task": "Compose reusable product-facing UI",
+        "kind": "package",
+        "entrypoint": "@phcdevworks/spectre-components"
+      },
+      {
+        "task": "Build application shell behavior",
+        "kind": "package",
+        "entrypoint": "@phcdevworks/spectre-shell"
+      }
+    ],
+    "generationRules": [
+      "Prefer manifest updates over ad hoc architecture conventions stored only in prose.",
+      "Do not introduce dependencies that violate rules.dependencyDirection or package.allowedTargets.",
+      "Treat declared package exports as the only supported integration surface.",
+      "Assign each package exactly one owning layer and one primary role."
+    ],
+    "usageGuidance": [
+      "Read system, layers, and rules before changing package boundaries or adding new packages.",
+      "Use the packages registry to discover package responsibilities, consumers, and allowed dependency targets.",
+      "When a task touches scaffolding, validation, docs, or AI governance, prefer spectre-manifest or spectre-init before creating bespoke tooling."
+    ],
+    "safeDefaults": [
+      "Default new packages to experimental until stability is declared.",
+      "Default new internal dependencies to disallowed unless an allowed layer or allowed target explicitly permits them.",
+      "Default AI and code generation to public exports only.",
+      "Default the canonical manifest file location to /spectre.manifest.json at the repository root."
+    ]
+  }
+}

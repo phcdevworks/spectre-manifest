@@ -1,0 +1,361 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:phcdevworks:spectre:manifest:schema:0.1",
+  "title": "Spectre Manifest",
+  "description": "Machine-readable architecture contract for the Spectre ecosystem.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["system", "layers", "packages", "rules", "ai"],
+  "properties": {
+    "$schema": {
+      "type": "string",
+      "minLength": 1
+    },
+    "$id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "system": {
+      "$ref": "#/$defs/systemMetadata"
+    },
+    "layers": {
+      "$ref": "#/$defs/layerRegistry"
+    },
+    "packages": {
+      "$ref": "#/$defs/packageRegistry"
+    },
+    "rules": {
+      "$ref": "#/$defs/rules"
+    },
+    "ai": {
+      "$ref": "#/$defs/aiGuidance"
+    }
+  },
+  "$defs": {
+    "notes": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1
+      },
+      "uniqueItems": true
+    },
+    "layerId": {
+      "type": "string",
+      "pattern": "^[a-z][a-z0-9-]*$"
+    },
+    "packageName": {
+      "type": "string",
+      "pattern": "^(@[a-z0-9-]+\\/)?[a-z0-9][a-z0-9-]*$"
+    },
+    "manifestSelector": {
+      "type": "string",
+      "pattern": "^(layer:[a-z][a-z0-9-]*|package:(@[a-z0-9-]+\\/)?[a-z0-9][a-z0-9-]*)$"
+    },
+    "dependencyTargetSelector": {
+      "type": "string",
+      "pattern": "^(layer:[a-z][a-z0-9-]*|package:(@[a-z0-9-]+\\/)?[a-z0-9][a-z0-9-]*|external)$"
+    },
+    "systemMetadata": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["name", "version", "manifestVersion"],
+      "properties": {
+        "name": {
+          "type": "string",
+          "minLength": 1
+        },
+        "version": {
+          "type": "string",
+          "pattern": "^\\d+\\.\\d+\\.\\d+(?:-[0-9A-Za-z.-]+)?$"
+        },
+        "manifestVersion": {
+          "const": "0.1"
+        },
+        "summary": {
+          "type": "string",
+          "minLength": 1
+        },
+        "packageManager": {
+          "type": "string",
+          "minLength": 1
+        },
+        "repository": {
+          "type": "string",
+          "minLength": 1
+        },
+        "notes": {
+          "$ref": "#/$defs/notes"
+        }
+      }
+    },
+    "layerRegistry": {
+      "type": "object",
+      "minProperties": 1,
+      "propertyNames": {
+        "$ref": "#/$defs/layerId"
+      },
+      "additionalProperties": {
+        "$ref": "#/$defs/layerDefinition"
+      }
+    },
+    "layerDefinition": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["title", "description", "order"],
+      "properties": {
+        "title": {
+          "type": "string",
+          "minLength": 1
+        },
+        "description": {
+          "type": "string",
+          "minLength": 1
+        },
+        "order": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "dependsOn": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/layerId"
+          },
+          "uniqueItems": true
+        },
+        "notes": {
+          "$ref": "#/$defs/notes"
+        }
+      }
+    },
+    "packageRegistry": {
+      "type": "object",
+      "minProperties": 1,
+      "propertyNames": {
+        "$ref": "#/$defs/packageName"
+      },
+      "additionalProperties": {
+        "$ref": "#/$defs/packageDefinition"
+      }
+    },
+    "packageDefinition": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["role", "layer", "stability", "description", "exports"],
+      "properties": {
+        "role": {
+          "type": "string",
+          "minLength": 1
+        },
+        "layer": {
+          "$ref": "#/$defs/layerId"
+        },
+        "stability": {
+          "type": "string",
+          "enum": ["experimental", "beta", "stable", "deprecated"]
+        },
+        "description": {
+          "type": "string",
+          "minLength": 1
+        },
+        "exports": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "string",
+            "minLength": 1
+          },
+          "uniqueItems": true
+        },
+        "dependencies": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/packageName"
+          },
+          "uniqueItems": true
+        },
+        "consumers": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/packageName"
+          },
+          "uniqueItems": true
+        },
+        "allowedTargets": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/dependencyTargetSelector"
+          },
+          "uniqueItems": true
+        },
+        "notes": {
+          "$ref": "#/$defs/notes"
+        }
+      }
+    },
+    "rules": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "dependencyDirection",
+        "forbiddenImports",
+        "boundaryConstraints"
+      ],
+      "properties": {
+        "dependencyDirection": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "$ref": "#/$defs/layerDependencyRule"
+          }
+        },
+        "forbiddenImports": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/forbiddenImportRule"
+          }
+        },
+        "boundaryConstraints": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/boundaryConstraint"
+          }
+        }
+      }
+    },
+    "layerDependencyRule": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["fromLayer", "allowedLayers"],
+      "properties": {
+        "fromLayer": {
+          "$ref": "#/$defs/layerId"
+        },
+        "allowedLayers": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "$ref": "#/$defs/layerId"
+          },
+          "uniqueItems": true
+        },
+        "notes": {
+          "$ref": "#/$defs/notes"
+        }
+      }
+    },
+    "forbiddenImportRule": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["source", "target", "reason"],
+      "properties": {
+        "source": {
+          "$ref": "#/$defs/manifestSelector"
+        },
+        "target": {
+          "$ref": "#/$defs/manifestSelector"
+        },
+        "reason": {
+          "type": "string",
+          "minLength": 1
+        }
+      }
+    },
+    "boundaryConstraint": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["scope", "rule", "reason"],
+      "properties": {
+        "scope": {
+          "$ref": "#/$defs/manifestSelector"
+        },
+        "rule": {
+          "type": "string",
+          "minLength": 1
+        },
+        "reason": {
+          "type": "string",
+          "minLength": 1
+        }
+      }
+    },
+    "aiGuidance": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "preferredEntrypoints",
+        "generationRules",
+        "usageGuidance",
+        "safeDefaults"
+      ],
+      "properties": {
+        "preferredEntrypoints": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "$ref": "#/$defs/aiEntrypoint"
+          }
+        },
+        "generationRules": {
+          "$ref": "#/$defs/nonEmptyStringArray"
+        },
+        "usageGuidance": {
+          "$ref": "#/$defs/nonEmptyStringArray"
+        },
+        "safeDefaults": {
+          "$ref": "#/$defs/nonEmptyStringArray"
+        }
+      }
+    },
+    "aiEntrypoint": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["task", "kind", "entrypoint"],
+      "properties": {
+        "task": {
+          "type": "string",
+          "minLength": 1
+        },
+        "kind": {
+          "type": "string",
+          "enum": ["package", "file", "command"]
+        },
+        "entrypoint": {
+          "type": "string",
+          "minLength": 1
+        },
+        "notes": {
+          "$ref": "#/$defs/notes"
+        }
+      },
+      "allOf": [
+        {
+          "if": {
+            "properties": {
+              "kind": {
+                "const": "package"
+              }
+            },
+            "required": ["kind"]
+          },
+          "then": {
+            "properties": {
+              "entrypoint": {
+                "$ref": "#/$defs/packageName"
+              }
+            }
+          }
+        }
+      ]
+    },
+    "nonEmptyStringArray": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "string",
+        "minLength": 1
+      },
+      "uniqueItems": true
+    }
+  }
+}

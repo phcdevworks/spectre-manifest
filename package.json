@@ -1,0 +1,10 @@
+{
+  "name": "spectre-workspace",
+  "private": true,
+  "packageManager": "pnpm@10.6.0",
+  "scripts": {
+    "build": "pnpm --filter @phcdevworks/spectre-manifest build",
+    "typecheck": "pnpm --filter @phcdevworks/spectre-manifest typecheck",
+    "validate:manifest": "pnpm --filter @phcdevworks/spectre-manifest build && pnpm --filter @phcdevworks/spectre-manifest validate -- ../../spectre.manifest.json"
+  }
+}
