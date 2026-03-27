@@ -1,0 +1,40 @@
+###############################################################################
+# Core: normalize line endings + UTF-8
+###############################################################################
+*           text=auto eol=lf
+*.sh        text eol=lf
+*.bash      text eol=lf
+*.zsh       text eol=lf
+*.ts        text eol=lf
+*.js        text eol=lf
+*.json      text eol=lf
+*.md        text eol=lf
+*.yml       text eol=lf
+*.yaml      text eol=lf
+*.toml      text eol=lf
+Dockerfile  text eol=lf
+
+###############################################################################
+# Binary safety
+###############################################################################
+*.png       binary
+*.jpg       binary
+*.jpeg      binary
+*.gif       binary
+*.webp      binary
+*.woff      binary
+*.woff2     binary
+*.zip       binary
+*.gz        binary
+
+###############################################################################
+# Exports
+###############################################################################
+.gitattributes export-ignore
+.gitignore    export-ignore
+.github/      export-ignore
+.vscode/      export-ignore
+.editorconfig export-ignore
+node_modules/ export-ignore
+coverage/     export-ignore
+*.log         export-ignore

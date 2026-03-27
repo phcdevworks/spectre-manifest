@@ -1,7 +1,18 @@
 {
   "name": "@phcdevworks/spectre-manifest",
   "version": "0.1.0",
-  "description": "Machine-readable architecture contract for the Spectre ecosystem.",
+  "description": "Machine-readable contract package for Spectre architecture, package boundaries, and tooling validation.",
+  "keywords": [
+    "phcdevworks",
+    "spectre",
+    "spectre-manifest",
+    "architecture",
+    "contract",
+    "schema",
+    "validation",
+    "tooling"
+  ],
+  "author": "PHCDevworks",
   "license": "MIT",
   "type": "module",
   "engines": {
@@ -22,10 +33,21 @@
     "schema",
     "README.md"
   ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/phcdevworks/spectre-manifest.git"
+  },
+  "bugs": {
+    "url": "https://github.com/phcdevworks/spectre-manifest/issues"
+  },
+  "homepage": "https://github.com/phcdevworks/spectre-manifest#readme",
   "scripts": {
     "build": "tsc -p tsconfig.json",
     "typecheck": "tsc -p tsconfig.json --noEmit",
     "validate": "node dist/cli.js"
+  },
+  "publishConfig": {
+    "access": "public"
   },
   "dependencies": {
     "ajv": "^8.17.1",

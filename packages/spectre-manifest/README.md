@@ -1,6 +1,12 @@
 # @phcdevworks/spectre-manifest
 
-`@phcdevworks/spectre-manifest` is the machine-readable contract layer for the Spectre ecosystem. It captures system structure, package boundaries, dependency rules, and AI/tooling guidance so humans, CLIs, CI, docs generators, and coding agents can work from the same source of truth.
+PHCDevworks maintains `@phcdevworks/spectre-manifest` as the machine-readable
+contract package for the Spectre suite. It captures system structure, package
+boundaries, dependency rules, and tooling guidance so humans, CI, docs
+generators, and coding agents can work from the same source of truth.
+
+🤝 **[Contributing Guide](../../CONTRIBUTING.md)** | 🛡️
+**[Security Policy](../../SECURITY.md)**
 
 ## Scope
 

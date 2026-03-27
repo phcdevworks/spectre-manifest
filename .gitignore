@@ -1,6 +1,14 @@
-node_modules
-dist
-.pnpm-store
-.turbo
-coverage
+# Dependencies
+node_modules/
+.pnpm-store/
+
+# Build artifacts
+dist/
+coverage/
 *.tsbuildinfo
+
+# Tooling caches
+.turbo/
+
+# OS files
+.DS_Store
