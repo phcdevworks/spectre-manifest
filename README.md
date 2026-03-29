@@ -18,9 +18,8 @@ coding agents can all share.
 ## Quick Start
 
 ```sh
-pnpm install
-pnpm build
-pnpm validate:manifest
+corepack pnpm install
+corepack pnpm verify
 ```
 
 ## Related Spectre Packages

@@ -1,14 +1,21 @@
 import { readFile } from "node:fs/promises";
+import { createRequire } from "node:module";
 import { resolve } from "node:path";
 import type { ErrorObject } from "ajv";
-import Ajv2020 from "ajv/dist/2020.js";
-import addFormats from "ajv-formats";
 import { loadManifestSchema } from "./schema.js";
 import type {
   DependencyTargetSelector,
   ManifestSelector,
   SpectreManifest,
 } from "./types.js";
+
+const require = createRequire(import.meta.url);
+const { default: Ajv2020 } = require("ajv/dist/2020.js") as {
+  default: typeof import("ajv/dist/2020.js").default;
+};
+const { default: addFormats } = require("ajv-formats") as {
+  default: typeof import("ajv-formats").default;
+};
 
 export type ManifestValidationIssueKind = "parse" | "schema" | "semantic";
 
@@ -114,8 +121,21 @@ function collectSemanticIssues(
   const layerIds = new Set(Object.keys(manifest.layers));
   const packageNames = new Set(Object.keys(manifest.packages));
   const dependencyRules = new Map<string, Set<string>>();
+  const layerOrderOwners = new Map<number, string>();
 
   for (const [layerId, layer] of Object.entries(manifest.layers)) {
+    const existingOrderOwner = layerOrderOwners.get(layer.order);
+
+    if (existingOrderOwner !== undefined) {
+      issues.push({
+        kind: "semantic",
+        path: `layers.${layerId}.order`,
+        message: `Duplicate layer order "${layer.order}" already used by "${existingOrderOwner}".`,
+      });
+    } else {
+      layerOrderOwners.set(layer.order, layerId);
+    }
+
     for (const [index, dependencyLayer] of (layer.dependsOn ?? []).entries()) {
       if (!layerIds.has(dependencyLayer)) {
         issues.push({
@@ -159,6 +179,16 @@ function collectSemanticIssues(
     }
 
     dependencyRules.set(rule.fromLayer, allowedLayers);
+  }
+
+  for (const layerId of layerIds) {
+    if (!dependencyRules.has(layerId)) {
+      issues.push({
+        kind: "semantic",
+        path: "rules.dependencyDirection",
+        message: `No dependencyDirection rule exists for layer "${layerId}".`,
+      });
+    }
   }
 
   for (const [index, rule] of manifest.rules.forbiddenImports.entries()) {
@@ -248,6 +278,19 @@ function collectSemanticIssues(
           message: `Dependency "${dependencyName}" is not covered by allowedTargets.`,
         });
       }
+
+      const declaredConsumers = manifest.packages[dependencyName]?.consumers;
+
+      if (
+        declaredConsumers !== undefined &&
+        !declaredConsumers.includes(packageName)
+      ) {
+        issues.push({
+          kind: "semantic",
+          path: dependencyPath,
+          message: `Dependency "${dependencyName}" does not declare "${packageName}" as a matching consumer.`,
+        });
+      }
     }
 
     for (const [index, consumerName] of (packageDefinition.consumers ?? []).entries()) {
@@ -256,6 +299,17 @@ function collectSemanticIssues(
           kind: "semantic",
           path: `${packagePath}.consumers[${index}]`,
           message: `Unknown consumer package "${consumerName}".`,
+        });
+        continue;
+      }
+
+      const consumerDependencies = manifest.packages[consumerName]?.dependencies ?? [];
+
+      if (!consumerDependencies.includes(packageName)) {
+        issues.push({
+          kind: "semantic",
+          path: `${packagePath}.consumers[${index}]`,
+          message: `Consumer "${consumerName}" does not declare a matching dependency on "${packageName}".`,
         });
       }
     }
@@ -281,6 +335,25 @@ function collectSemanticIssues(
       });
     }
   }
+
+  issues.push(
+    ...findCycles(
+      "layers",
+      manifest.layers,
+      (layer) => layer.dependsOn ?? [],
+      (layerId) => `layers.${layerId}.dependsOn`,
+      "Layer dependency cycle detected",
+    ),
+  );
+  issues.push(
+    ...findCycles(
+      "packages",
+      manifest.packages,
+      (packageDefinition) => packageDefinition.dependencies ?? [],
+      (packageName) => `packages["${packageName}"].dependencies`,
+      "Package dependency cycle detected",
+    ),
+  );
 
   return issues;
 }
@@ -356,4 +429,66 @@ function matchesAllowedTarget(
 
 function toErrorMessage(error: unknown): string {
   return error instanceof Error ? error.message : String(error);
+}
+
+function findCycles<TNode>(
+  graphName: string,
+  nodes: Record<string, TNode>,
+  getDependencies: (node: TNode) => string[],
+  pathForNode: (nodeId: string) => string,
+  messagePrefix: string,
+): ManifestValidationIssue[] {
+  const issues: ManifestValidationIssue[] = [];
+  const visited = new Set<string>();
+  const active = new Set<string>();
+  const pathStack: string[] = [];
+  const reportedCycles = new Set<string>();
+
+  function visit(nodeId: string): void {
+    if (visited.has(nodeId)) {
+      return;
+    }
+
+    visited.add(nodeId);
+    active.add(nodeId);
+    pathStack.push(nodeId);
+
+    const node = nodes[nodeId];
+
+    if (node !== undefined) {
+      for (const dependencyId of getDependencies(node)) {
+        if (!(dependencyId in nodes)) {
+          continue;
+        }
+
+        if (active.has(dependencyId)) {
+          const cycleStartIndex = pathStack.indexOf(dependencyId);
+          const cycle = [...pathStack.slice(cycleStartIndex), dependencyId];
+          const cycleKey = `${graphName}:${cycle.join("->")}`;
+
+          if (!reportedCycles.has(cycleKey)) {
+            reportedCycles.add(cycleKey);
+            issues.push({
+              kind: "semantic",
+              path: pathForNode(nodeId),
+              message: `${messagePrefix}: ${cycle.join(" -> ")}.`,
+            });
+          }
+
+          continue;
+        }
+
+        visit(dependencyId);
+      }
+    }
+
+    pathStack.pop();
+    active.delete(nodeId);
+  }
+
+  for (const nodeId of Object.keys(nodes)) {
+    visit(nodeId);
+  }
+
+  return issues;
 }

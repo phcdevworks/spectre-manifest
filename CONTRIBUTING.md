@@ -17,10 +17,11 @@ It does not own design tokens, UI implementation, or framework adapters.
 
 ## Development Setup
 
-1. Install dependencies with `pnpm install`.
-2. Build the package with `pnpm build`.
-3. Type-check with `pnpm typecheck`.
-4. Validate the root manifest with `pnpm validate:manifest`.
+1. Install dependencies with `corepack pnpm install`.
+2. Build the package with `corepack pnpm build`.
+3. Type-check with `corepack pnpm typecheck`.
+4. Run the automated tests with `corepack pnpm test`.
+5. Validate the root manifest with `corepack pnpm validate:manifest`.
 
 ## Contribution Guidelines
 
@@ -35,10 +36,11 @@ It does not own design tokens, UI implementation, or framework adapters.
 ## Pull Request Checklist
 
 1. Keep the change focused.
-2. Run `pnpm build`.
-3. Run `pnpm typecheck`.
-4. Run `pnpm validate:manifest`.
-5. Update docs when public contract behavior changes.
+2. Run `corepack pnpm build`.
+3. Run `corepack pnpm typecheck`.
+4. Run `corepack pnpm test`.
+5. Run `corepack pnpm validate:manifest`.
+6. Update docs when public contract behavior changes.
 
 ## Code of Conduct
 
