@@ -1,10 +1,8 @@
-# @phcdevworks/spectre-manifest
+# @phcdevworks/spectre-manifest [![GitHub issues](https://img.shields.io/github/issues/phcdevworks/spectre-manifest)](https://github.com/phcdevworks/spectre-manifest/issues) [![GitHub pulls](https://img.shields.io/github/issues-pr/phcdevworks/spectre-manifest)](https://github.com/phcdevworks/spectre-manifest/pulls) [![License](https://img.shields.io/badge/license-MIT-green.svg)](https://opensource.org/licenses/MIT)
 
-[![npm version](https://img.shields.io/npm/v/@phcdevworks/spectre-manifest)](https://www.npmjs.com/package/@phcdevworks/spectre-manifest)
-[![License: MIT](https://img.shields.io/badge/license-MIT-green.svg)](https://opensource.org/licenses/MIT)
-[![Node.js](https://img.shields.io/badge/node-%3E%3D20-339933.svg)](https://nodejs.org/)
+`@phcdevworks/spectre-manifest` is the machine-readable contract package for the Spectre system for tooling, validation, scaffolding, documentation, and architecture workflows.
 
-`@phcdevworks/spectre-manifest` is the machine-readable contract layer for the Spectre ecosystem. It describes system metadata, official package and layer boundaries, dependency rules, and tooling guidance so scaffolding, validation, documentation, and AI-assisted workflows can consume Spectre consistently without becoming part of the application runtime.
+Maintained by PHCDevworks, it describes system metadata, official package roles, layer boundaries, dependency rules, AI guidance, and preferred tooling entrypoints consumed across the Spectre ecosystem. It keeps architecture intent explicit so `spectre-init`, CI, docs generation, and AI-assisted workflows can reason about Spectre safely without becoming part of the core runtime.
 
 [Contributing](../../CONTRIBUTING.md) | [Changelog](https://github.com/phcdevworks/spectre-manifest/releases) | [Security Policy](../../SECURITY.md)
 
@@ -18,42 +16,42 @@
 
 ## Installation
 
-```sh
+```bash
 npm install @phcdevworks/spectre-manifest
 ```
 
 ## Quick start
 
-Import the package when you need to read, validate, or reason about a Spectre manifest in tooling, CI, or code generation workflows.
+### Manifest usage
+
+Load a manifest object in JavaScript or TypeScript:
 
 ```ts
 import type { SpectreManifest } from "@phcdevworks/spectre-manifest";
-import { validateManifest } from "@phcdevworks/spectre-manifest";
 import manifest from "./spectre.manifest.json" with { type: "json" };
 
-const typedManifest = manifest as SpectreManifest;
-
-const result = validateManifest(typedManifest);
-
-if (!result.valid) {
-  console.error(result.issues);
-}
+const spectreManifest = manifest as SpectreManifest;
 ```
 
-Validate a manifest file in CI or local tooling:
+### Validation usage
+
+Validate a manifest object or manifest file:
 
 ```ts
-import { validateManifestFile } from "@phcdevworks/spectre-manifest";
+import { validateManifest, validateManifestFile } from "@phcdevworks/spectre-manifest";
+import manifest from "./spectre.manifest.json" with { type: "json" };
 
-const result = await validateManifestFile("spectre.manifest.json");
+const objectResult = validateManifest(manifest);
+const fileResult = await validateManifestFile("spectre.manifest.json");
 
-if (!result.valid) {
-  process.exitCode = 1;
-  console.error(result.issues);
+if (!objectResult.valid || !fileResult.valid) {
+  console.error(objectResult.issues, fileResult.issues);
 }
 ```
 
-Read top-level contract sections after validation:
+### Contract inspection
+
+Read top-level sections when you need system metadata, package registry data, or rules for downstream tooling:
 
 ```ts
 import { validateManifestFile } from "@phcdevworks/spectre-manifest";
@@ -61,11 +59,13 @@ import { validateManifestFile } from "@phcdevworks/spectre-manifest";
 const result = await validateManifestFile("spectre.manifest.json");
 
 if (result.valid && result.manifest) {
-  console.log(result.manifest.system.name);
-  console.log(Object.keys(result.manifest.packages));
-  console.log(result.manifest.rules.dependencyDirection);
+  console.log(result.manifest.system);
+  console.log(result.manifest.packages["@phcdevworks/spectre-ui"]);
+  console.log(result.manifest.rules);
 }
 ```
+
+Use the manifest when you need package and layer metadata, dependency constraints, or AI/tooling guidance. Do not treat it as a runtime source for UI rendering, styling, or application behavior.
 
 ## What this package owns
 
@@ -75,62 +75,122 @@ if (result.valid && result.manifest) {
 - AI and tooling guidance metadata
 - Validation schema, types, and utilities
 
+### Contract model
+
+The manifest is organized around these top-level sections:
+
+- `system`
+- `layers`
+- `packages`
+- `rules`
+- `ai`
+
+### Primary consumers
+
+This package is intended for:
+
+- `@phcdevworks/spectre-init`
+- CI validation and repository checks
+- Documentation generation
+- AI and code generation workflows
+- Architecture and governance tooling
+
 ## What this package does not own
 
 - Visual tokens
+  Those belong in [`@phcdevworks/spectre-tokens`](https://github.com/phcdevworks/spectre-tokens).
 - Styling implementation
+  That belongs in [`@phcdevworks/spectre-ui`](https://github.com/phcdevworks/spectre-ui) and related downstream packages.
 - Framework-specific adapters
+  Adapter packages translate Spectre contracts for specific frameworks and runtimes.
 - Runtime shell behavior
-- Component structure
-- Full application state or app-level configuration
+  That belongs in shell and application-layer packages.
+- Component structure or implementation
+  Component composition belongs in downstream UI and build packages.
+- Full application state, routing, or app-specific configuration
+  The manifest describes ecosystem structure, not every runtime detail in an application.
 
 ## Package exports / API surface
 
-The initial public surface is intentionally small and focused on contract authoring and validation.
+### Root package
 
-- `SpectreManifest` and related TypeScript contract types from the root package
-- `validateManifest(manifest)` for in-memory validation
-- `validateManifestFile(path)` for file-based validation
-- `formatManifestValidationIssues(issues)` for readable validator output
-- `loadManifestSchema()` and `manifestSchemaPath` for schema-aware tooling
-- `@phcdevworks/spectre-manifest/schema` for direct schema consumers
+`@phcdevworks/spectre-manifest` exports:
+
+- `validateManifest()`
+- `validateManifestFile()`
+- `formatManifestValidationIssues()`
+- `loadManifestSchema()`
+- `manifestSchemaPath`
+- TypeScript types including `SpectreManifest`, `SpectreSystemMetadata`, `SpectrePackageDefinition`, `SpectreLayerDefinition`, `ManifestRules`, and `ManifestAiGuidance`
+
+Example:
+
+```ts
+import {
+  formatManifestValidationIssues,
+  validateManifestFile,
+} from "@phcdevworks/spectre-manifest";
+
+const result = await validateManifestFile("spectre.manifest.json");
+
+if (!result.valid) {
+  console.error(formatManifestValidationIssues(result.issues));
+}
+```
+
+### Schema export
+
+- `@phcdevworks/spectre-manifest/schema`
 
 ## Relationship to the rest of Spectre
 
-Spectre packages have distinct responsibilities, and this package exists to document those boundaries rather than replace them.
+Spectre keeps responsibilities separate:
 
-- `@phcdevworks/spectre-tokens` defines the visual language and token primitives
-- `@phcdevworks/spectre-ui` implements styling and UI-level contracts
-- Spectre UI adapters deliver framework-specific integration for consuming UI packages
-- Build-layer packages such as `@phcdevworks/spectre-components`, `@phcdevworks/spectre-shell`, `@phcdevworks/spectre-shell-router`, `@phcdevworks/spectre-shell-signals`, and `@phcdevworks/spectre-init` power application assembly, routing, signals, and project scaffolding
-- `@phcdevworks/spectre-manifest` describes how the system is structured and how tooling, CI, documentation generators, and AI workflows should consume that structure safely
+- [`@phcdevworks/spectre-tokens`](https://github.com/phcdevworks/spectre-tokens) defines visual language, semantic roles, and token contracts
+- [`@phcdevworks/spectre-ui`](https://github.com/phcdevworks/spectre-ui) implements shared styling contracts and reusable UI-level behavior
+- Spectre UI adapters deliver framework-specific usage for those contracts
+- Build-layer packages such as `@phcdevworks/spectre-components`, `@phcdevworks/spectre-shell`, `@phcdevworks/spectre-shell-router`, `@phcdevworks/spectre-shell-signals`, and `@phcdevworks/spectre-init` power application assembly and delivery
+- [`@phcdevworks/spectre-manifest`](https://github.com/phcdevworks/spectre-manifest) describes how the system is structured and how tooling, CI, docs generators, and AI workflows should consume that structure safely
 
-Core runtime packages should be described by the manifest, not built around importing it directly. This package is cross-system infrastructure for governance and tooling, not a runtime dependency for rendering or application behavior.
+That separation keeps package responsibilities explicit while letting Spectre tooling reason about boundaries, allowed dependencies, and preferred entrypoints without moving those concerns into runtime packages.
 
 ## Development
 
-Common commands:
+Build the package:
 
-```sh
+```bash
 pnpm build
+```
+
+Run validation and checks:
+
+```bash
 pnpm test
 pnpm typecheck
 pnpm validate:manifest
 ```
 
-Likely areas to update when the contract changes:
+Key source areas:
 
-- `src/` for public types, schema helpers, and validators
+- `src/` for public types, schema helpers, validators, and package entry points
 - `schema/` for the published JSON Schema
-- `examples/` or the repository manifest sample for tooling-facing examples when added
-- `README.md` for package-level contract and usage documentation
+- `examples/` for manifest usage examples when present
+- `README.md` for package documentation
 
 ## Contributing
 
-Contributions should preserve the package's role as a stable contract and tooling boundary for the wider Spectre ecosystem. Treat schema changes, validation behavior, and exported types as public surface area, and update documentation alongside any contract change.
+PHCDevworks maintains this package as part of the Spectre system.
 
-See the [Contributing Guide](../../CONTRIBUTING.md) for repository workflow and expectations.
+When contributing:
+
+- treat schema, validation behavior, and exported types as public contract surface
+- keep terminology aligned with the rest of the Spectre suite
+- prefer additive, backward-compatible contract evolution when possible
+- update documentation whenever contract behavior changes
+- run `pnpm build`, `pnpm typecheck`, and `pnpm validate:manifest` before opening a pull request
+
+See [../../CONTRIBUTING.md](../../CONTRIBUTING.md) for the full workflow.
 
 ## License
 
-[MIT](https://opensource.org/licenses/MIT)
+MIT © PHCDevworks. See [MIT License](https://opensource.org/licenses/MIT).
