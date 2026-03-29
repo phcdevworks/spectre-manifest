@@ -58,8 +58,7 @@
       "exports": ["."],
       "dependencies": ["@phcdevworks/spectre-tokens"],
       "consumers": [
-        "@phcdevworks/spectre-components",
-        "@phcdevworks/spectre-shell"
+        "@phcdevworks/spectre-components"
       ],
       "allowedTargets": [
         "package:@phcdevworks/spectre-tokens",

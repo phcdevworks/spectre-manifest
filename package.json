@@ -8,8 +8,10 @@
     "node": ">=20"
   },
   "scripts": {
-    "build": "pnpm --filter @phcdevworks/spectre-manifest build",
-    "typecheck": "pnpm --filter @phcdevworks/spectre-manifest typecheck",
-    "validate:manifest": "pnpm --filter @phcdevworks/spectre-manifest build && pnpm --filter @phcdevworks/spectre-manifest validate -- ../../spectre.manifest.json"
+    "build": "corepack pnpm --filter @phcdevworks/spectre-manifest build",
+    "typecheck": "corepack pnpm --filter @phcdevworks/spectre-manifest typecheck",
+    "test": "corepack pnpm --filter @phcdevworks/spectre-manifest build && corepack pnpm --filter @phcdevworks/spectre-manifest test",
+    "validate:manifest": "corepack pnpm --filter @phcdevworks/spectre-manifest build && corepack pnpm --filter @phcdevworks/spectre-manifest validate ../../spectre.manifest.json",
+    "verify": "corepack pnpm build && corepack pnpm typecheck && corepack pnpm test && corepack pnpm validate:manifest"
   }
 }
