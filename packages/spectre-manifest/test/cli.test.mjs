@@ -31,7 +31,8 @@ test("CLI returns non-zero and JSON issues for an invalid manifest", async () =>
     invalidManifestPath,
     JSON.stringify(
       {
-        $schema: "./packages/spectre-manifest/schema/spectre.manifest.schema.json",
+        $schema:
+          "./packages/spectre-manifest/schema/spectre.manifest.schema.json",
         system: {
           name: "Broken Spectre",
           version: "0.1.0",

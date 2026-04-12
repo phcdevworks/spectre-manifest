@@ -380,12 +380,12 @@ function validateManifestSelector(
     return layerIds.has(layerId)
       ? []
       : [
-          {
-            kind: "semantic",
-            path,
-            message: `Unknown layer selector "${selector}".`,
-          },
-        ];
+        {
+          kind: "semantic",
+          path,
+          message: `Unknown layer selector "${selector}".`,
+        },
+      ];
   }
 
   const packageName = selector.slice("package:".length);
@@ -393,12 +393,12 @@ function validateManifestSelector(
   return packageNames.has(packageName)
     ? []
     : [
-        {
-          kind: "semantic",
-          path,
-          message: `Unknown package selector "${selector}".`,
-        },
-      ];
+      {
+        kind: "semantic",
+        path,
+        message: `Unknown package selector "${selector}".`,
+      },
+    ];
 }
 
 function validateDependencyTargetSelector(

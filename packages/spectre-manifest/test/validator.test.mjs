@@ -2,10 +2,7 @@ import test from "node:test";
 import assert from "node:assert/strict";
 import { readFile } from "node:fs/promises";
 import { resolve } from "node:path";
-import {
-  validateManifest,
-  validateManifestFile,
-} from "../dist/index.js";
+import { validateManifest, validateManifestFile } from "../dist/index.js";
 
 const rootManifestPath = resolve(process.cwd(), "../../spectre.manifest.json");
 const rootManifest = JSON.parse(await readFile(rootManifestPath, "utf8"));
