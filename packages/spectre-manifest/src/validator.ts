@@ -9,6 +9,8 @@ import type {
   SpectreManifest,
 } from "./types.js";
 
+// ajv and ajv-formats ship as CJS only; createRequire is the correct ESM workaround
+// under NodeNext module resolution, which enforces the exports map and blocks bare subpath imports.
 const require = createRequire(import.meta.url);
 const { default: Ajv2020 } = require("ajv/dist/2020.js") as {
   default: typeof import("ajv/dist/2020.js").default;
