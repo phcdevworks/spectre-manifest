@@ -21,8 +21,8 @@ importers:
         specifier: ^20.0.0
         version: 20.19.39
       typescript:
-        specifier: 5.8.2
-        version: 5.8.2
+        specifier: 6.0.3
+        version: 6.0.3
 
 packages:
 
@@ -53,8 +53,8 @@ packages:
     resolution: {integrity: sha512-Xf0nWe6RseziFMu+Ap9biiUbmplq6S9/p+7w7YXP/JBHhrUDDUhwa+vANyubuqfZWTveU//DYVGsDG7RKL/vEw==}
     engines: {node: '>=0.10.0'}
 
-  typescript@5.8.2:
-    resolution: {integrity: sha512-aJn6wq13/afZp/jT9QZmwEjDqqvSGp1VT5GVg+f/t6/oVyrgXM6BY1h9BRh/O5p3PlUPAe+WuiEZOmb/49RqoQ==}
+  typescript@6.0.3:
+    resolution: {integrity: sha512-y2TvuxSZPDyQakkFRPZHKFm+KKVqIisdg9/CZwm9ftvKXLP8NRWj38/ODjNbr43SsoXqNuAisEf1GdCxqWcdBw==}
     engines: {node: '>=14.17'}
     hasBin: true
 
@@ -86,6 +86,6 @@ snapshots:
 
   require-from-string@2.0.2: {}
 
-  typescript@5.8.2: {}
+  typescript@6.0.3: {}
 
   undici-types@6.21.0: {}
