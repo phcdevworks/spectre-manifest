@@ -3,7 +3,7 @@
   "private": true,
   "description": "Workspace for the Spectre manifest package and schema tooling.",
   "author": "PHCDevworks",
-  "packageManager": "pnpm@10.33.2",
+  "packageManager": "pnpm@10.33.3",
   "engines": {
     "node": ">=20"
   },
