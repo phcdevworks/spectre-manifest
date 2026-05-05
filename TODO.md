@@ -22,11 +22,9 @@ coverage, CI, and downstream validation tooling.
   - Each entry declares the package's public contract surface
   - Validation confirms all entries are structurally correct
 
-- Add GitHub Actions CI pipeline File targets:
-  - `.github/workflows/ci.yml`
-  - `README.md` (badge) Acceptance criteria:
-  - CI runs `npm run validate:manifest` and `npm run verify` on push and PR
-  - Badge visible in README
+- [x] Add GitHub Actions CI pipeline — `.github/workflows/ci.yml` in place,
+  runs `pnpm verify` on push and PR across Node 20 and 22. Add README badge
+  when repository is public.
 
 - Build downstream consumer validation tooling File targets:
   - `packages/` (new validation package or script)

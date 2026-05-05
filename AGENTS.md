@@ -19,6 +19,7 @@ to consume.
 ## Validation Flow
 
 1. Update schema, docs, or workspace metadata as needed.
-2. Run `pnpm build`.
-3. Run `pnpm typecheck`.
-4. Run `pnpm validate:manifest`.
+2. Run `corepack pnpm build`.
+3. Run `corepack pnpm typecheck`.
+4. Run `corepack pnpm test`.
+5. Run `corepack pnpm validate:manifest`.

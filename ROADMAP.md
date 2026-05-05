@@ -27,13 +27,8 @@ logic.
 
 - Manifest schema versioning is not yet formalized — there is no declared schema
   version that downstream consumers can reference to confirm compatibility.
-- Contract coverage is not yet complete across all Spectre packages —
-  `spectre-shell`, `spectre-shell-router`, and `spectre-shell-signals` are not
-  yet represented in the manifest.
-- There is no CI pipeline enforcing manifest validation on every push.
 - Downstream consumers have no tooling to validate themselves against the
   manifest contract without manual coordination.
-- No ROADMAP.md or TODO.md has existed until now, making prioritization opaque.
 
 ## 2. Roadmap
 
@@ -86,25 +81,11 @@ Risk if skipped
 
 - Shell and component packages operate outside the contract system
 
-### P0.3 CI Pipeline
+### P0.3 CI Pipeline ✓ Complete
 
-Objective Add a CI pipeline that runs manifest validation on every push.
-
-Why it matters Without CI, manifest drift goes undetected until a release-time
-audit.
-
-Suggested deliverables
-
-- GitHub Actions workflow running `npm run validate:manifest` and `npm run verify`
-- Badge in `README.md`
-
-Dependency notes
-
-- No blocking dependencies
-
-Risk if skipped
-
-- Manifest drift accumulates silently between releases
+GitHub Actions workflow at `.github/workflows/ci.yml` runs `pnpm verify` (build,
+typecheck, test, validate:manifest) on every push and pull request against Node
+20 and 22. Add a CI badge to `README.md` when the repository is public.
 
 ### P0.4 Downstream Consumer Validation Tooling
 
