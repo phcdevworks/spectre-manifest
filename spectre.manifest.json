@@ -1,6 +1,7 @@
 {
   "$schema": "./packages/spectre-manifest/schema/spectre.manifest.schema.json",
   "$id": "urn:phcdevworks:spectre:manifest:current",
+  "schemaVersion": "0.1",
   "system": {
     "name": "Spectre",
     "version": "0.1.0",
@@ -57,13 +58,8 @@
       "description": "Core Spectre UI package consumed by higher-level composition packages and adapters.",
       "exports": ["."],
       "dependencies": ["@phcdevworks/spectre-tokens"],
-      "consumers": [
-        "@phcdevworks/spectre-components"
-      ],
-      "allowedTargets": [
-        "package:@phcdevworks/spectre-tokens",
-        "external"
-      ]
+      "consumers": ["@phcdevworks/spectre-components"],
+      "allowedTargets": ["package:@phcdevworks/spectre-tokens", "external"]
     },
     "@phcdevworks/spectre-components": {
       "role": "composed-ui",
@@ -100,10 +96,7 @@
       "exports": ["."],
       "dependencies": ["@phcdevworks/spectre-shell"],
       "consumers": [],
-      "allowedTargets": [
-        "package:@phcdevworks/spectre-shell",
-        "external"
-      ]
+      "allowedTargets": ["package:@phcdevworks/spectre-shell", "external"]
     },
     "@phcdevworks/spectre-shell-signals": {
       "role": "shell-state-signals",
@@ -113,10 +106,7 @@
       "exports": ["."],
       "dependencies": ["@phcdevworks/spectre-shell"],
       "consumers": [],
-      "allowedTargets": [
-        "package:@phcdevworks/spectre-shell",
-        "external"
-      ]
+      "allowedTargets": ["package:@phcdevworks/spectre-shell", "external"]
     },
     "@phcdevworks/spectre-init": {
       "role": "workspace-scaffolding",
@@ -126,11 +116,7 @@
       "exports": ["."],
       "dependencies": [],
       "consumers": [],
-      "allowedTargets": [
-        "layer:foundation",
-        "layer:build",
-        "external"
-      ],
+      "allowedTargets": ["layer:foundation", "layer:build", "external"],
       "notes": [
         "If spectre-init starts consuming governance packages later, it should either move into a tooling/governance layer or receive an explicit boundary exception."
       ]
