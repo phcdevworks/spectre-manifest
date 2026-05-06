@@ -11,6 +11,7 @@ export type AiEntrypointKind = "package" | "file" | "command";
 export interface SpectreManifest {
   $schema?: string;
   $id?: string;
+  schemaVersion: ManifestVersion;
   system: SpectreSystemMetadata;
   layers: LayerRegistry;
   packages: PackageRegistry;

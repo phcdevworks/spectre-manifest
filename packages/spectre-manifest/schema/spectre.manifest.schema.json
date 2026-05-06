@@ -5,7 +5,7 @@
   "description": "Machine-readable architecture contract for the Spectre ecosystem.",
   "type": "object",
   "additionalProperties": false,
-  "required": ["system", "layers", "packages", "rules", "ai"],
+  "required": ["schemaVersion", "system", "layers", "packages", "rules", "ai"],
   "properties": {
     "$schema": {
       "type": "string",
@@ -14,6 +14,9 @@
     "$id": {
       "type": "string",
       "minLength": 1
+    },
+    "schemaVersion": {
+      "const": "0.1"
     },
     "system": {
       "$ref": "#/$defs/systemMetadata"

@@ -7,6 +7,7 @@ Workspace for the Spectre manifest package and ecosystem contract. The manifest 
 ## Capabilities
 
 - Defines the official Spectre package and layer map.
+- Requires a root `schemaVersion` so tools know which manifest contract they validated.
 - Models allowed and forbidden dependency relationships.
 - Publishes a JSON schema and TypeScript validation utilities.
 - Validates schema rules plus semantic concerns such as duplicate layer order and dependency cycles.
