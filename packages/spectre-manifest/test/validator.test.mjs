@@ -61,6 +61,17 @@ test("rejects manifest with missing required top-level fields", () => {
   assert.ok(result.issues.some((i) => i.kind === "schema"));
 });
 
+test("rejects unrecognized schemaVersion values", () => {
+  const manifest = structuredClone(rootManifest);
+
+  manifest.schemaVersion = "999.0";
+
+  const result = validateManifest(manifest);
+
+  assert.equal(result.valid, false);
+  assert.ok(result.issues.some((i) => i.kind === "schema"));
+});
+
 // --- semantic errors: layers ---
 
 test("rejects duplicate layer order values", () => {
