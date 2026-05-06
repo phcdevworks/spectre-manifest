@@ -12,6 +12,7 @@
     "typecheck": "corepack pnpm --filter @phcdevworks/spectre-manifest typecheck",
     "test": "corepack pnpm --filter @phcdevworks/spectre-manifest build && corepack pnpm --filter @phcdevworks/spectre-manifest test",
     "validate:manifest": "corepack pnpm --filter @phcdevworks/spectre-manifest build && corepack pnpm --filter @phcdevworks/spectre-manifest validate ../../spectre.manifest.json",
+    "check": "corepack pnpm verify",
     "verify": "corepack pnpm build && corepack pnpm typecheck && corepack pnpm test && corepack pnpm validate:manifest"
   }
 }

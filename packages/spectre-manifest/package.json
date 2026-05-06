@@ -45,7 +45,8 @@
     "build": "tsc -p tsconfig.json",
     "test": "node --test test/**/*.test.mjs",
     "typecheck": "tsc -p tsconfig.json --noEmit",
-    "validate": "node dist/cli.js"
+    "validate": "node dist/cli.js",
+    "check": "npm run typecheck && npm run build && npm test"
   },
   "publishConfig": {
     "access": "public"

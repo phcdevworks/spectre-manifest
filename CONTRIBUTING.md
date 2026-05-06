@@ -1,48 +1,31 @@
-# Contributing to Spectre Manifest
+# Contributing
 
-Thanks for helping improve Spectre Manifest. This repository is maintained by
-PHCDevworks and provides the contract and schema tooling that keep the Spectre
-suite aligned.
+Thanks for helping improve `@phcdevworks/spectre-manifest`. This workspace owns the Spectre architecture contract, so changes should keep schema, validation, and documentation aligned.
 
-## Repository Role
-
-This workspace exists to define and validate the machine-readable architecture
-contract for Spectre.
-
-- Package boundaries and relationships
-- Schema validation and semantic validation
-- Tooling defaults for CI, docs generation, and coding agents
-
-It does not own design tokens, UI implementation, or framework adapters.
-
-## Development Setup
+## Workflow
 
 1. Install dependencies with `corepack pnpm install`.
-2. Build the package with `corepack pnpm build`.
-3. Type-check with `corepack pnpm typecheck`.
-4. Run the automated tests with `corepack pnpm test`.
-5. Validate the root manifest with `corepack pnpm validate:manifest`.
+2. Make the smallest focused change that solves the problem.
+3. Update README, schema docs, or manifest notes when contract behavior changes.
+4. Run `pnpm verify` before opening a pull request.
 
-## Contribution Guidelines
+## Project Standards
 
-1. Keep contract changes explicit and documented.
-2. Prefer additive evolution over breaking schema changes unless versioned
-   intentionally.
-3. Update validation logic, schema, and README guidance together when the public
-   contract changes.
-4. Keep wording aligned with the rest of the Spectre suite and PHCDevworks
-   ownership.
+- Treat schema and validation behavior as public contract surface.
+- Prefer additive, backward-compatible changes when possible.
+- Keep package, layer, dependency, and AI guidance terminology consistent.
+- Validate `spectre.manifest.json` whenever manifest rules or package metadata change.
 
-## Pull Request Checklist
+## Checks
 
-1. Keep the change focused.
-2. Run `corepack pnpm build`.
-3. Run `corepack pnpm typecheck`.
-4. Run `corepack pnpm test`.
-5. Run `corepack pnpm validate:manifest`.
-6. Update docs when public contract behavior changes.
+```bash
+pnpm build
+pnpm typecheck
+pnpm test
+pnpm validate:manifest
+pnpm verify
+```
 
-## Code of Conduct
+## Pull Requests
 
-By participating in this project, you agree to follow the
-[Code of Conduct](CODE_OF_CONDUCT.md).
+Describe the contract change, call out migration concerns, and include the commands you ran.
