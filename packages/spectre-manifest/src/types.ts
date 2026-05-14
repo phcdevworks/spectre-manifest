@@ -49,7 +49,6 @@ export interface SpectrePackageDefinition {
   exports: string[];
   dependencies?: string[];
   consumers?: string[];
-  // Targets stay selector-based so packages can allow whole layers or single packages.
   allowedTargets?: DependencyTargetSelector[];
   notes?: string[];
 }

@@ -1,63 +1,45 @@
 # Spectre Manifest Execution Todo
 
-This todo list is aligned to the current repository and the roadmap in
-`ROADMAP.md`. It is scoped to contract authority, schema versioning, package
-coverage, CI, and downstream validation tooling.
+Scoped to contract authority, schema versioning, package coverage, CI, and downstream validation tooling. Aligned to `ROADMAP.md`.
 
 ## P0: Contract Authority / Must-Do
 
-- Add schema version to `spectre.manifest.json` File targets:
-  - `spectre.manifest.json`
-  - schema validation scripts under `packages/`
-  - `README.md` Acceptance criteria:
-  - `"schemaVersion"` field is present in `spectre.manifest.json`
-  - Validation fails if `schemaVersion` is missing or unrecognized
-  - Version semantics (additive / semantic change / breaking) are documented
+- [x] Add schema version to `spectre.manifest.json`
+  - `"schemaVersion": "0.1"` present in manifest
+  - Schema rejects missing or unrecognized `schemaVersion`
+  - Version semantics documented in `README.md`
 
-- Add manifest entries for all active Spectre packages File targets:
-  - `spectre.manifest.json` Acceptance criteria:
-  - Entries exist for: `spectre-shell`, `spectre-shell-router`,
-    `spectre-shell-signals`, `spectre-components`, `spectre-wordpress-themes`,
-    `spectre-init`
-  - Each entry declares the package's public contract surface
-  - Validation confirms all entries are structurally correct
+- [x] Add CI pipeline — `.github/workflows/ci.yml` runs `pnpm verify` on push and PR across Node 22 and 24. Add README badge when repository is public.
 
-- [x] Add GitHub Actions CI pipeline — `.github/workflows/ci.yml` in place,
-  runs `pnpm verify` on push and PR across Node 20 and 22. Add README badge
-  when repository is public.
+- [ ] Add `spectre-wordpress-themes` to the manifest
+  - Remaining gap from P0.2 full package coverage
+  - Requires: package role, layer assignment, dependency/consumer declarations from the package owner
+  - File targets: `spectre.manifest.json`
 
-- Build downstream consumer validation tooling File targets:
-  - `packages/` (new validation package or script)
-  - `README.md`
-  - `CONTRIBUTING.md` Acceptance criteria:
-  - Downstream packages can run a script to validate themselves against their
-    manifest entry
-  - Validation flow is documented in README
-  - Flow is referenced in `spectre-init` scaffolding
+- [ ] Build downstream consumer validation tooling
+  - CLI or script for downstream packages to validate themselves against their manifest entry
+  - Document validation flow in `README.md` and `CONTRIBUTING.md`
+  - Reference from `spectre-init` scaffolding
+  - File targets: `packages/` (new validation package or script), `README.md`, `CONTRIBUTING.md`
 
 ## P1: Maintainer and Consumer Clarity
 
-- Document manifest entry structure for contributors File targets:
-  - `CONTRIBUTING.md` or `README.md` Acceptance criteria:
-  - Manifest entry structure is documented with a template
-  - Validation instructions are included
-  - New package self-registration process is clear
+- [ ] Document manifest entry structure for contributors
+  - Template entry for new packages in `CONTRIBUTING.md` or `README.md`
+  - Validation instructions included
+  - New package self-registration process clear
 
-- Add `CHANGELOG.md` File targets:
-  - `CHANGELOG.md` Acceptance criteria:
-  - Follows Keep a Changelog format
+- [ ] Add `CHANGELOG.md`
+  - Keep a Changelog format
   - Documents package contract additions, updates, and deprecations
 
 ## P2: Later / Controlled Improvement
 
-- Build automated contract diff tooling File targets:
-  - `packages/` or `scripts/` Acceptance criteria:
-  - Script compares two manifest versions and classifies changes as additive,
-    semantic, or breaking
+- [ ] Build automated contract diff tooling
+  - Script compares two manifest versions and classifies changes as additive, semantic, or breaking
   - Implement when downstream consumer count justifies automation
 
-- Evaluate publishing manifest to npm File targets:
-  - planning docs Acceptance criteria:
+- [ ] Evaluate publishing manifest to npm
   - Decision document weighing publish-to-npm vs. reference-by-URL
   - Implement only when external consumer demand is proven
 
@@ -67,11 +49,11 @@ coverage, CI, and downstream validation tooling.
 - Do not absorb token generation or CSS output
 - Do not add package-specific runtime code
 
-## Recommended Execution Order
+## Execution Order
 
-1. Schema versioning
-2. Full package coverage in manifest
-3. CI pipeline
+1. ~~Schema versioning~~ ✓
+2. Full package coverage (only `spectre-wordpress-themes` remaining)
+3. ~~CI pipeline~~ ✓
 4. Downstream consumer validation tooling
 5. Contributor documentation
 6. CHANGELOG
