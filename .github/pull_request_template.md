@@ -4,11 +4,21 @@
 - [ ] Summary of changes
 - [ ] Rationale/context
 
-## Testing
+## Type of Change
 
-- [ ] `pnpm build`
-- [ ] `pnpm typecheck`
-- [ ] `pnpm validate:manifest`
-- [ ] Other (describe):
+- [ ] Bug fix / patch
+- [ ] New feature / additive
+- [ ] Breaking change
+- [ ] Documentation / config only
+- [ ] Refactor (no behavior change)
 
-## Notes for reviewers
+## Checklist
+
+- [ ] `pnpm build` passes
+- [ ] `pnpm typecheck` passes
+- [ ] `pnpm validate:manifest` passes
+- [ ] `CHANGELOG.md` updated
+
+## Screenshots (if applicable)
+
+## Notes for Reviewers
