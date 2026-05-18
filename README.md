@@ -4,6 +4,17 @@ Workspace for the Spectre manifest package and ecosystem contract. The manifest 
 
 [Issues](https://github.com/phcdevworks/spectre-manifest/issues) | [Pull requests](https://github.com/phcdevworks/spectre-manifest/pulls) | [Security](./SECURITY.md) | [Contributing](./CONTRIBUTING.md)
 
+## When to use this package
+
+- You need a machine-readable contract describing Spectre package roles, layer membership, and dependency rules.
+- You are writing tooling, CI scripts, AI agent docs, or scaffolding that needs to understand the Spectre ecosystem structure programmatically.
+- You want to validate a `spectre.manifest.json` file against the published schema.
+
+## When not to use this package
+
+- You need runtime reactive state, routing, styling, or component logic — those belong in other Spectre packages.
+- You need a generic JSON schema library — this package is purpose-built for Spectre architecture contracts only.
+
 ## Capabilities
 
 - Defines the official Spectre package and layer map.
@@ -88,9 +99,22 @@ Useful scripts:
 - `pnpm validate:manifest` validates `spectre.manifest.json`.
 - `pnpm verify` runs the standard workspace verification flow.
 
+### Troubleshooting
+
+| Problem | Likely cause | Fix |
+|---|---|---|
+| `pnpm verify` fails with TTY error | Running in non-interactive shell without `CI=true` | Prefix with `CI=true pnpm verify` |
+| `validate:manifest` reports unknown layer | `spectre.manifest.json` references a layer not defined in schema | Add the layer to the manifest or fix the reference |
+| Type errors after schema change | TypeScript types and schema are out of sync | Update `packages/spectre-manifest/src/types.ts` to match schema changes |
+| Tests fail after schema change | Tests import from `dist/` which is stale | Run `pnpm build` before `pnpm test` |
+
+## Contributing
+
+See [CONTRIBUTING.md](./CONTRIBUTING.md). The gate is `CI=true corepack pnpm verify`. Schema and validation behavior are public contract surface — breaking changes require a `schemaVersion` rationale. See [AGENTS.md](./AGENTS.md) for boundaries.
+
 ## Release Notes
 
-See the project releases on GitHub.
+See [GitHub Releases](https://github.com/phcdevworks/spectre-manifest/releases).
 
 ## License
 
