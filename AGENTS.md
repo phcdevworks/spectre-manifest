@@ -1,17 +1,38 @@
-# Spectre Manifest Agent Guide
+# AGENTS.md - spectre-manifest
 
-## Agent Boundaries (Source of Truth)
+## AI Operating Model
 
-- **Claude Code**: lead developer and primary implementation owner.
-- **Codex**: documentation, releases, production stabilization, repo hygiene,
-  and config standardization.
-- **GitHub Copilot**: general development support assistant.
-- **Google Jules**: automated maintenance for small fixes, dependency updates,
-  and micro-updates.
+This is the central AI coordination document for the repository. Agent-specific
+files may add tool-local guidance, but they must not override the role
+boundaries below.
 
-These roles are intentionally non-competing. If guidance appears to conflict,
-follow this order: `AGENTS.md` -> `CLAUDE.md` for implementation direction ->
-`CODEX.md` for release/readiness direction.
+This repository uses a four-agent AI operating model with defined,
+non-overlapping roles:
+
+| Agent              | Role                                                                   |
+| ------------------ | ---------------------------------------------------------------------- |
+| **Claude Code**    | Lead developer - primary implementation, architecture, tests           |
+| **OpenAI Codex**   | Documentation, releases, production stabilization, repo hygiene        |
+| **GitHub Copilot** | General development assistance (in-editor suggestions)                 |
+| **Google Jules**   | Automated maintenance - small fixes, dependency updates, micro-patches |
+
+Human commit and release authority rests with Bradley Potts
+(brad.potts@coastdigitalgroup.com). No AI agent creates git commits, pushes
+branches, creates tags, merges pull requests, publishes packages, or creates
+releases.
+
+## Instruction Map
+
+| File                              | Audience                     | Purpose                                                            |
+| --------------------------------- | ---------------------------- | ------------------------------------------------------------------ |
+| `AGENTS.md`                       | All agents, especially Codex | Central role model, coordination rules, verification gate          |
+| `CLAUDE.md`                       | Claude Code                  | Lead-development guide for implementation, architecture, and tests |
+| `CODEX.md`                        | OpenAI Codex                 | Release-readiness, production stabilization, and config posture    |
+| `.codex/`                         | OpenAI Codex                 | Release checklist, review playbook, reusable handoff prompt        |
+| `.github/copilot-instructions.md` | GitHub Copilot               | In-editor suggestion boundaries                                    |
+| `.claude/settings.json`           | Claude Code runtime          | Local command denies for commit, push, tag, merge, and publish     |
+| `.coderabbit.yaml`                | CodeRabbit                   | Automated review checks aligned with package boundaries            |
+| `.github/dependabot.yml`          | Dependabot / Jules handoff   | Dependency-update cadence for automated maintenance                |
 
 ## Primary AI Developer
 
@@ -34,12 +55,12 @@ When Claude Code is active in this repo:
   `validate:manifest` at every commit.
 - It does not introduce new runtime dependencies without explicit approval.
 
-## Codex Release Agent
+## OpenAI Codex - Documentation & Releases
 
-**Codex** is available as the release readiness and production safety agent for
-this repository. Codex works from `CODEX.md` and supports Claude Code by keeping
-changes reviewable, contract-safe, documented, and ready for Bradley's final
-human review.
+**OpenAI Codex** is the documentation, release-readiness, production
+stabilization, repo-hygiene, and config-standardization agent for this
+repository. Codex works from `AGENTS.md`, `CODEX.md`, and the supporting files
+under `.codex/`.
 
 When Codex is active in this repo:
 
@@ -47,9 +68,9 @@ When Codex is active in this repo:
 - Codex checks public contract impact, release risk, documentation coverage, and
   validation results.
 - Codex may perform focused refactors when required for correctness,
-  maintainability, or documentation standardization.
-- Codex does not create commits, tags, pushes, or releases unless Bradley
-  explicitly requests that action.
+  maintainability, documentation standardization, or release-risk reduction.
+- Codex does not create commits, tags, pushes, merges, publishes, or releases
+  unless Bradley explicitly requests that action.
 - Codex tracks existing uncommitted work and does not revert changes it did not
   make.
 
@@ -68,7 +89,8 @@ productivity. It provides:
 
 Copilot does not own implementation leadership, architecture direction, release
 coordination, production stabilization ownership, repository-wide AI governance,
-or automated maintenance workflows.
+automated maintenance workflows, config standardization ownership, or commit
+authority.
 
 ## Google Jules Maintenance Agent
 
@@ -78,8 +100,26 @@ Google Jules handles narrowly-scoped automated maintenance only:
 - dependency updates
 - micro-updates
 
-Jules does not own architecture, implementation leadership, or release
-coordination.
+Jules does not own architecture, implementation leadership, feature work,
+public contract changes, large refactors, release coordination, or publishing.
+
+## Coordination Rules
+
+- When instructions conflict, follow this priority: direct human request,
+  `AGENTS.md`, agent-specific file, then tool suggestions.
+- Claude Code leads any change that alters schema behavior, validator
+  semantics, package exports, CLI behavior, tests, or the manifest public
+  contract.
+- Codex keeps production readiness in check and leads documentation, release
+  notes, release preparation, stabilization review, repo hygiene, and AI/config
+  cleanup.
+- Copilot output is advisory only; accepted suggestions still follow the owning
+  agent or human reviewer.
+- Jules and Dependabot changes should stay mechanical and easy to review.
+  Escalate behavior changes to Claude Code and release/changelog questions to
+  Codex.
+- Keep handoffs short: summarize changed files, validation status, contract
+  impact, and unresolved risk.
 
 ## Mission
 
