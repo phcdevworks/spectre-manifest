@@ -6,7 +6,7 @@ This is the central AI coordination document for the repository. Agent-specific
 files may add tool-local guidance, but they must not override the role
 boundaries below.
 
-This repository uses a four-agent AI operating model with defined,
+This repository uses a five-agent AI operating model with defined,
 non-overlapping roles:
 
 | Agent              | Role                                                                   |
@@ -15,6 +15,7 @@ non-overlapping roles:
 | **OpenAI Codex**   | Documentation, releases, production stabilization, repo hygiene        |
 | **GitHub Copilot** | General development assistance (in-editor suggestions)                 |
 | **Google Jules**   | Automated maintenance - small fixes, dependency updates, micro-patches |
+| **ChatGPT**        | Strategy, coordination, prompt design, and external review             |
 
 Human commit and release authority rests with Bradley Potts
 (brad.potts@coastdigitalgroup.com). No AI agent creates git commits, pushes
@@ -102,6 +103,18 @@ Google Jules handles narrowly-scoped automated maintenance only:
 
 Jules does not own architecture, implementation leadership, feature work,
 public contract changes, large refactors, release coordination, or publishing.
+
+## ChatGPT — Strategy and Coordination
+
+ChatGPT provides strategy, coordination, prompt design, and external review.
+It is an advisory layer, not an implementation or release agent.
+
+**Supports:** architecture strategy, AI coordination, prompt refinement,
+cross-project review, and high-level technical direction.
+
+**Does not own:** implementation, release execution, commit authority,
+production stabilization, or repository changes. ChatGPT input is advisory
+and requires human or Claude Code review before acting.
 
 ## Coordination Rules
 
