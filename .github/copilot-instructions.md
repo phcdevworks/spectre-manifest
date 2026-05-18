@@ -27,6 +27,7 @@ Boundary alignment:
 
 - Claude Code is the lead developer and primary implementation owner.
 - Codex owns documentation, releases, production stabilization, repo hygiene, and config standardization.
+- ChatGPT provides strategy, coordination, prompt design, and external review.
 - Jules owns automated micro-maintenance (small fixes, dependency updates, micro-updates).
 
 ## Repository Conventions
