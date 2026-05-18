@@ -34,18 +34,18 @@ corepack pnpm verify              # build + typecheck + test + validate (full su
 
 ## File Map
 
-| Path | Purpose |
-|------|---------|
-| `spectre.manifest.json` | Root manifest — the living architecture contract |
-| `packages/spectre-manifest/src/types.ts` | TypeScript types for the manifest |
-| `packages/spectre-manifest/src/schema.ts` | Schema loader (reads the JSON schema file) |
-| `packages/spectre-manifest/src/validator.ts` | Schema + semantic validation logic |
-| `packages/spectre-manifest/src/cli.ts` | CLI entrypoint (`spectre-manifest-validate`) |
-| `packages/spectre-manifest/src/index.ts` | Public API re-exports |
-| `packages/spectre-manifest/schema/spectre.manifest.schema.json` | JSON Schema (draft 2020-12) |
-| `packages/spectre-manifest/test/validator.test.mjs` | Validator unit tests |
-| `packages/spectre-manifest/test/cli.test.mjs` | CLI integration tests |
-| `.github/workflows/ci.yml` | CI — runs `pnpm verify` on Node 22 and 24 |
+| Path                                                            | Purpose                                          |
+| --------------------------------------------------------------- | ------------------------------------------------ |
+| `spectre.manifest.json`                                         | Root manifest — the living architecture contract |
+| `packages/spectre-manifest/src/types.ts`                        | TypeScript types for the manifest                |
+| `packages/spectre-manifest/src/schema.ts`                       | Schema loader (reads the JSON schema file)       |
+| `packages/spectre-manifest/src/validator.ts`                    | Schema + semantic validation logic               |
+| `packages/spectre-manifest/src/cli.ts`                          | CLI entrypoint (`spectre-manifest-validate`)     |
+| `packages/spectre-manifest/src/index.ts`                        | Public API re-exports                            |
+| `packages/spectre-manifest/schema/spectre.manifest.schema.json` | JSON Schema (draft 2020-12)                      |
+| `packages/spectre-manifest/test/validator.test.mjs`             | Validator unit tests                             |
+| `packages/spectre-manifest/test/cli.test.mjs`                   | CLI integration tests                            |
+| `.github/workflows/ci.yml`                                      | CI — runs `pnpm verify` on Node 22 and 24        |
 
 ## Architecture Rules (don't violate these)
 
