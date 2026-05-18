@@ -1,8 +1,14 @@
 # @phcdevworks/spectre-manifest
 
+[![npm version](https://img.shields.io/npm/v/@phcdevworks/spectre-manifest.svg)](https://www.npmjs.com/package/@phcdevworks/spectre-manifest)
+[![CI](https://img.shields.io/github/actions/workflow/status/phcdevworks/spectre-manifest/ci.yml?branch=main&label=CI)](https://github.com/phcdevworks/spectre-manifest/actions/workflows/ci.yml)
+[![License](https://img.shields.io/github/license/phcdevworks/spectre-manifest)](LICENSE)
+[![Node](https://img.shields.io/node/v/@phcdevworks/spectre-manifest)](https://nodejs.org)
+
 Workspace for the Spectre manifest package and ecosystem contract. The manifest records package roles, layers, ownership boundaries, dependency rules, and AI/tooling guidance in one machine-readable source of truth.
 
-[Issues](https://github.com/phcdevworks/spectre-manifest/issues) | [Pull requests](https://github.com/phcdevworks/spectre-manifest/pulls) | [Security](./SECURITY.md) | [Contributing](./CONTRIBUTING.md)
+[Contributing](CONTRIBUTING.md) | [Changelog](CHANGELOG.md) |
+[Roadmap](ROADMAP.md) | [Security Policy](SECURITY.md)
 
 ## When to use this package
 
@@ -99,14 +105,19 @@ Useful scripts:
 - `pnpm validate:manifest` validates `spectre.manifest.json`.
 - `pnpm verify` runs the standard workspace verification flow.
 
+AI-agent coordination starts in [AGENTS.md](./AGENTS.md), with companion
+guidance in [CLAUDE.md](./CLAUDE.md), [CODEX.md](./CODEX.md),
+[COPILOT.md](./COPILOT.md), [JULES.md](./JULES.md), and
+[.github/copilot-instructions.md](./.github/copilot-instructions.md).
+
 ### Troubleshooting
 
-| Problem | Likely cause | Fix |
-|---|---|---|
-| `pnpm verify` fails with TTY error | Running in non-interactive shell without `CI=true` | Prefix with `CI=true pnpm verify` |
-| `validate:manifest` reports unknown layer | `spectre.manifest.json` references a layer not defined in schema | Add the layer to the manifest or fix the reference |
-| Type errors after schema change | TypeScript types and schema are out of sync | Update `packages/spectre-manifest/src/types.ts` to match schema changes |
-| Tests fail after schema change | Tests import from `dist/` which is stale | Run `pnpm build` before `pnpm test` |
+| Problem                                   | Likely cause                                                     | Fix                                                                     |
+| ----------------------------------------- | ---------------------------------------------------------------- | ----------------------------------------------------------------------- |
+| `pnpm verify` fails with TTY error        | Running in non-interactive shell without `CI=true`               | Prefix with `CI=true pnpm verify`                                       |
+| `validate:manifest` reports unknown layer | `spectre.manifest.json` references a layer not defined in schema | Add the layer to the manifest or fix the reference                      |
+| Type errors after schema change           | TypeScript types and schema are out of sync                      | Update `packages/spectre-manifest/src/types.ts` to match schema changes |
+| Tests fail after schema change            | Tests import from `dist/` which is stale                         | Run `pnpm build` before `pnpm test`                                     |
 
 ## Contributing
 
@@ -114,7 +125,7 @@ See [CONTRIBUTING.md](./CONTRIBUTING.md). The gate is `CI=true corepack pnpm ver
 
 ## Release Notes
 
-See [GitHub Releases](https://github.com/phcdevworks/spectre-manifest/releases).
+See [CHANGELOG.md](./CHANGELOG.md).
 
 ## License
 
