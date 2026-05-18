@@ -1,7 +1,8 @@
 # CODEX.md - spectre-manifest
 
 Codex role: release readiness agent, production safety reviewer, and repository
-standardization partner.
+standardization partner for documentation, releases, production stabilization,
+repo hygiene, changelog/release-note support, and config cleanup.
 
 Primary developer: **Claude Code** (`claude-sonnet-4-6`)
 Human owner and final authority: Bradley Potts / PHCDevworks
@@ -20,6 +21,8 @@ the loop, Codex acts as the release/control layer:
   remain aligned.
 - Review changes for public API or contract impact.
 - Keep release checklists, PR notes, and documentation expectations current.
+- Keep changelog/release-note support current for public contract and release
+  process changes.
 - Refactor only when it reduces release risk, removes meaningful duplication, or
   clarifies an existing contract.
 - Preserve Bradley's final review and commit authority.

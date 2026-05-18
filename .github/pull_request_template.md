@@ -14,10 +14,9 @@
 
 ## Checklist
 
-- [ ] `pnpm build` passes
-- [ ] `pnpm typecheck` passes
-- [ ] `pnpm validate:manifest` passes
+- [ ] `corepack pnpm verify` passes
 - [ ] `CHANGELOG.md` updated
+- [ ] AI-agent guidance updated if roles, release flow, or automation config changed
 
 ## Screenshots (if applicable)
 
