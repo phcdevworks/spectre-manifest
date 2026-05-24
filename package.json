@@ -3,7 +3,7 @@
   "private": true,
   "description": "Workspace for the Spectre manifest package and schema tooling.",
   "author": "PHCDevworks",
-  "packageManager": "pnpm@11.1.1",
+  "packageManager": "pnpm@11.2.2",
   "engines": {
     "node": "^22.12.0 || >=24.0.0"
   },
@@ -13,6 +13,7 @@
     "test": "corepack pnpm --filter @phcdevworks/spectre-manifest build && corepack pnpm --filter @phcdevworks/spectre-manifest test",
     "validate:manifest": "corepack pnpm --filter @phcdevworks/spectre-manifest build && corepack pnpm --filter @phcdevworks/spectre-manifest validate ../../spectre.manifest.json",
     "check": "corepack pnpm verify",
-    "verify": "corepack pnpm build && corepack pnpm typecheck && corepack pnpm test && corepack pnpm validate:manifest"
+    "verify": "corepack pnpm build && corepack pnpm typecheck && corepack pnpm test && corepack pnpm validate:manifest",
+    "release:propose": "node --experimental-strip-types scripts/propose-version.ts"
   }
 }
