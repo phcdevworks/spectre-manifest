@@ -24,12 +24,12 @@ Scoped to contract authority, schema versioning, package coverage, CI, and downs
 
 ## P1: Maintainer and Consumer Clarity
 
-- [ ] Document manifest entry structure for contributors
+- [x] Document manifest entry structure for contributors
   - Template entry for new packages in `CONTRIBUTING.md` or `README.md`
   - Validation instructions included
   - New package self-registration process clear
 
-- [ ] Add `CHANGELOG.md`
+- [x] Add `CHANGELOG.md`
   - Keep a Changelog format
   - Documents package contract additions, updates, and deprecations
 
@@ -55,7 +55,7 @@ Scoped to contract authority, schema versioning, package coverage, CI, and downs
 2. Full package coverage (only `spectre-wordpress-themes` remaining)
 3. ~~CI pipeline~~ ✓
 4. Downstream consumer validation tooling
-5. Contributor documentation
-6. CHANGELOG
+5. ~~Contributor documentation~~ ✓
+6. ~~CHANGELOG~~ ✓
 7. Contract diff tooling (scale-driven)
 8. npm publish evaluation (demand-driven)
