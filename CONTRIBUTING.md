@@ -16,6 +16,58 @@ Thanks for helping improve `@phcdevworks/spectre-manifest`. This workspace owns 
 - Keep package, layer, dependency, and AI guidance terminology consistent.
 - Validate `spectre.manifest.json` whenever manifest rules or package metadata change.
 
+## Adding a New Package
+
+To register a new Spectre package in the manifest:
+
+**1. Add an entry to `spectre.manifest.json`** under `packages`:
+
+```json
+"@phcdevworks/your-package-name": {
+  "role": "your-role",
+  "layer": "foundation",
+  "stability": "experimental",
+  "description": "One-sentence description of what this package does.",
+  "exports": ["."],
+  "dependencies": [],
+  "consumers": [],
+  "allowedTargets": ["external"]
+}
+```
+
+Field reference:
+
+| Field | Required | Values | Notes |
+| --- | --- | --- | --- |
+| `role` | yes | free string | e.g. `"design-tokens"`, `"composed-ui"`, `"shell-routing"` |
+| `layer` | yes | `"foundation"`, `"build"`, `"governance"` | Must match a key in `layers` |
+| `stability` | yes | `"experimental"`, `"beta"`, `"stable"`, `"deprecated"` | Default new packages to `"experimental"` |
+| `description` | yes | string | One sentence |
+| `exports` | yes | array of strings | Mirrors `package.json` `exports` keys |
+| `dependencies` | no | array of package names | Only other packages registered in this manifest |
+| `consumers` | no | array of package names | Packages that declare this package in their `dependencies` |
+| `allowedTargets` | no | `"external"`, `"layer:<id>"`, `"package:<name>"` | Required when you want finer-grained dependency control |
+| `notes` | no | array of strings | Context for maintainers and tooling |
+
+**2. Wire up bidirectional relationships.**
+
+`dependencies` and `consumers` must be consistent across both sides:
+
+- If `A` lists `B` in `dependencies`, then `B` must list `A` in `consumers`.
+- If `B` lists `A` in `consumers`, then `A` must list `B` in `dependencies`.
+
+**3. Respect `dependencyDirection` rules.**
+
+Check `rules.dependencyDirection` before adding a dependency. A `build` package may depend on `foundation`, but a `foundation` package may not depend on `build`.
+
+**4. Validate.**
+
+```bash
+corepack pnpm validate:manifest
+```
+
+This must pass before opening a pull request. If it fails, the error output shows the exact path and rule that was violated.
+
 ## Checks
 
 ```bash

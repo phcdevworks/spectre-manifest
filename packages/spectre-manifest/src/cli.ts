@@ -13,43 +13,28 @@ const manifestPath =
 const validation = await validateManifestFile(manifestPath);
 const absolutePath = validation.absolutePath ?? resolve(manifestPath);
 
-if (!validation.valid) {
+const payload = JSON.stringify(
+  { valid: validation.valid, absolutePath, issues: validation.issues },
+  null,
+  2,
+);
+
+if (validation.valid) {
   if (jsonOutput) {
-    console.error(
-      JSON.stringify(
-        {
-          valid: validation.valid,
-          absolutePath,
-          issues: validation.issues,
-        },
-        null,
-        2,
-      ),
-    );
-    process.exitCode = 1;
+    console.log(payload);
+  } else {
+    console.log(`Spectre manifest is valid: ${absolutePath}`);
+  }
+} else {
+  if (jsonOutput) {
+    console.error(payload);
   } else {
     console.error(`Spectre manifest is invalid: ${absolutePath}`);
 
     for (const issue of formatManifestValidationIssues(validation.issues)) {
       console.error(`- ${issue}`);
     }
+  }
 
-    process.exitCode = 1;
-  }
-} else {
-  if (jsonOutput) {
-    console.log(
-      JSON.stringify(
-        {
-          valid: validation.valid,
-          absolutePath,
-          issues: validation.issues,
-        },
-        null,
-        2,
-      ),
-    );
-  } else {
-    console.log(`Spectre manifest is valid: ${absolutePath}`);
-  }
+  process.exitCode = 1;
 }
