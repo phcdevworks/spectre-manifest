@@ -5,19 +5,14 @@ Human owner: PHCDevworks / brad.potts@coastdigitalgroup.com
 
 ## Commit Policy
 
-Claude Code does **not** create git commits, push branches, or create tags in this repository. Changes are prepared and validated but left for human review and commit.
+Claude Code does not create git commits, push branches, or create tags in this repository. Changes are prepared and validated but left for human review and commit.
 
-## AI Team
+## Multi-Agent Team
 
-| Role                   | Agent          | Authority                                                     |
-| ---------------------- | -------------- | ------------------------------------------------------------- |
-| Human owner            | Bradley Potts  | Final authority — commits, tags, releases                     |
-| Lead developer         | Claude Code    | Implementation, architecture, tests, CI                       |
-| Release/docs oversight | OpenAI Codex   | Release readiness, changelog, production safety               |
-| Development support    | GitHub Copilot | Inline suggestions, IDE support                               |
-| Maintenance            | Google Jules   | Bounded micro-maintenance and dependency updates (`JULES.md`) |
-
-See [AGENTS.md](./AGENTS.md) for full role boundaries and per-agent handoff rules.
+`AGENTS.md` is the shared guide for agent roles, edit boundaries, and PR
+requirements. Claude Code remains the lead implementation authority for schema,
+validation logic, types, CLI, and tests. Resolve implementation conflicts by
+referencing this file and `spectre.manifest.json`.
 
 ---
 
@@ -87,9 +82,9 @@ Always run `corepack pnpm validate:manifest` after editing `spectre.manifest.jso
 See `TODO.md` for the current P0/P1/P2 task queue and completion status.
 See `ROADMAP.md` for the full strategic roadmap with context and acceptance criteria.
 
-## Agent Handoffs
+## What This Package Does Not Own
 
-- **Codex** — hand off when work is ready for release review, changelog finalization, production-safety sign-off, repo hygiene, or config cleanup. Codex may make scoped documentation, configuration, and stabilization changes but does not lead feature implementation.
-- **Jules** — handles automated small fixes, dependency bumps, and micro-maintenance autonomously. Do not duplicate that work.
-- **Copilot** — inline support assistant. Not a coordination target.
-- **Brad** — all commits, tags, and publishes require human review and action.
+Shared ownership boundaries live in `AGENTS.md`. Claude Code must keep this
+package focused on schema, validation, manifest contract enforcement, and
+supporting tooling — not UI behavior, token generation, or downstream package
+runtime code.
