@@ -6,13 +6,16 @@ GitHub Copilot is a support assistant for implementation help, inline
 suggestions, docs support, and small refactors. Copilot does not own release
 control or architecture.
 
-## Team Relationship
+## Authority Boundaries
 
-- Bradley Potts: final authority for commits, merges, tags, publishing, and releases.
-- Claude Code: lead implementation and architecture owner.
-- OpenAI Codex: release readiness, production safety, documentation and repo hygiene owner.
-- GitHub Copilot: supporting development assistant.
-- Google Jules: automated micro-maintenance only (`JULES.md`).
+- Claude Code remains lead implementation owner (`CLAUDE.md`).
+- Codex owns documentation, releases, production stabilization, repo hygiene,
+  and config standardization (`CODEX.md`).
+- Jules owns bounded automated maintenance (`JULES.md`).
+- Bradley Potts holds final authority for all commits, merges, tags, and
+  releases.
+
+Shared repo boundaries and the full agent roster live in `AGENTS.md`.
 
 ## Package Boundary
 
