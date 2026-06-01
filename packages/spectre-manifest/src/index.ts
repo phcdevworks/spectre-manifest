@@ -23,3 +23,12 @@ export {
   validateManifest,
   validateManifestFile,
 } from "./validator.js";
+export type {
+  PackageCheckIssue,
+  PackageCheckIssueKind,
+  PackageCheckResult,
+} from "./checker.js";
+export {
+  checkPackageAgainstManifest,
+  formatPackageCheckIssues,
+} from "./checker.js";

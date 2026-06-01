@@ -68,6 +68,23 @@ corepack pnpm validate:manifest
 
 This must pass before opening a pull request. If it fails, the error output shows the exact path and rule that was violated.
 
+## Validating a downstream package
+
+Once a package is registered in the manifest, it can validate itself against its own entry:
+
+```bash
+npx spectre-manifest-check /path/to/spectre.manifest.json .
+```
+
+Run this from the package directory (`.`) or supply the path explicitly. The check confirms:
+
+- The package is registered in the manifest.
+- All declared `@phcdevworks/*` manifest dependencies are present in `package.json` `dependencies` or `peerDependencies`.
+- No undeclared `@phcdevworks/*` dependencies exist in `package.json`.
+- All declared manifest `exports` are present in the `package.json` `exports` map (when an `exports` object is defined).
+
+Use `--json` for machine-readable output, e.g. in CI.
+
 ## Checks
 
 ```bash
