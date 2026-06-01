@@ -63,12 +63,21 @@ if (!result.valid) {
 }
 ```
 
-Use the CLI:
+Use the validate CLI:
 
 ```bash
 npx spectre-manifest-validate spectre.manifest.json
 npx spectre-manifest-validate spectre.manifest.json --json
 ```
+
+Check a downstream package against its manifest entry:
+
+```bash
+npx spectre-manifest-check spectre.manifest.json ./path/to/your-package
+npx spectre-manifest-check spectre.manifest.json ./path/to/your-package --json
+```
+
+`spectre-manifest-check` reads the package's `package.json`, confirms it is registered in the manifest, verifies that all declared Spectre dependencies are present, and flags any undeclared ones. Exit code 0 means compliant; exit code 1 means issues were found or the package is not registered.
 
 ## API
 
@@ -79,12 +88,14 @@ Runtime exports:
 - `formatManifestValidationIssues`
 - `loadManifestSchema`
 - `manifestSchemaPath`
+- `checkPackageAgainstManifest`
+- `formatPackageCheckIssues`
 
 Published schema export:
 
 - `@phcdevworks/spectre-manifest/schema`
 
-Type exports include `SpectreManifest`, `SpectrePackageDefinition`, `SpectreLayerDefinition`, `ManifestRules`, and `ManifestAiGuidance`.
+Type exports include `SpectreManifest`, `SpectrePackageDefinition`, `SpectreLayerDefinition`, `ManifestRules`, `ManifestAiGuidance`, `PackageCheckResult`, and `PackageCheckIssue`.
 
 ## Boundaries
 

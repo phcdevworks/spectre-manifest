@@ -9,9 +9,7 @@
     "summary": "Package-level architecture contract for the Spectre ecosystem.",
     "packageManager": "pnpm",
     "notes": [
-      "System version is assumed for the v0.1 bootstrap because no published monorepo version was provided.",
-      "Concrete Spectre UI adapter package names were not provided, so they are intentionally omitted from this example registry.",
-      "A governance layer is introduced so the manifest package is not forced into a UI or runtime role."
+      "A governance layer keeps manifest, validation, and automation concerns separate from runtime packages."
     ]
   },
   "layers": {
@@ -45,68 +43,116 @@
       "role": "design-tokens",
       "layer": "foundation",
       "stability": "stable",
-      "description": "Canonical design token source for the Spectre ecosystem.",
-      "exports": ["."],
+      "description": "Design-token source for the Spectre system.",
+      "exports": [".", "./index.css"],
       "dependencies": [],
-      "consumers": ["@phcdevworks/spectre-ui"],
+      "consumers": [
+        "@phcdevworks/spectre-ui",
+        "@phcdevworks/spectre-components",
+        "@phcdevworks/spectre-shell",
+        "@phcdevworks/spectre-ui-astro",
+        "@phcdevworks/spectre-base"
+      ],
       "allowedTargets": ["external"]
     },
     "@phcdevworks/spectre-ui": {
-      "role": "foundation-ui",
+      "role": "styling-contract",
       "layer": "foundation",
       "stability": "stable",
-      "description": "Core Spectre UI package consumed by higher-level composition packages and adapters.",
-      "exports": ["."],
+      "description": "Layer 2 styling contract between spectre-tokens and downstream adapters or apps.",
+      "exports": [".", "./tailwind", "./index.css", "./base.css", "./components.css", "./utilities.css"],
       "dependencies": ["@phcdevworks/spectre-tokens"],
-      "consumers": ["@phcdevworks/spectre-components"],
+      "consumers": [
+        "@phcdevworks/spectre-components",
+        "@phcdevworks/spectre-shell",
+        "@phcdevworks/spectre-ui-astro",
+        "@phcdevworks/spectre-base"
+      ],
       "allowedTargets": ["package:@phcdevworks/spectre-tokens", "external"]
     },
     "@phcdevworks/spectre-components": {
-      "role": "composed-ui",
+      "role": "web-components",
       "layer": "build",
       "stability": "beta",
-      "description": "Reusable, product-facing component compositions built from Spectre foundation packages.",
-      "exports": ["."],
-      "dependencies": ["@phcdevworks/spectre-ui"],
-      "consumers": ["@phcdevworks/spectre-shell"],
+      "description": "Lit-based component layer of the Spectre system for reusable, accessible, framework-agnostic web components.",
+      "exports": [".", "./input", "./button", "./textarea", "./select", "./checkbox", "./radio", "./label", "./fieldset"],
+      "dependencies": ["@phcdevworks/spectre-tokens", "@phcdevworks/spectre-ui"],
+      "consumers": ["@phcdevworks/spectre-base"],
       "allowedTargets": ["layer:foundation", "external"]
     },
-    "@phcdevworks/spectre-shell": {
-      "role": "application-shell",
+    "@phcdevworks/spectre-ui-astro": {
+      "role": "astro-adapter",
       "layer": "build",
-      "stability": "beta",
-      "description": "Shell primitives and composition for Spectre application experiences.",
-      "exports": ["."],
-      "dependencies": ["@phcdevworks/spectre-components"],
-      "consumers": [
-        "@phcdevworks/spectre-shell-router",
-        "@phcdevworks/spectre-shell-signals"
+      "stability": "stable",
+      "description": "Astro adapter for the Spectre system for Astro applications that consume the core Spectre UI contract.",
+      "exports": [
+        ".",
+        "./components/SpBadge.astro",
+        "./components/SpButton.astro",
+        "./components/SpCard.astro",
+        "./components/SpIconBox.astro",
+        "./components/SpInput.astro",
+        "./components/SpPricingCard.astro",
+        "./components/SpRating.astro",
+        "./components/SpTestimonial.astro"
       ],
-      "allowedTargets": [
-        "package:@phcdevworks/spectre-components",
-        "layer:foundation",
-        "external"
-      ]
+      "dependencies": ["@phcdevworks/spectre-tokens", "@phcdevworks/spectre-ui"],
+      "consumers": [],
+      "allowedTargets": ["layer:foundation", "external"]
     },
     "@phcdevworks/spectre-shell-router": {
       "role": "shell-routing",
       "layer": "build",
       "stability": "beta",
-      "description": "Routing integration package for Spectre shell-based applications.",
+      "description": "Minimal, framework-agnostic client-side router for Spectre-based applications.",
       "exports": ["."],
-      "dependencies": ["@phcdevworks/spectre-shell"],
-      "consumers": [],
-      "allowedTargets": ["package:@phcdevworks/spectre-shell", "external"]
+      "dependencies": [],
+      "consumers": ["@phcdevworks/spectre-shell"],
+      "allowedTargets": ["external"]
     },
     "@phcdevworks/spectre-shell-signals": {
       "role": "shell-state-signals",
       "layer": "build",
       "stability": "beta",
-      "description": "Signal-driven state integration package for Spectre shell usage.",
+      "description": "Minimal, framework-agnostic reactive primitives package for Spectre applications.",
       "exports": ["."],
-      "dependencies": ["@phcdevworks/spectre-shell"],
+      "dependencies": [],
+      "consumers": ["@phcdevworks/spectre-shell"],
+      "allowedTargets": ["external"]
+    },
+    "@phcdevworks/spectre-shell": {
+      "role": "application-shell",
+      "layer": "build",
+      "stability": "beta",
+      "description": "Thin, framework-agnostic bootstrap shell for Spectre apps.",
+      "exports": ["."],
+      "dependencies": [
+        "@phcdevworks/spectre-shell-router",
+        "@phcdevworks/spectre-shell-signals",
+        "@phcdevworks/spectre-tokens",
+        "@phcdevworks/spectre-ui"
+      ],
       "consumers": [],
-      "allowedTargets": ["package:@phcdevworks/spectre-shell", "external"]
+      "allowedTargets": [
+        "layer:foundation",
+        "package:@phcdevworks/spectre-shell-router",
+        "package:@phcdevworks/spectre-shell-signals",
+        "external"
+      ]
+    },
+    "@phcdevworks/spectre-base": {
+      "role": "wordpress-theme-foundation",
+      "layer": "build",
+      "stability": "experimental",
+      "description": "WordPress theme foundation with Vite, TypeScript, and Tailwind CSS 4 backed by the Spectre design system.",
+      "exports": ["."],
+      "dependencies": [
+        "@phcdevworks/spectre-components",
+        "@phcdevworks/spectre-tokens",
+        "@phcdevworks/spectre-ui"
+      ],
+      "consumers": [],
+      "allowedTargets": ["layer:foundation", "package:@phcdevworks/spectre-components", "external"]
     },
     "@phcdevworks/spectre-init": {
       "role": "workspace-scaffolding",
@@ -173,7 +219,7 @@
       {
         "source": "layer:build",
         "target": "layer:governance",
-        "reason": "Build packages are runtime-facing in v0.1 and should not import governance tooling."
+        "reason": "Build packages are runtime-facing and should not import governance tooling."
       }
     ],
     "boundaryConstraints": [
@@ -185,7 +231,7 @@
       {
         "scope": "layer:build",
         "rule": "Compose runtime features here, but keep package responsibilities narrow and package-layer ownership explicit.",
-        "reason": "Prevents shell, routing, signals, and components from collapsing into a single grab-bag layer."
+        "reason": "Prevents shell, routing, signals, components, and theme packages from collapsing into a single grab-bag layer."
       },
       {
         "scope": "package:@phcdevworks/spectre-manifest",
@@ -213,14 +259,24 @@
         ]
       },
       {
-        "task": "Compose reusable product-facing UI",
+        "task": "Build or consume reusable web components",
         "kind": "package",
         "entrypoint": "@phcdevworks/spectre-components"
+      },
+      {
+        "task": "Build an Astro application with Spectre UI",
+        "kind": "package",
+        "entrypoint": "@phcdevworks/spectre-ui-astro"
       },
       {
         "task": "Build application shell behavior",
         "kind": "package",
         "entrypoint": "@phcdevworks/spectre-shell"
+      },
+      {
+        "task": "Build or extend a WordPress theme with Spectre",
+        "kind": "package",
+        "entrypoint": "@phcdevworks/spectre-base"
       }
     ],
     "generationRules": [

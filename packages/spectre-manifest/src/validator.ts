@@ -89,7 +89,7 @@ export async function validateManifestFile(
   let parsedManifest: unknown;
 
   try {
-    parsedManifest = JSON.parse(rawManifest) as unknown;
+    parsedManifest = JSON.parse(rawManifest);
   } catch (error) {
     return {
       valid: false,

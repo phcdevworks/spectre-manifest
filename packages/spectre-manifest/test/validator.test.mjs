@@ -168,8 +168,8 @@ test("rejects dependency not covered by allowedTargets", () => {
 test("rejects package dependency cycles", () => {
   const manifest = structuredClone(rootManifest);
 
-  manifest.packages["@phcdevworks/spectre-components"].dependencies = [
-    "@phcdevworks/spectre-ui",
+  // spectre-shell depends on spectre-shell-router; adding the reverse creates a cycle
+  manifest.packages["@phcdevworks/spectre-shell-router"].dependencies = [
     "@phcdevworks/spectre-shell",
   ];
 
