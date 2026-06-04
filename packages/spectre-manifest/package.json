@@ -1,6 +1,6 @@
 {
   "name": "@phcdevworks/spectre-manifest",
-  "version": "0.1.0",
+  "version": "1.0.0",
   "description": "Machine-readable contract package for Spectre architecture, package boundaries, and tooling validation.",
   "keywords": [
     "phcdevworks",
