@@ -4,7 +4,7 @@ All notable changes to this project will be documented here. The format follows 
 
 ## [Unreleased]
 
-## [0.1.0] - 2026-04-01
+## [1.0.0] - 2026-06-04
 
 Release Title: Initial Contract Authority Release
 
@@ -19,5 +19,5 @@ Release Title: Initial Contract Authority Release
 - **CI**: Added `.github/workflows/ci.yml` — runs `pnpm verify` on Node 22 and 24 across push and PR events.
 - **Manifest Coverage**: Added manifest entries for all current Spectre packages across layers 1–7.
 
-[unreleased]: https://github.com/phcdevworks/spectre-manifest/compare/0.1.0...HEAD
-[0.1.0]: https://github.com/phcdevworks/spectre-manifest/tree/0.1.0
+[unreleased]: https://github.com/phcdevworks/spectre-manifest/compare/1.0.0...HEAD
+[1.0.0]: https://github.com/phcdevworks/spectre-manifest/tree/1.0.0
