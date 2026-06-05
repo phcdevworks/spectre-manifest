@@ -1,7 +1,6 @@
-'use strict'
-
-const { readFileSync } = require('node:fs') as typeof import('node:fs')
-const { join } = require('node:path') as typeof import('node:path')
+import { readFileSync } from 'node:fs'
+import { join, dirname } from 'node:path'
+import { fileURLToPath } from 'node:url'
 
 type ChangeClassification = 'additive' | 'semantic change' | 'breaking'
 
@@ -9,7 +8,7 @@ type PackageJsonWithVersion = {
   version: string
 }
 
-const repoRoot = join(__dirname, '..')
+const repoRoot = join(dirname(fileURLToPath(import.meta.url)), '..')
 const changelogPath = join(repoRoot, 'CHANGELOG.md')
 const packagePath = join(repoRoot, 'package.json')
 

@@ -87,6 +87,8 @@
       "description": "Astro adapter for the Spectre system for Astro applications that consume the core Spectre UI contract.",
       "exports": [
         ".",
+        "./components/SpAlert.astro",
+        "./components/SpAvatar.astro",
         "./components/SpBadge.astro",
         "./components/SpButton.astro",
         "./components/SpCard.astro",
