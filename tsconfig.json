@@ -1,0 +1,9 @@
+{
+  "$schema": "https://json.schemastore.org/tsconfig",
+  "extends": "./tsconfig.base.json",
+  "compilerOptions": {
+    "noEmit": true,
+    "typeRoots": ["./packages/spectre-manifest/node_modules/@types"]
+  },
+  "include": ["scripts/**/*.ts"]
+}
