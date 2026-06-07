@@ -39,19 +39,19 @@ and contract automation.
 
 ### P0: Package Coverage and Consumer Tooling
 
-- [ ] Add `spectre-wordpress-themes` to the manifest
-  - Remaining gap from full package coverage
-  - Requires: package role, layer assignment, dependency/consumer declarations
-    from the package owner
-  - File targets: `spectre.manifest.json`
+- [x] Add `spectre-wordpress-themes` to the manifest
+  - `spectre-wordpress-themes` was renamed to `@phcdevworks/spectre-base`
+    (<https://github.com/phcdevworks/spectre-base>) and is already registered
+    in `spectre.manifest.json` with role `wordpress-theme-foundation`
+  - Full package coverage achieved — no remaining gap
 
-- [ ] Build downstream consumer validation tooling
-  - CLI or script for downstream packages to validate themselves against their
-    manifest entry
-  - Document validation flow in `README.md` and `CONTRIBUTING.md`
-  - Reference from `spectre-init` scaffolding
-  - File targets: `packages/` (new validation package or script), `README.md`,
-    `CONTRIBUTING.md`
+- [x] Build downstream consumer validation tooling
+  - `spectre-manifest-check` CLI (`packages/spectre-manifest/src/check-cli.ts`,
+    `checker.ts`) validates a downstream package's `package.json` against its
+    manifest entry (registration, exports, dependency declarations)
+  - Validation flow documented in `README.md` and `CONTRIBUTING.md`
+  - Wired into `spectre-init` scaffolding via its `check:ecosystem` script
+    (`spectre-manifest-validate ... && spectre-manifest-check ...`)
 
 ### P2: Controlled Improvement
 
@@ -66,8 +66,9 @@ and contract automation.
 
 ## Recommended Execution Order
 
-1. Full package coverage (`spectre-wordpress-themes` is the only remaining gap)
-2. Downstream consumer validation tooling
+1. ~~Full package coverage~~ ✓ (`spectre-wordpress-themes` renamed to
+   `spectre-base` and registered)
+2. ~~Downstream consumer validation tooling~~ ✓ (`spectre-manifest-check`)
 3. Contract diff tooling (scale-driven)
 4. npm publish evaluation (demand-driven)
 
