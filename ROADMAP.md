@@ -10,16 +10,17 @@ Its job is to make contracts enforceable, not to define UI behavior or package l
 
 - `spectre.manifest.json` is in place as the root machine-readable contract anchor with `schemaVersion: "0.1"`.
 - Full JSON Schema (draft 2020-12) with AJV validation covering structural and semantic rules.
-- TypeScript types, validator, and CLI published as `@phcdevworks/spectre-manifest`.
-- 16 passing tests covering happy path, parse errors, schema errors, and all semantic checks.
+- TypeScript types, validator, checker, and CLIs (`spectre-manifest-validate`, `spectre-manifest-check`) published as `@phcdevworks/spectre-manifest`.
+- Passing test suite covering manifest validation (happy path, parse errors, schema errors, semantic checks) and downstream package compliance checks.
 - CI pipeline on GitHub Actions running `pnpm verify` across Node 22 and 24.
-- All core Spectre packages registered (except `spectre-wordpress-themes`).
+- `CHANGELOG.md` documents contract releases in Keep a Changelog format.
+- All core Spectre packages registered, including `@phcdevworks/spectre-base`
+  (the renamed `spectre-wordpress-themes`).
 
 ### Remaining gaps
 
-- `spectre-wordpress-themes` not yet in the manifest.
-- No downstream consumer validation tooling.
-- No CHANGELOG.
+- Contract diff tooling not yet built (P2, scale-driven).
+- No decision on publishing the manifest to npm (P2, demand-driven).
 
 ## 2. Roadmap
 
@@ -29,45 +30,27 @@ Its job is to make contracts enforceable, not to define UI behavior or package l
 
 `schemaVersion: "0.1"` is declared in both `spectre.manifest.json` and the JSON Schema. Validation fails on missing or unrecognized versions.
 
-### P0.2 Full Package Coverage in the Manifest — Partial
+### P0.2 Full Package Coverage in the Manifest ✓ Complete
 
-All active Spectre packages except `spectre-wordpress-themes` are registered. That package requires role, layer, and dependency details from the package owner before it can be added correctly.
+All active Spectre packages are registered. `spectre-wordpress-themes` was renamed to `@phcdevworks/spectre-base` (<https://github.com/phcdevworks/spectre-base>) and is registered with role `wordpress-theme-foundation`.
 
 ### P0.3 CI Pipeline ✓ Complete
 
 GitHub Actions workflow at `.github/workflows/ci.yml` runs `pnpm verify` (build, typecheck, test, validate:manifest) on every push and pull request against Node 22 and 24. Add a CI badge to `README.md` when the repository is public.
 
-### P0.4 Downstream Consumer Validation Tooling
+### P0.4 Downstream Consumer Validation Tooling ✓ Complete
 
-Objective: Provide tooling or documentation that lets downstream packages validate themselves against the manifest.
-
-Why it matters: The manifest is only useful if consumers can check their own compliance. Without tooling, validation requires manual audit.
-
-Suggested deliverables:
-- CLI or script that a downstream package can run to validate its public API against its manifest entry
-- Document the validation flow in `README.md` and `CONTRIBUTING.md`
-- Integrate the validation path into `@phcdevworks/spectre-init` scaffolding
-
-Risk if skipped: Downstream packages cannot self-validate; compliance is informal.
+The `spectre-manifest-check` CLI (backed by `checkPackageAgainstManifest` in `src/checker.ts`) lets a downstream package validate its `package.json` against its manifest entry — checking registration, declared exports, and Spectre dependency declarations. The validation flow is documented in `README.md` and `CONTRIBUTING.md`, and `@phcdevworks/spectre-init` wires it into its `check:ecosystem` script alongside `spectre-manifest-validate`.
 
 ## P1: Maintainer and Consumer Clarity
 
-### P1.1 Document Manifest Structure for Contributors
+### P1.1 Document Manifest Structure for Contributors ✓ Complete
 
-Objective: Make the manifest schema and contribution process clear for anyone adding a new Spectre package.
+Manifest entry structure, a template entry, and validation instructions are documented in `README.md` and `CONTRIBUTING.md`.
 
-Suggested deliverables:
-- Document manifest entry structure in `CONTRIBUTING.md` or `README.md`
-- Provide a template entry for new packages
-- Include validation instructions
+### P1.2 Manifest Changelog ✓ Complete
 
-### P1.2 Manifest Changelog
-
-Objective: Track meaningful changes to `spectre.manifest.json` in a structured changelog.
-
-Suggested deliverables:
-- Add `CHANGELOG.md` to the manifest repository
-- Document entries when package contracts are added, updated, or deprecated
+`CHANGELOG.md` is in place in Keep a Changelog format, documenting contract additions, updates, and deprecations starting with the 1.0.0 release.
 
 ## P2: Later / Controlled Improvement
 
@@ -92,10 +75,10 @@ Implement only if multiple external consumers prove the need.
 ## 4. Recommended Execution Order
 
 1. ~~Schema versioning~~ ✓
-2. Full package coverage (only `spectre-wordpress-themes` remaining)
+2. ~~Full package coverage~~ ✓
 3. ~~CI pipeline~~ ✓
-4. Downstream consumer validation tooling
-5. Document manifest structure for contributors
-6. Manifest changelog
+4. ~~Downstream consumer validation tooling~~ ✓
+5. ~~Document manifest structure for contributors~~ ✓
+6. ~~Manifest changelog~~ ✓
 7. Contract diffing tooling (when scale demands it)
 8. Evaluate public registry (when external consumers prove the need)
