@@ -53,16 +53,22 @@ and contract automation.
   - Wired into `spectre-init` scaffolding via its `check:ecosystem` script
     (`spectre-manifest-validate ... && spectre-manifest-check ...`)
 
-### P2: Controlled Improvement
+### P1: Controlled Improvement
 
-- [ ] Build automated contract diff tooling
-  - Script compares two manifest versions and classifies changes as additive,
-    semantic, or breaking
-  - Implement when downstream consumer count justifies automation
+- [x] Build automated contract diff tooling
+  - `spectre-manifest-diff` CLI (`packages/spectre-manifest/src/diff-cli.ts`,
+    `differ.ts`) compares two manifest files and classifies every change as
+    additive, semantic, or breaking; exits non-zero on breaking changes
+  - `diffManifests` / `formatManifestDiff` exported from the package's public
+    API for programmatic use
+  - Covered by `test/differ.test.mjs` (unit + CLI integration)
 
-- [ ] Evaluate publishing manifest to npm
-  - Decision document weighing publish-to-npm vs. reference-by-URL
-  - Implement only when external consumer demand is proven
+- [x] Evaluate publishing manifest to npm
+  - Decision recorded in `DECISION-manifest-distribution.md`: ship
+    `spectre.manifest.json` from the existing `@phcdevworks/spectre-manifest`
+    package via a new `./manifest` export (mirrors `./schema`), rather than
+    reference-by-URL — keeps schema and manifest versioned together and
+    pinnable through the existing npm dependency
 
 ## Recommended Execution Order
 

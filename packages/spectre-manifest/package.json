@@ -20,7 +20,8 @@
   },
   "bin": {
     "spectre-manifest-validate": "./dist/cli.js",
-    "spectre-manifest-check": "./dist/check-cli.js"
+    "spectre-manifest-check": "./dist/check-cli.js",
+    "spectre-manifest-diff": "./dist/diff-cli.js"
   },
   "exports": {
     ".": {
@@ -44,7 +45,7 @@
   "homepage": "https://github.com/phcdevworks/spectre-manifest#readme",
   "scripts": {
     "build": "tsc -p tsconfig.json",
-    "test": "node --test test/cli.test.mjs test/validator.test.mjs test/checker.test.mjs",
+    "test": "node --test test/cli.test.mjs test/validator.test.mjs test/checker.test.mjs test/differ.test.mjs",
     "typecheck": "tsc -p tsconfig.json --noEmit",
     "validate": "node dist/cli.js",
     "check": "npm run typecheck && npm run build && npm test"
