@@ -32,3 +32,9 @@ export {
   checkPackageAgainstManifest,
   formatPackageCheckIssues,
 } from "./checker.js";
+export type {
+  ManifestChange,
+  ManifestChangeClassification,
+  ManifestDiffResult,
+} from "./differ.js";
+export { diffManifests, formatManifestDiff } from "./differ.js";
