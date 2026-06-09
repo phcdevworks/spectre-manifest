@@ -52,19 +52,21 @@ Manifest entry structure, a template entry, and validation instructions are docu
 
 `CHANGELOG.md` is in place in Keep a Changelog format, documenting contract additions, updates, and deprecations starting with the 1.0.0 release.
 
-## P2: Later / Controlled Improvement
+## P2: Controlled Improvement — Complete
 
-### P2.1 Automated Package Contract Diffing
+### P2.1 Automated Package Contract Diffing ✓ Complete
 
-Objective: Build tooling that diffs manifest versions and identifies additive vs. breaking changes automatically.
+`spectre-manifest-diff` CLI (`packages/spectre-manifest/src/diff-cli.ts`, `differ.ts`)
+compares two manifest files and classifies every change as additive, semantic, or breaking.
+Exits non-zero on breaking changes. `diffManifests` / `formatManifestDiff` exported from
+the public API for programmatic use. Covered by `test/differ.test.mjs`.
 
-Implement when the schema is stable and downstream consumer count is large enough to justify automation.
+### P2.2 Public Manifest Registry Evaluation ✓ Complete
 
-### P2.2 Public Manifest Registry Evaluation
-
-Objective: Evaluate whether `spectre.manifest.json` should be published as a versioned artifact to npm for downstream consumption.
-
-Implement only if multiple external consumers prove the need.
+Decision recorded in `DECISION-manifest-distribution.md`: ship `spectre.manifest.json`
+from the existing `@phcdevworks/spectre-manifest` package via a new `./manifest` export
+(mirrors `./schema`). Keeps schema and manifest versioned together and pinnable through
+the existing npm dependency.
 
 ## 3. Explicitly Out of Scope
 
@@ -80,5 +82,7 @@ Implement only if multiple external consumers prove the need.
 4. ~~Downstream consumer validation tooling~~ ✓
 5. ~~Document manifest structure for contributors~~ ✓
 6. ~~Manifest changelog~~ ✓
-7. Contract diffing tooling (when scale demands it)
-8. Evaluate public registry (when external consumers prove the need)
+7. ~~Contract diffing tooling~~ ✓ (`spectre-manifest-diff` CLI)
+8. ~~Evaluate public registry~~ ✓ (decision: `./manifest` export from existing package)
+
+All phases complete. No active roadmap items. Future work is demand-driven only.
