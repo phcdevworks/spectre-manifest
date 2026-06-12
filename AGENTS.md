@@ -7,7 +7,7 @@
 | Project team | `project-shell` |
 | Repository role | Spectre manifest schema and contract tooling |
 | Package/artifact | `@phcdevworks/spectre-manifest` |
-| Validation gate | `corepack pnpm verify` |
+| Validation gate | `npm run check` (wraps `corepack pnpm verify`) |
 
 ## Standard Authority Model
 
@@ -29,28 +29,6 @@ public behavior or contract impact, and unresolved risks. Do not edit generated
 outputs directly. Do not update [CHANGELOG.md](CHANGELOG.md) unless the change
 is release-relevant.
 
-## AI Operating Model
-
-This is the central AI coordination document for the repository. Agent-specific
-files may add tool-local guidance, but they must not override the role
-boundaries below.
-
-This repository uses a five-agent AI operating model with defined,
-non-overlapping roles:
-
-| Agent              | Role                                                                   |
-| ------------------ | ---------------------------------------------------------------------- |
-| **Claude Code**    | Lead developer - primary implementation, architecture, tests           |
-| **OpenAI Codex**   | Documentation, releases, production stabilization, repo hygiene        |
-| **ChatGPT**        | Strategy, coordination, prompt design, and external review - support only |
-| **GitHub Copilot** | General development assistance (in-editor suggestions)                 |
-| **Google Jules**   | Automated maintenance - small fixes, dependency updates, micro-patches |
-
-Human final review, release decisions, tagging, publishing, and merge authority rest with Bradley Potts
-(brad.potts@coastdigitalgroup.com). Claude Code, Codex, and Copilot do not
-commit by default. Jules may commit and push only bounded automated
-maintenance when `JULES.md` explicitly allows it and all validation gates pass.
-
 ## Instruction Map
 
 | File                              | Audience                     | Purpose                                                            |
@@ -65,27 +43,6 @@ maintenance when `JULES.md` explicitly allows it and all validation gates pass.
 | `.claude/settings.json`           | Claude Code runtime          | Local command denies for commit, push, tag, merge, and publish     |
 | `.coderabbit.yaml`                | CodeRabbit                   | Automated review checks aligned with package boundaries            |
 | `.github/dependabot.yml`          | Dependabot / Jules handoff   | Dependency-update cadence for automated maintenance                |
-
-## Primary AI Developer
-
-**Claude Code** (`claude-sonnet-4-6`) is the designated primary AI developer for
-this repository, maintained on behalf of Bradley Potts
-(brad.potts@coastdigitalgroup.com) at PHCDevworks. All development is driven
-through Claude Code operating from `CLAUDE.md` as the authoritative working
-guide. Human final review and commit authority rests with Bradley Potts.
-
-Claude Code does not create git commits. Changes are prepared and validated,
-then handed off for human review and commit.
-
-When Claude Code is active in this repo:
-
-- It owns the full development cycle: schema, types, validator, tests, CLI, and
-  docs.
-- It runs `corepack pnpm verify` (or the step-by-step equivalent) before
-  marking any change done.
-- It treats `spectre.manifest.json` as always-valid — the manifest must pass
-  `validate:manifest` at every commit.
-- It does not introduce new runtime dependencies without explicit approval.
 
 ## OpenAI Codex - Documentation & Releases
 
@@ -152,6 +109,25 @@ public contract changes, large refactors, release coordination, or publishing.
   Codex.
 - Keep handoffs short: summarize changed files, validation status, contract
   impact, and unresolved risk.
+
+## Pull Request Creation
+
+Every agent that opens a PR must populate every section of the repo's PR
+template (`.github/pull_request_template.md`):
+
+- **Summary** - linked issue (or `N/A`), what changed, why it was needed.
+- **Type of Change** - check every box that applies.
+- **Package Boundary Check** - confirm the change stays within manifest
+  contract and tooling scope, with no drift into downstream runtime behavior.
+- **Public API Impact** - state whether the schema, types, validator, or CLI
+  contract changed, and whether a `schemaVersion` rationale is required.
+- **Validation** - record the command run (`corepack pnpm verify` /
+  `npm run check`) and its result.
+- **Documentation Updated**, **Release Impact**, **Codex Review Needed**, and
+  **Claude Code Implementation Notes** - complete each checklist item.
+
+Never submit a PR with an empty body or only the template headings left
+unfilled.
 
 ## Mission
 

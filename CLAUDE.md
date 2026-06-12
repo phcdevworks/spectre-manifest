@@ -1,4 +1,4 @@
-# CLAUDE.md — spectre-manifest
+# CLAUDE.md - spectre-manifest
 
 Primary AI maintainer: **Claude Code** (claude-sonnet-4-6, Anthropic)
 Human owner: PHCDevworks / brad.potts@coastdigitalgroup.com
@@ -13,6 +13,12 @@ Claude Code does not create git commits, push branches, or create tags in this r
 requirements. Claude Code remains the lead implementation authority for schema,
 validation logic, types, CLI, and tests. Resolve implementation conflicts by
 referencing this file and `spectre.manifest.json`.
+
+## Pull Request Creation
+
+Follow the shared PR requirements in `AGENTS.md`. Claude Code prepares
+validated changes for human review; Bradley Potts handles final commit, merge,
+tag, and release authority.
 
 ---
 
@@ -32,12 +38,18 @@ All commands run from the workspace root:
 CI=true corepack pnpm install     # install (CI=true skips TTY prompt)
 corepack pnpm build               # compile TypeScript
 corepack pnpm typecheck           # type-check without emit
-corepack pnpm test                # build + run Node test suite (16 tests)
+corepack pnpm test                # build + run Node test suite (cli, validator, checker, differ)
 corepack pnpm validate:manifest   # build + validate spectre.manifest.json
 corepack pnpm verify              # build + typecheck + test + validate (full suite)
 ```
 
 > `pnpm verify` will fail in a non-TTY shell without `CI=true`. Use `corepack pnpm build && corepack pnpm typecheck && corepack pnpm test && corepack pnpm validate:manifest` as a workaround when needed.
+
+The workspace root `package.json` also exposes `npm run check`, which wraps
+`corepack pnpm verify` (`"check": "corepack pnpm verify"`). This is the
+companywide-standard validation entry point — use it when a unified
+`npm run check` is expected, and use the `corepack pnpm` commands above when
+working step-by-step or debugging a single gate.
 
 ## File Map
 
