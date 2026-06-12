@@ -111,3 +111,14 @@ When reporting release readiness, include:
 - `.codex/review-playbook.md` - Codex review focus for this repository.
 - `.codex/session-handoff.md` - reusable handoff prompt for future Codex
   sessions.
+
+## Source of Truth Hierarchy
+
+When guidance conflicts, resolve in this order:
+
+1. `spectre.manifest.json` and `packages/spectre-manifest/schema/spectre.manifest.schema.json`
+   - the published contract authority
+2. `CLAUDE.md` - development authority
+3. `AGENTS.md` - shared agent boundaries
+4. This file (`CODEX.md`) - Codex operational procedures
+5. `ROADMAP.md` / `TODO.md` - planning context (may be stale)
