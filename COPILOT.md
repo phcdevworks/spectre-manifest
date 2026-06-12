@@ -1,6 +1,6 @@
 # COPILOT.md - spectre-manifest
 
-## Copilot Role
+## Role Summary
 
 GitHub Copilot is a support assistant for implementation help, inline
 suggestions, docs support, and small refactors. Copilot does not own release
@@ -38,7 +38,7 @@ Do not add downstream package runtime behavior here.
 - Do not publish, merge, tag, or release.
 - Do not broaden scope beyond manifest contract management.
 
-## Validation Expectations
+## Validation
 
 Primary gate: `corepack pnpm verify`.
 
@@ -50,7 +50,16 @@ the smallest safe fix.
 Keep `README.md`, `CHANGELOG.md`, schema/API documentation, and GitHub templates
 consistent with the implemented contract.
 
+## Pull Request Creation
+
+Follow the shared PR requirements in `AGENTS.md`.
+
 ## PR and Issue Support
 
 PRs should include contract impact, validation result, package-boundary check,
 and release impact to support Codex handoff.
+
+## Source of Detailed Guidance
+
+Primary Copilot guidance lives in `.github/copilot-instructions.md`.
+Shared repo boundaries live in `AGENTS.md`.

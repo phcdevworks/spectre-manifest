@@ -97,4 +97,12 @@ pnpm verify
 
 ## Pull Requests
 
-Describe the contract change, call out migration concerns, and include the commands you ran.
+Describe the contract change, call out migration concerns, and include the commands you ran. Populate all sections of the PR template.
+
+## Code of Conduct
+
+By participating in this project, you agree to follow the [Code of Conduct](CODE_OF_CONDUCT.md).
+
+## License
+
+By contributing, you agree that your contributions will be licensed under the MIT License.

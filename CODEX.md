@@ -1,5 +1,7 @@
 # CODEX.md - spectre-manifest
 
+## Role
+
 Codex role: release readiness agent, production safety reviewer, and repository
 standardization partner for documentation, releases, production stabilization,
 repo hygiene, changelog/release-note support, and config cleanup.
@@ -86,6 +88,22 @@ A change is not release-ready until:
 - PR notes identify contract impact, migration notes, and verification results.
 
 Use `CI=true corepack pnpm verify` when possible.
+
+## Pull Request Creation
+
+Follow the shared PR requirements in `AGENTS.md`. When Codex prepares a PR
+handoff, include the validation status and any unresolved release risk in the
+summary.
+
+## Handoff Format
+
+When reporting release readiness, include:
+
+- Current git status summary.
+- Files changed by Codex.
+- Validation commands run and whether they passed.
+- Any public behavior, contract, or documentation changes.
+- Remaining risks, blockers, or human review notes.
 
 ## Supporting Files
 
