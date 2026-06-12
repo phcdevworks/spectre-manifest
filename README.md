@@ -1,5 +1,37 @@
 # @phcdevworks/spectre-manifest
 
+## Repository Snapshot
+
+| Field | Value |
+|-------|-------|
+| Project team | `project-shell` |
+| Repository role | Spectre manifest schema and contract tooling |
+| Package/artifact | `@phcdevworks/spectre-manifest` |
+| Current version/status | 1.0.0 |
+
+## Standard Workflow
+
+1. Read [AGENTS.md](AGENTS.md), then the agent-specific guide for the task.
+2. Check [TODO.md](TODO.md) and [ROADMAP.md](ROADMAP.md) for current scope.
+3. Make the smallest repo-local change that satisfies the task.
+4. Run `corepack pnpm verify` when validation is required or practical.
+5. Update docs and [CHANGELOG.md](CHANGELOG.md) only when behavior, public
+   contracts, or release-relevant metadata changed.
+
+## Documentation Map
+
+| Guide | Path |
+|-------|------|
+| Agent rules | [AGENTS.md](AGENTS.md) |
+| Claude Code | [CLAUDE.md](CLAUDE.md) |
+| Codex | [CODEX.md](CODEX.md) |
+| Copilot | [COPILOT.md](COPILOT.md) |
+| Jules | [JULES.md](JULES.md) |
+| Roadmap | [ROADMAP.md](ROADMAP.md) |
+| Todo | [TODO.md](TODO.md) |
+| Changelog | [CHANGELOG.md](CHANGELOG.md) |
+| Security | [SECURITY.md](SECURITY.md) |
+
 [![npm version](https://img.shields.io/npm/v/@phcdevworks/spectre-manifest.svg)](https://www.npmjs.com/package/@phcdevworks/spectre-manifest)
 [![CI](https://img.shields.io/github/actions/workflow/status/phcdevworks/spectre-manifest/ci.yml?branch=main&label=CI)](https://github.com/phcdevworks/spectre-manifest/actions/workflows/ci.yml)
 [![License](https://img.shields.io/github/license/phcdevworks/spectre-manifest)](LICENSE)

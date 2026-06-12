@@ -1,18 +1,48 @@
 # AGENTS.md - spectre-manifest
 
+## Repository Snapshot
+
+| Field | Value |
+|-------|-------|
+| Project team | `project-shell` |
+| Repository role | Spectre manifest schema and contract tooling |
+| Package/artifact | `@phcdevworks/spectre-manifest` |
+| Validation gate | `corepack pnpm verify` |
+
+## Standard Authority Model
+
+| Agent | Role | Authority |
+|-------|------|-----------|
+| Claude Code | Lead implementation and validation | [CLAUDE.md](CLAUDE.md) |
+| OpenAI Codex | Documentation, release readiness, stabilization, and repo hygiene | [CODEX.md](CODEX.md) |
+| ChatGPT | Strategy, coordination, prompt design, and external review | Support only |
+| GitHub Copilot | Development assistance | [COPILOT.md](COPILOT.md) |
+| Google Jules | Bounded automated maintenance | [JULES.md](JULES.md) |
+
+Bradley Potts holds final authority for commits, merges, tags, publishing, and
+releases.
+
+## Standard Handoff
+
+Every AI-prepared change should report files changed, validation performed,
+public behavior or contract impact, and unresolved risks. Do not edit generated
+outputs directly. Do not update [CHANGELOG.md](CHANGELOG.md) unless the change
+is release-relevant.
+
 ## AI Operating Model
 
 This is the central AI coordination document for the repository. Agent-specific
 files may add tool-local guidance, but they must not override the role
 boundaries below.
 
-This repository uses a four-agent AI operating model with defined,
+This repository uses a five-agent AI operating model with defined,
 non-overlapping roles:
 
 | Agent              | Role                                                                   |
 | ------------------ | ---------------------------------------------------------------------- |
 | **Claude Code**    | Lead developer - primary implementation, architecture, tests           |
 | **OpenAI Codex**   | Documentation, releases, production stabilization, repo hygiene        |
+| **ChatGPT**        | Strategy, coordination, prompt design, and external review - support only |
 | **GitHub Copilot** | General development assistance (in-editor suggestions)                 |
 | **Google Jules**   | Automated maintenance - small fixes, dependency updates, micro-patches |
 

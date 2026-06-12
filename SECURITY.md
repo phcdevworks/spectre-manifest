@@ -2,30 +2,66 @@
 
 ## Supported Versions
 
-PHCDevworks applies security fixes to the current major release of this
-repository and package.
+We aim to support the latest published version of the project. Security updates are applied to the current major version only.
+
+**Please ensure you are using the most recent versions** of the Spectre packages. Older releases may not receive security fixes.
 
 ## Reporting a Vulnerability
 
-Do not open a public issue for security problems.
+If you discover a security vulnerability, please **DO NOT** open a public issue. Security issues should be reported privately to protect users.
 
-Please use GitHub Security Advisories for the affected repository whenever
-possible. If that is not available, contact the maintainers through GitHub.
+### How to Report
 
-Include:
+**Preferred method**: Use GitHub Security Advisories to privately report vulnerabilities on the specific repository.
 
-1. A clear description of the issue and its impact
-2. Steps to reproduce or a proof of concept
-3. Affected versions, if known
-4. Any suggested mitigation
+**Alternative methods**:
 
-## Response Expectations
+- Direct message maintainers through GitHub
+- Email the maintainers if provided in the repository
 
-1. We aim to acknowledge reports within 48 hours.
-2. We aim to provide an initial assessment within 5 business days.
-3. We will coordinate disclosure timing with the reporter when possible.
+### What to Include
+
+Please provide as much detail as possible to help us reproduce and assess impact:
+
+1. **Description of the vulnerability** and potential impact
+2. **Steps to reproduce** or proof-of-concept code
+3. **Affected versions** (if known)
+4. **Potential attack scenarios**
+5. **Suggested mitigation** (if you have ideas)
+
+### What to Expect
+
+1. **Acknowledgment**: We will acknowledge receipt within **48 hours**
+2. **Assessment**: We will investigate and provide an initial assessment within **5 business days**
+3. **Updates**: We will keep you informed of the fix status throughout the process
+4. **Resolution**: We will work on a fix and coordinate disclosure timing with you
+5. **Credit**: We will credit you in the security advisory (unless you prefer to remain anonymous)
+
+## Responsible Disclosure
+
+We appreciate responsible disclosure and will work with you to:
+
+- Understand the scope and severity of the issue
+- Develop and test a fix
+- Coordinate public disclosure timing
+- Credit your contribution (if desired)
+
+**Please allow us reasonable time to address the issue before public disclosure.**
+
+## Security Best Practices
+
+When using `@phcdevworks/spectre-manifest`:
+
+1. **Keep dependencies updated** to the latest versions.
+2. **Monitor dependencies** for known vulnerabilities (`npm audit` / `pnpm audit`).
+3. **Validate `spectre.manifest.json` after upgrades** with `validate:manifest` to catch contract drift early.
+4. **Treat schema and validator changes as contract changes** and review them accordingly.
 
 ## Contact
 
-For non-sensitive security questions, open an issue or discussion in this
-repository.
+For security-related questions that aren't vulnerabilities:
+
+- Open a GitHub Discussion on the repository
+- Tag maintainers in relevant issues
+
+Thank you for helping keep the Spectre community safe!
