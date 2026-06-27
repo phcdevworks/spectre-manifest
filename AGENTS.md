@@ -129,6 +129,30 @@ template (`.github/pull_request_template.md`):
 Never submit a PR with an empty body or only the template headings left
 unfilled.
 
+## Upstream Requests and Roadmap Self-Expansion
+
+Full directive: project-team [AGENTS.md](../AGENTS.md) "Upstream Requests and
+Roadmap Self-Expansion." Applied to this repo:
+
+- This repo is cross-cutting infrastructure — it has no upstream dependency
+  on any other `project-shell` repo within this workspace; do not invent one.
+- Downstream repos `spectre-shell`, `spectre-shell-router`,
+  `spectre-shell-signals`, and `spectre-init` all consume this package as a
+  devDependency for `check:ecosystem`. They may append schema or validator
+  requests (e.g. a new manifest field, layer, or dependency-target selector)
+  to this repo's own `TODO.md` under `## Requested by Downstream`, dated and
+  linked back to the requesting repo's TODO.md/ROADMAP.md. Keep that section
+  visible and separate from self-planned schema work.
+- This repo's own `ROADMAP.md` may be proactively expanded with new or
+  reordered phases by the agent's own analysis — but never mark a phase
+  delivered without `corepack pnpm verify` (exposed as `npm run check`)
+  passing, and never ship a breaking schema/validator change without a
+  `schemaVersion` bump rationale (see "What Constitutes Contract-Breaking
+  Change" in `CLAUDE.md`).
+- Surface any new TODO request or roadmap expansion in the handoff for Bradley
+  Potts in the same change it was made, and reflect cross-repo-relevant
+  changes in the project-team's own ROADMAP.md/TODO.md.
+
 ## Mission
 
 Keep the Spectre manifest accurate, versionable, and safe for people and tools
@@ -143,6 +167,8 @@ this repository — treat them accordingly.
 4. Update documentation whenever contract behavior changes.
 5. Validate the sample manifest before finishing any change.
 6. Semantic validation logic belongs in `validator.ts`. Do not embed business rules in the schema beyond structural constraints.
+7. All workspace-root `scripts/` tooling is TypeScript (`.ts`), run via
+   `node --experimental-strip-types`; never add a new `.js`/`.mjs` script.
 
 ## Validation Flow
 
