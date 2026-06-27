@@ -5,7 +5,7 @@
 | Field | Value |
 |-------|-------|
 | Project team | `project-shell` |
-| Repository role | Spectre manifest schema and contract tooling |
+| Repository role | Spectre M (cross-cutting) manifest schema and contract tooling |
 | Package/artifact | `@phcdevworks/spectre-manifest` |
 | Current version/status | 1.0.0 |
 
