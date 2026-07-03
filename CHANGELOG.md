@@ -6,7 +6,7 @@ All notable changes to this project will be documented here. The format follows 
 
 ## [1.0.0] - 2026-06-04
 
-Release Title: Initial Contract Authority Release
+Release Title: Phase 0 - Initial Contract Authority Release
 
 ### Added
 
