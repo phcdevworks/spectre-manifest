@@ -16,11 +16,14 @@ Its job is to make contracts enforceable, not to define UI behavior or package l
 - `CHANGELOG.md` documents contract releases in Keep a Changelog format.
 - All core Spectre packages registered, including `@phcdevworks/spectre-base`
   (the renamed `spectre-wordpress-themes`).
+- `spectre-manifest-diff` CLI classifies manifest changes as additive,
+  semantic, or breaking.
+- `spectre.manifest.json` is published via a `./manifest` export alongside
+  the existing `./schema` export.
 
 ### Remaining gaps
 
-- Contract diff tooling not yet built (P2, scale-driven).
-- No decision on publishing the manifest to npm (P2, demand-driven).
+None. All phases are complete; future work is demand-driven only.
 
 ## 2. Roadmap
 
@@ -66,7 +69,9 @@ the public API for programmatic use. Covered by `test/differ.test.mjs`.
 Decision recorded in `DECISION-manifest-distribution.md`: ship `spectre.manifest.json`
 from the existing `@phcdevworks/spectre-manifest` package via a new `./manifest` export
 (mirrors `./schema`). Keeps schema and manifest versioned together and pinnable through
-the existing npm dependency.
+the existing npm dependency. Follow-up implemented: the `./manifest` export is live,
+`spectre.manifest.json` is copied into the package during `pnpm build` and shipped in the
+npm tarball via `files`, and usage is documented in `README.md`.
 
 ## 3. Explicitly Out of Scope
 

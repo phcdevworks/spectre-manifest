@@ -69,14 +69,17 @@ and contract automation.
     package via a new `./manifest` export (mirrors `./schema`), rather than
     reference-by-URL — keeps schema and manifest versioned together and
     pinnable through the existing npm dependency
+  - Follow-up implemented: `./manifest` export added, `spectre.manifest.json`
+    copied into the package during `pnpm build` and included in the npm
+    tarball via `files`, documented in `README.md`
 
 ## Recommended Execution Order
 
 1. ~~Full package coverage~~ ✓ (`spectre-wordpress-themes` renamed to
    `spectre-base` and registered)
 2. ~~Downstream consumer validation tooling~~ ✓ (`spectre-manifest-check`)
-3. Contract diff tooling (scale-driven)
-4. npm publish evaluation (demand-driven)
+3. ~~Contract diff tooling~~ ✓ (`spectre-manifest-diff` CLI)
+4. ~~npm publish evaluation~~ ✓ (`./manifest` export shipped)
 
 ## Explicitly Out of Scope
 

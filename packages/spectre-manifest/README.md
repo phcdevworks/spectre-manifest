@@ -46,11 +46,31 @@ if (!result.valid) {
 }
 ```
 
-Use the CLI:
+Use the validate CLI:
 
 ```bash
 npx spectre-manifest-validate spectre.manifest.json
 npx spectre-manifest-validate spectre.manifest.json --json
+```
+
+Check a downstream package against its manifest entry:
+
+```bash
+npx spectre-manifest-check spectre.manifest.json ./path/to/your-package
+npx spectre-manifest-check spectre.manifest.json ./path/to/your-package --json
+```
+
+Diff two manifests and classify every change as additive, semantic, or breaking:
+
+```bash
+npx spectre-manifest-diff old.manifest.json new.manifest.json
+npx spectre-manifest-diff old.manifest.json new.manifest.json --json
+```
+
+Import the published manifest document directly:
+
+```ts
+import manifest from '@phcdevworks/spectre-manifest/manifest' with { type: 'json' }
 ```
 
 ## API
@@ -62,12 +82,20 @@ Runtime exports:
 - `formatManifestValidationIssues`
 - `loadManifestSchema`
 - `manifestSchemaPath`
+- `checkPackageAgainstManifest`
+- `formatPackageCheckIssues`
+- `diffManifests`
+- `formatManifestDiff`
 
 Published schema export:
 
 - `@phcdevworks/spectre-manifest/schema`
 
-Type exports include `SpectreManifest`, `SpectrePackageDefinition`, `SpectreLayerDefinition`, `ManifestRules`, and `ManifestAiGuidance`.
+Published manifest export:
+
+- `@phcdevworks/spectre-manifest/manifest`
+
+Type exports include `SpectreManifest`, `SpectrePackageDefinition`, `SpectreLayerDefinition`, `ManifestRules`, `ManifestAiGuidance`, `PackageCheckResult`, `PackageCheckIssue`, `ManifestChange`, `ManifestChangeClassification`, and `ManifestDiffResult`.
 
 ## Boundaries
 

@@ -128,6 +128,12 @@ npx spectre-manifest-check spectre.manifest.json ./path/to/your-package --json
 
 `spectre-manifest-check` reads the package's `package.json`, confirms it is registered in the manifest, verifies that all declared Spectre dependencies are present, and flags any undeclared ones. Exit code 0 means compliant; exit code 1 means issues were found or the package is not registered.
 
+Import the published manifest document directly (no need to fetch or check out this repo):
+
+```ts
+import manifest from '@phcdevworks/spectre-manifest/manifest' with { type: 'json' }
+```
+
 ## API
 
 Runtime exports:
@@ -143,6 +149,10 @@ Runtime exports:
 Published schema export:
 
 - `@phcdevworks/spectre-manifest/schema`
+
+Published manifest export:
+
+- `@phcdevworks/spectre-manifest/manifest` — ships `spectre.manifest.json` itself (the living architecture contract, versioned and pinned alongside the schema and validation tooling)
 
 Type exports include `SpectreManifest`, `SpectrePackageDefinition`, `SpectreLayerDefinition`, `ManifestRules`, `ManifestAiGuidance`, `PackageCheckResult`, and `PackageCheckIssue`.
 

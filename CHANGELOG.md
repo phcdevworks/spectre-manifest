@@ -4,6 +4,10 @@ All notable changes to this project will be documented here. The format follows 
 
 ## [Unreleased]
 
+### Added
+
+- **Manifest Export**: Added `./manifest` subpath export shipping `spectre.manifest.json` from the published package (mirrors the existing `./schema` export), per `DECISION-manifest-distribution.md`. The manifest is copied into the package directory as part of `pnpm build` and included in the npm tarball via `files`.
+
 ## [1.0.0] - 2026-06-04
 
 Release Title: Phase 0 - Initial Contract Authority Release
