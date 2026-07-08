@@ -6,6 +6,8 @@ All notable changes to this project will be documented here. The format follows 
 
 ## [1.1.0] - 2026-07-08
 
+Release Title: Phase 2 - Manifest Distribution Export
+
 Contract change type: additive
 
 ### Added
