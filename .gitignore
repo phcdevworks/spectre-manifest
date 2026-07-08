@@ -9,6 +9,7 @@ package-lock.json
 dist/
 coverage/
 *.tsbuildinfo
+packages/spectre-manifest/spectre.manifest.json
 
 # Tooling caches
 .turbo/

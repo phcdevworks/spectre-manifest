@@ -28,11 +28,13 @@
       "types": "./dist/index.d.ts",
       "import": "./dist/index.js"
     },
-    "./schema": "./schema/spectre.manifest.schema.json"
+    "./schema": "./schema/spectre.manifest.schema.json",
+    "./manifest": "./spectre.manifest.json"
   },
   "files": [
     "dist",
     "schema",
+    "spectre.manifest.json",
     "README.md"
   ],
   "repository": {
@@ -44,7 +46,7 @@
   },
   "homepage": "https://github.com/phcdevworks/spectre-manifest#readme",
   "scripts": {
-    "build": "tsc -p tsconfig.json",
+    "build": "tsc -p tsconfig.json && node --experimental-strip-types ../../scripts/copy-manifest.ts",
     "test": "node --test test/cli.test.mjs test/validator.test.mjs test/checker.test.mjs test/differ.test.mjs",
     "typecheck": "tsc -p tsconfig.json --noEmit",
     "validate": "node dist/cli.js",
@@ -58,7 +60,7 @@
     "ajv-formats": "3.0.1"
   },
   "devDependencies": {
-    "@types/node": "^25.9.1",
+    "@types/node": "^26.1.0",
     "typescript": "6.0.3"
   }
 }
