@@ -1,6 +1,6 @@
 {
   "name": "@phcdevworks/spectre-manifest",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "description": "Machine-readable contract package for Spectre architecture, package boundaries, and tooling validation.",
   "keywords": [
     "phcdevworks",
@@ -19,9 +19,9 @@
     "node": "^22.12.0 || >=24.0.0"
   },
   "bin": {
-    "spectre-manifest-validate": "./dist/cli.js",
-    "spectre-manifest-check": "./dist/check-cli.js",
-    "spectre-manifest-diff": "./dist/diff-cli.js"
+    "spectre-manifest-validate": "dist/cli.js",
+    "spectre-manifest-check": "dist/check-cli.js",
+    "spectre-manifest-diff": "dist/diff-cli.js"
   },
   "exports": {
     ".": {

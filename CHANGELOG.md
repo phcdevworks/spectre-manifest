@@ -4,6 +4,10 @@ All notable changes to this project will be documented here. The format follows 
 
 ## [Unreleased]
 
+## [1.1.0] - 2026-07-08
+
+Contract change type: additive
+
 ### Added
 
 - **Manifest Export**: Added `./manifest` subpath export shipping `spectre.manifest.json` from the published package (mirrors the existing `./schema` export), per `DECISION-manifest-distribution.md`. The manifest is copied into the package directory as part of `pnpm build` and included in the npm tarball via `files`.
@@ -23,5 +27,6 @@ Release Title: Phase 0 - Initial Contract Authority Release
 - **CI**: Added `.github/workflows/ci.yml` — runs `pnpm verify` on Node 22 and 24 across push and PR events.
 - **Manifest Coverage**: Added manifest entries for all current Spectre packages across layers 1–7.
 
-[unreleased]: https://github.com/phcdevworks/spectre-manifest/compare/1.0.0...HEAD
+[unreleased]: https://github.com/phcdevworks/spectre-manifest/compare/1.1.0...HEAD
+[1.1.0]: https://github.com/phcdevworks/spectre-manifest/compare/1.0.0...1.1.0
 [1.0.0]: https://github.com/phcdevworks/spectre-manifest/tree/1.0.0

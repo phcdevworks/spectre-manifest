@@ -10,7 +10,7 @@ type PackageJsonWithVersion = {
 
 const repoRoot = join(dirname(fileURLToPath(import.meta.url)), '..')
 const changelogPath = join(repoRoot, 'CHANGELOG.md')
-const packagePath = join(repoRoot, 'package.json')
+const packagePath = join(repoRoot, 'packages/spectre-manifest/package.json')
 
 const CLASSIFICATION_PREFIX = 'Contract change type:'
 const ALLOWED: ChangeClassification[] = ['additive', 'semantic change', 'breaking']
