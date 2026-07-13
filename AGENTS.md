@@ -44,53 +44,12 @@ is release-relevant.
 | `.coderabbit.yaml`                | CodeRabbit                   | Automated review checks aligned with package boundaries            |
 | `.github/dependabot.yml`          | Dependabot / Jules handoff   | Dependency-update cadence for automated maintenance                |
 
-## OpenAI Codex - Documentation & Releases
+## Agent-Specific Guides
 
-**OpenAI Codex** is the documentation, release-readiness, production
-stabilization, repo-hygiene, and config-standardization agent for this
-repository. Codex works from `AGENTS.md`, `CODEX.md`, and the supporting files
-under `.codex/`.
-
-When Codex is active in this repo:
-
-- Claude Code remains the primary AI developer and implementation lead.
-- Codex checks public contract impact, release risk, documentation coverage, and
-  validation results.
-- Codex may perform focused refactors when required for correctness,
-  maintainability, documentation standardization, or release-risk reduction.
-- Codex does not create commits, tags, pushes, merges, publishes, or releases
-  unless Bradley explicitly requests that action.
-- Codex tracks existing uncommitted work and does not revert changes it did not
-  make.
-
-## GitHub Copilot Support Assistant
-
-GitHub Copilot is the default in-IDE support layer for fast, local developer
-productivity. It provides:
-
-- inline code completion
-- small code suggestions
-- test suggestions
-- TypeScript assistance
-- API usage hints
-- refactor suggestions
-- pattern-aware implementation help
-
-Copilot does not own implementation leadership, architecture direction, release
-coordination, production stabilization ownership, repository-wide AI governance,
-automated maintenance workflows, config standardization ownership, or commit
-authority.
-
-## Google Jules Maintenance Agent
-
-Google Jules handles narrowly-scoped automated maintenance only:
-
-- small fix PRs
-- dependency updates
-- micro-updates
-
-Jules does not own architecture, implementation leadership, feature work,
-public contract changes, large refactors, release coordination, or publishing.
+- `CLAUDE.md` - primary development authority and implementation workflow.
+- `CODEX.md` - documentation, release, stabilization, and repo hygiene workflow.
+- `JULES.md` - bounded automated maintenance workflow.
+- `COPILOT.md` and `.github/copilot-instructions.md` - support-assistant workflow.
 
 ## Coordination Rules
 

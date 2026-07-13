@@ -1,7 +1,7 @@
 {
   "name": "@phcdevworks/spectre-manifest",
   "version": "1.1.0",
-  "description": "Machine-readable contract package for Spectre architecture, package boundaries, and tooling validation.",
+  "description": "@phcdevworks/spectre-manifest is the manifest schema and contract tooling package of the Spectre system. It records package roles, layers, ownership boundaries, and dependency rules in one machine-readable source of truth, and validates each package's spectre.manifest.json against it.",
   "keywords": [
     "phcdevworks",
     "spectre",
