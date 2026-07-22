@@ -4,7 +4,7 @@
   "description": "Workspace for the Spectre manifest package and schema tooling.",
   "type": "module",
   "author": "PHCDevworks",
-  "packageManager": "pnpm@11.12.0",
+  "packageManager": "pnpm@11.15.1",
   "engines": {
     "node": "^22.12.0 || >=24.0.0"
   },
