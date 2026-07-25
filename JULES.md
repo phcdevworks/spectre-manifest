@@ -7,22 +7,17 @@ Google Jules is the scheduled maintenance agent for
 keeps the manifest workspace clean without taking over schema, validation, or
 release ownership.
 
-Claude Code remains the lead implementation agent. Codex owns documentation,
-release readiness, production stabilization, repo hygiene, contract review, and
-config standardization. Bradley Potts remains the final release and merge
-authority.
-
-Jules does not own schema changes, validator semantics, public manifest
-contract changes, large refactors, documentation governance, release
-decisions, or AI-agent governance.
+Full roster and authority table: [AGENTS.md](AGENTS.md). Bradley Potts
+remains the final release and merge authority. Jules does not own schema
+changes, validator semantics, public manifest contract changes, large
+refactors, documentation governance, release decisions, or AI-agent
+governance.
 
 ## Operating Principles
 
 1. Read `AGENTS.md` before taking any action.
-2. Defer to `CLAUDE.md` for development authority.
-3. Follow the shared source, validation, and PR rules in `AGENTS.md`.
-4. Commit and push only when all validation gates pass clean.
-5. If a gate fails and cannot be safely resolved within scope, stop and report
+2. Commit and push only when all validation gates pass clean.
+3. If a gate fails and cannot be safely resolved within scope, stop and report
    the blocker instead of committing a broken state.
 
 ## Allowed Maintenance

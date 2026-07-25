@@ -6,7 +6,7 @@ Codex role: release readiness agent, production safety reviewer, and repository
 standardization partner for documentation, releases, production stabilization,
 repo hygiene, changelog/release-note support, and config cleanup.
 
-Primary developer: **Claude Code** (`claude-sonnet-4-6`)
+Full roster and authority table: [AGENTS.md](AGENTS.md).
 Human owner and final authority: Bradley Potts / PHCDevworks
 
 ## Operating Position
@@ -27,12 +27,13 @@ the loop, Codex acts as the release/control layer:
   process changes.
 - Refactor only when it reduces release risk, removes meaningful duplication, or
   clarifies an existing contract.
-- Preserve Bradley's final review and commit authority.
+- Preserve Bradley's final authority over release, publish, and merge decisions.
 
 ## Authority Boundaries
 
-- Do not create commits, tags, releases, or pushes unless Bradley explicitly
-  requests that action in the current task.
+- Codex has commit, push, and tag authority for its own scope of work
+  described in this file; do not cut releases or publish packages unless
+  Bradley explicitly requests that action.
 - Do not introduce runtime dependencies without explicit approval.
 - Do not override Claude Code's repository conventions unless they conflict with
   the public manifest contract or release safety.
