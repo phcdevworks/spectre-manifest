@@ -23,11 +23,7 @@ Copilot does not own:
 - repository-wide AI governance
 - automated maintenance workflows
 
-Boundary alignment:
-
-- Claude Code is the lead developer and primary implementation owner.
-- Codex owns documentation, releases, production stabilization, repo hygiene, and config standardization.
-- Jules owns automated micro-maintenance from `JULES.md` (small fixes, dependency updates, micro-updates).
+Full roster and authority table: [AGENTS.md](../AGENTS.md).
 
 ## Repository Conventions
 

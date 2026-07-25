@@ -5,14 +5,16 @@ Human owner: PHCDevworks / brad.potts@coastdigitalgroup.com
 
 ## Commit Policy
 
-Claude Code does not create git commits, push branches, or create tags in this repository. Changes are prepared and validated but left for human review and commit.
+See [AGENTS.md](AGENTS.md) for the full grant of authority. Changes are
+validated, then staged, committed, tagged, and pushed without per-action
+confirmation.
 
 ## Multi-Agent Team
 
-`AGENTS.md` is the shared guide for agent roles, edit boundaries, and PR
-requirements. Claude Code remains the lead implementation authority for schema,
-validation logic, types, CLI, and tests. Resolve implementation conflicts by
-referencing this file and `spectre.manifest.json`.
+Full roster, authority table, and PR requirements: [AGENTS.md](AGENTS.md).
+Claude Code remains the lead implementation authority for schema, validation
+logic, types, CLI, and tests. Resolve implementation conflicts by referencing
+this file and `spectre.manifest.json`.
 
 ## Pull Request Creation
 
