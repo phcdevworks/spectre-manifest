@@ -53,7 +53,7 @@ Workspace for the Spectre manifest package and ecosystem contract. The manifest 
 [Contributing](CONTRIBUTING.md) | [Changelog](CHANGELOG.md) |
 [Roadmap](ROADMAP.md) | [Security Policy](SECURITY.md)
 
-## Source of truth
+## Source Of Truth
 
 `spectre.manifest.json` (root) and `packages/spectre-manifest/schema/spectre.manifest.schema.json`
 are the source of truth for the Spectre architecture contract. Everything else
@@ -70,13 +70,13 @@ After any schema, type, or manifest change: run `pnpm build` then
 `pnpm validate:manifest` (or `corepack pnpm verify` / `npm run check`) to
 confirm the contract is internally consistent.
 
-## When to use this package
+## When To Use This Package
 
 - You need a machine-readable contract describing Spectre package roles, layer membership, and dependency rules.
 - You are writing tooling, CI scripts, AI agent docs, or scaffolding that needs to understand the Spectre ecosystem structure programmatically.
 - You want to validate a `spectre.manifest.json` file against the published schema.
 
-## When not to use this package
+## When Not To Use This Package
 
 - You need runtime reactive state, routing, styling, or component logic — those belong in other Spectre packages.
 - You need a generic JSON schema library — this package is purpose-built for Spectre architecture contracts only.
@@ -90,7 +90,7 @@ confirm the contract is internally consistent.
 - Validates schema rules plus semantic concerns such as duplicate layer order and dependency cycles.
 - Gives humans, CI, scaffolding, docs, and AI workflows the same architecture contract.
 
-## Install
+## Installation
 
 ```bash
 npm install @phcdevworks/spectre-manifest
@@ -200,17 +200,17 @@ guidance in [CLAUDE.md](./CLAUDE.md), [CODEX.md](./CODEX.md),
 | Type errors after schema change           | TypeScript types and schema are out of sync                      | Update `packages/spectre-manifest/src/types.ts` to match schema changes |
 | Tests fail after schema change            | Tests import from `dist/` which is stale                         | Run `pnpm build` before `pnpm test`                                     |
 
-## AI and automation boundaries
+## AI And Automation Boundaries
 
 Claude Code (`claude-sonnet-4-6`) is the primary development agent for this
-repository. Codex handles release readiness and production stabilization.
-Jules handles small, bounded automated maintenance. GitHub Copilot provides
-development support.
+repository. Codex handles releases, including cutting tagged releases and
+GitHub Releases, and production stabilization. Jules handles small, bounded
+automated maintenance. GitHub Copilot provides development support.
 
-Claude Code does not create git commits. All Claude Code changes are prepared
-and validated, then handed off to Bradley Potts for human review and commit.
-Jules commits bounded automated maintenance tasks autonomously when all
-validation gates pass.
+All AI agents with repository access (Claude Code, Codex, Copilot, Jules)
+have commit, push, and tag authority in this repository. Publishing to npm
+remains Bradley Potts's sole authority. See [AGENTS.md](AGENTS.md) for the
+full commit-policy and release-authority grant.
 
 **Protected from automated change:** `packages/spectre-manifest/schema/spectre.manifest.schema.json`,
 `packages/spectre-manifest/src/types.ts`, `packages/spectre-manifest/src/index.ts`,
