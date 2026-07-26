@@ -29,6 +29,9 @@
     "editor.insertSpaces": true,
     "editor.detectIndentation": true,
     "editor.trimAutoWhitespace": true,
+    "editor.codeActionsOnSave": {
+      "source.fixAll.eslint": "explicit"
+    },
     "files.trimTrailingWhitespace": true,
     "files.insertFinalNewline": true,
     "files.eol": "\n",
@@ -103,6 +106,11 @@
         "type": "shell"
       },
       {
+        "label": "test",
+        "command": "pnpm test",
+        "type": "shell"
+      },
+      {
         "label": "validate:manifest",
         "command": "pnpm validate:manifest",
         "type": "shell",
@@ -110,6 +118,16 @@
           "kind": "build",
           "isDefault": true
         }
+      },
+      {
+        "label": "check",
+        "command": "pnpm check",
+        "type": "shell"
+      },
+      {
+        "label": "verify",
+        "command": "pnpm verify",
+        "type": "shell"
       }
     ]
   }
