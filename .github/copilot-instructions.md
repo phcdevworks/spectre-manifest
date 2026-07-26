@@ -23,7 +23,8 @@ Copilot does not own:
 - repository-wide AI governance
 - automated maintenance workflows
 
-Full roster and authority table: [AGENTS.md](../AGENTS.md).
+Copilot has commit, push, and tag authority per the companywide grant in
+`AGENTS.md`. Full roster and authority table: [AGENTS.md](../AGENTS.md).
 
 ## Repository Conventions
 
