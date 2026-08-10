@@ -39,7 +39,12 @@ test("accepts a registered package with correct dependencies", async () => {
 test("accepts peerDependencies as satisfying manifest dependencies", async () => {
   const dir = await makeTempPackage({
     name: "@phcdevworks/spectre-ui-astro",
-    exports: { ".": "./dist/index.js", "./components/SpAlert.astro": "./components/SpAlert.astro", "./components/SpAvatar.astro": "./components/SpAvatar.astro", "./components/SpBadge.astro": "./components/SpBadge.astro", "./components/SpButton.astro": "./components/SpButton.astro", "./components/SpCard.astro": "./components/SpCard.astro", "./components/SpIconBox.astro": "./components/SpIconBox.astro", "./components/SpInput.astro": "./components/SpInput.astro", "./components/SpPricingCard.astro": "./components/SpPricingCard.astro", "./components/SpRating.astro": "./components/SpRating.astro", "./components/SpTestimonial.astro": "./components/SpTestimonial.astro" },
+    exports: Object.fromEntries(
+      rootManifest.packages["@phcdevworks/spectre-ui-astro"].exports.map((key) => [
+        key,
+        key === "." ? "./dist/index.js" : key,
+      ]),
+    ),
     peerDependencies: {
       "@phcdevworks/spectre-tokens": "^2.0.0",
       "@phcdevworks/spectre-ui": "^1.0.0",
