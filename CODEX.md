@@ -103,16 +103,15 @@ Once release-ready, Codex cuts the release:
 2. Bump `package.json` to the proposed version.
 3. Move `[Unreleased]` notes into a new versioned entry:
    `## [<version>] - <YYYY-MM-DD>`, with a release title line in the format
-   `**Release Title:** Phase <N> - <short title>`, where `Phase <N>` is the
-   active phase name from this repo's own `ROADMAP.md` and `<short title>`
-   is a concise summary of what shipped. If the release spans no single
-   ROADMAP phase, state that explicitly instead of inventing one.
+   `**Release Title:** <short title>`, where `<short title>` is a concise
+   summary of what shipped without a roadmap phase or version prefix.
 4. Stage and commit the version bump and changelog update.
 5. Create the git tag: `git tag v<version>` (matching `package.json`
    exactly), then push the commit and tag.
 6. Publish the GitHub Release from that tag: `gh release create v<version>
-   --title "v<version>: Phase <N> - <short title>" --notes-file` (extract the
-   new version's changelog section, or `--notes` inline for a short release).
+   --title "<short title>" --notes-file` (extract the new version's changelog
+   section, or `--notes` inline for a short release). The GitHub Release title
+   must match the changelog release title exactly.
 7. `npm publish` is **not** run by Codex — that stays with Bradley Potts.
 
 ## Pull Request Creation
