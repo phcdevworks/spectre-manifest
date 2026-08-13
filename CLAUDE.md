@@ -3,11 +3,18 @@
 Primary AI maintainer: **Claude Code** (claude-sonnet-4-6, Anthropic)
 Human owner: PHCDevworks / brad.potts@coastdigitalgroup.com
 
-## Commit Policy
+## Git Access — Denied
 
-See [AGENTS.md](AGENTS.md) for the full grant of authority. Changes are
-validated, then staged, committed, tagged, and pushed without per-action
-confirmation.
+**Claude Code has zero git access in this repo, as part of a companywide
+policy.** Claude Code must not run `git commit`, `git push`, `git tag`, or
+any other git command — read-only or mutating — here. This supersedes the
+prior commit/push/tag grant described in [AGENTS.md](AGENTS.md). OpenAI
+Codex now executes all git operations for this repo; see
+[AGENTS.md](AGENTS.md) and [CODEX.md](CODEX.md).
+
+When work is ready, Claude Code runs the validation flow below, then stops
+short of any git command and hands off to Codex (or Bradley Potts) with a
+summary of files changed and validation performed.
 
 ## Multi-Agent Team
 
@@ -18,9 +25,10 @@ this file and `spectre.manifest.json`.
 
 ## Pull Request Creation
 
-Claude Code may create commits and tags directly per the Commit Policy above;
-PR creation still follows the process in `AGENTS.md` where the repository's
-workflow calls for a PR rather than a direct push.
+Claude Code prepares changes and, where the repo's workflow calls for a PR
+rather than a direct push, hands off the branch/diff to Codex (or Bradley
+Potts) to open it — Claude Code does not create commits, tags, or PRs
+directly. PR creation still follows the process in `AGENTS.md`.
 
 ---
 

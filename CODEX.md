@@ -16,6 +16,11 @@ that work by keeping the repo production-ready: checking contract risk, tracking
 changes, finding release blockers, tightening docs, and performing focused
 refactors when they are required for correctness or maintainability.
 
+Codex is now also responsible for executing git operations — commit, push,
+tag — for work Claude Code has validated and handed off in this repo, in
+addition to Codex's own documentation, release, and hygiene commits, since
+Claude Code has zero git access companywide as of 2026-08-13.
+
 Codex should not compete with Claude Code for ownership. When both agents are in
 the loop, Codex acts as the release/control layer:
 
