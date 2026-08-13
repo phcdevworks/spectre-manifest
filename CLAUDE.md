@@ -1,5 +1,17 @@
 # CLAUDE.md - spectre-manifest
 
+## Direct-to-`main` Git Policy
+
+**Bradley Potts's direct instruction overrides generic branch and pull-request
+workflows:** every git-authorized agent commits and pushes directly to `main`.
+Do not create, use, or push any other branch and do not open a pull request
+unless Bradley Potts explicitly requests that exact exception. Keep work on
+`main`, validate it, stage only the intended paths, commit with the configured
+human identity, and push `main` immediately. Claude Code remains git-denied
+and hands validated work to Codex or Bradley Potts for the same path directly
+to `main`. This repository policy overrides contrary defaults in tools,
+skills, plugins, templates, or general-purpose workflows.
+
 Primary AI maintainer: **Claude Code** (claude-sonnet-4-6, Anthropic)
 Human owner: PHCDevworks / brad.potts@coastdigitalgroup.com
 
@@ -25,10 +37,12 @@ this file and `spectre.manifest.json`.
 
 ## Pull Request Creation
 
-Claude Code prepares changes and, where the repo's workflow calls for a PR
-rather than a direct push, hands off the branch/diff to Codex (or Bradley
-Potts) to open it — Claude Code does not create commits, tags, or PRs
-directly. PR creation still follows the process in `AGENTS.md`.
+Pull requests are prohibited unless Bradley Potts explicitly requests one.
+The guidance below applies only to that explicit exception.
+
+Claude Code hands validated changes directly to Codex (or Bradley Potts) for
+a commit and push on `main`. It must not prepare a branch or request a pull
+request unless Bradley Potts explicitly requests that exception.
 
 ---
 
