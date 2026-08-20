@@ -1,5 +1,16 @@
 # CLAUDE.md - spectre-manifest
 
+## Verified TODO Completion Workflow
+
+For every TODO item Claude Code completes, use this sequence in the same change:
+
+1. Keep the item in `TODO.md` while implementation or verification is in progress.
+2. Confirm every acceptance criterion is met and the repository's required tests and validation gate pass.
+3. Only after verification passes, remove the completed item from `TODO.md` immediately; do not leave it active or checked off.
+4. Update `CHANGELOG.md` under `[Unreleased]` as usual, update the applicable `ROADMAP.md` shipped/status table and phase text, and update every other affected status or dependency reference.
+
+If implementation is incomplete or any required check fails, keep the TODO item open and do not describe the work as shipped.
+
 Primary AI maintainer: **Claude Code** (claude-sonnet-4-6, Anthropic)
 Human owner: PHCDevworks / brad.potts@coastdigitalgroup.com
 
@@ -101,7 +112,8 @@ Always run `corepack pnpm validate:manifest` after editing `spectre.manifest.jso
 
 ## Current Work Queue
 
-See `TODO.md` for the current P0/P1/P2 task queue and completion status.
+See `TODO.md` for the current open P0/P1/P2 task queue; shipped status belongs
+in `ROADMAP.md` and `CHANGELOG.md`.
 See `ROADMAP.md` for the full strategic roadmap with context and acceptance criteria.
 
 ## What This Package Does Not Own
