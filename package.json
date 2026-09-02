@@ -4,12 +4,12 @@
   "description": "Workspace for the Spectre manifest package and schema tooling.",
   "type": "module",
   "author": "PHCDevworks",
-  "packageManager": "pnpm@11.18.0",
+  "packageManager": "pnpm@11.25.0",
   "engines": {
     "node": "^22.13.0 || >=24.0.0"
   },
   "devDependencies": {
-    "@types/node": "^26.1.2"
+    "@types/node": "^26.4.1"
   },
   "scripts": {
     "build": "pnpm --filter @phcdevworks/spectre-manifest build",
