@@ -1,6 +1,6 @@
 import test from "node:test";
 import assert from "node:assert/strict";
-import { mkdtemp, readFile, writeFile } from "node:fs/promises";
+import { mkdtemp, readFile, writeFile, rm } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import { join, resolve } from "node:path";
 import { execFile } from "node:child_process";
@@ -207,6 +207,90 @@ test("CLI exits non-zero when no package path is provided", async () => {
     execFileAsync(process.execPath, [cliPath, rootManifestPath]),
     (error) => {
       assert.equal(error.code, 1);
+      return true;
+    },
+  );
+});
+
+
+for (const [label, exports] of [
+  ["string root", "./dist/index.js"],
+  ["conditional root", { import: "./dist/index.js", require: "./dist/index.cjs" }],
+  ["nested conditional root", { node: { import: "./dist/index.js" } }],
+  ["array root", [null, "./dist/index.js"]],
+]) {
+  test(`accepts ${label} exports`, async (t) => {
+    const dir = await makeTempPackage({ name: "@phcdevworks/spectre-shell-router", exports });
+    t.after(() => rm(dir, { recursive: true, force: true }));
+    const result = await checkPackageAgainstManifest(rootManifest, dir);
+    assert.equal(result.valid, true);
+    assert.deepEqual(result.issues, []);
+  });
+}
+
+for (const [label, exports] of [
+  ["string root", "./dist/index.js"],
+  ["conditional root", { import: "./dist/index.js" }],
+  ["null subpath", { ".": "./dist/index.js", "./schema": null }],
+  ["null conditional subpath", { ".": "./dist/index.js", "./schema": { default: null } }],
+]) {
+  test(`reports missing schema export with ${label}`, async (t) => {
+    const dir = await makeTempPackage({ name: "@phcdevworks/spectre-manifest", exports });
+    t.after(() => rm(dir, { recursive: true, force: true }));
+    const result = await checkPackageAgainstManifest(rootManifest, dir);
+    assert.equal(result.valid, false);
+    assert.equal(result.issues.length, 1);
+    assert.equal(result.issues[0].kind, "missing-export");
+    assert.match(result.issues[0].message, /"\.\/schema"/);
+  });
+}
+
+for (const exports of [null, [], {}, { import: null }]) {
+  test(`reports unavailable root export for ${JSON.stringify(exports)}`, async (t) => {
+    const dir = await makeTempPackage({ name: "@phcdevworks/spectre-shell-router", exports });
+    t.after(() => rm(dir, { recursive: true, force: true }));
+    const result = await checkPackageAgainstManifest(rootManifest, dir);
+    assert.equal(result.valid, false);
+    assert.equal(result.issues[0].kind, "missing-export");
+  });
+}
+
+for (const [label, packageJson] of [
+  ["null", null], ["array", []], ["string", "package"], ["number", 42],
+  ["invalid name", { name: {} }], ["empty name", { name: "" }],
+  ["null dependencies", { dependencies: null }],
+  ["array dependencies", { dependencies: [] }],
+  ["invalid dependency version", { dependencies: { example: 42 } }],
+  ["invalid peerDependencies", { peerDependencies: "example" }],
+]) {
+  test(`returns a structured issue for ${label} package data`, async (t) => {
+    const dir = await makeTempPackage(packageJson);
+    t.after(() => rm(dir, { recursive: true, force: true }));
+    const result = await checkPackageAgainstManifest(rootManifest, dir);
+    assert.equal(result.valid, false);
+    assert.equal(result.issues[0].kind, "missing-registration");
+    assert.match(result.issues[0].message, /Unable to read package\.json: Expected/);
+  });
+}
+
+test("does not treat inherited object properties as registered packages", async (t) => {
+  const dir = await makeTempPackage({ name: "constructor", exports: "./index.js" });
+  t.after(() => rm(dir, { recursive: true, force: true }));
+  const result = await checkPackageAgainstManifest(rootManifest, dir);
+  assert.equal(result.valid, false);
+  assert.match(result.issues[0].message, /not registered/);
+});
+
+test("CLI returns JSON diagnostics for null package data", async (t) => {
+  const dir = await makeTempPackage(null);
+  t.after(() => rm(dir, { recursive: true, force: true }));
+  await assert.rejects(
+    execFileAsync(process.execPath, [cliPath, rootManifestPath, dir, "--json"]),
+    (error) => {
+      assert.equal(error.code, 1);
+      const result = JSON.parse(error.stderr);
+      assert.equal(result.valid, false);
+      assert.match(result.issues[0].message, /Expected a JSON object/);
       return true;
     },
   );

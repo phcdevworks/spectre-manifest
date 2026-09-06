@@ -60,12 +60,24 @@ npx spectre-manifest-check spectre.manifest.json ./path/to/your-package
 npx spectre-manifest-check spectre.manifest.json ./path/to/your-package --json
 ```
 
+The checker validates package metadata before inspecting it; malformed data returns
+structured issues, including with `--json`. When `exports` is present, declared
+exports must have a non-null target. String, array, and conditional root exports
+represent `.`; subpath maps are checked by their declared keys. Conditional targets
+are checked for declared availability, without selecting runtime conditions or
+checking files on disk. Packages without `exports` retain the legacy behavior of
+skipping export checks.
+
 Diff two manifests and classify every change as additive, semantic, or breaking:
 
 ```bash
 npx spectre-manifest-diff old.manifest.json new.manifest.json
 npx spectre-manifest-diff old.manifest.json new.manifest.json --json
 ```
+
+An absent or empty `allowedTargets` list imposes no target restriction. Changing
+it to a non-empty list is breaking; clearing the list is additive. The diff CLI
+exits with code 1 for breaking changes.
 
 Import the published manifest document directly:
 

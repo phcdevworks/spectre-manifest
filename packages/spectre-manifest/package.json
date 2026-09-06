@@ -1,6 +1,6 @@
 {
   "name": "@phcdevworks/spectre-manifest",
-  "version": "1.1.0",
+  "version": "1.2.0",
   "description": "@phcdevworks/spectre-manifest is the manifest schema and contract tooling package of the Spectre system. It records package roles, layers, ownership boundaries, and dependency rules in one machine-readable source of truth, and validates each package's spectre.manifest.json against it.",
   "keywords": [
     "phcdevworks",

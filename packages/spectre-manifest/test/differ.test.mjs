@@ -1,11 +1,11 @@
 import test from "node:test";
 import assert from "node:assert/strict";
-import { mkdtemp, readFile, writeFile } from "node:fs/promises";
+import { mkdtemp, readFile, writeFile, rm } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import { join, resolve } from "node:path";
 import { execFile } from "node:child_process";
 import { promisify } from "node:util";
-import { diffManifests, formatManifestDiff } from "../dist/index.js";
+import { diffManifests, formatManifestDiff, validateManifest } from "../dist/index.js";
 
 const execFileAsync = promisify(execFile);
 const rootManifestPath = resolve(process.cwd(), "../../spectre.manifest.json");
@@ -245,4 +245,68 @@ test("CLI --json emits machine-readable diff payload", async () => {
       return true;
     },
   );
+});
+
+
+for (const unrestricted of [undefined, []]) {
+  test(`classifies ${JSON.stringify(unrestricted)} targets becoming restricted as breaking`, () => {
+    const before = clone(rootManifest);
+    const key = "@phcdevworks/spectre-ui";
+    before.packages[key].allowedTargets = unrestricted;
+    const after = clone(before);
+    after.packages[key].allowedTargets = ["external"];
+    assert.equal(validateManifest(before).valid, true);
+    assert.equal(validateManifest(after).valid, false);
+    const result = diffManifests(before, after);
+    assert.equal(result.classification, "breaking");
+    assert.equal(result.changes.length, 1);
+    assert.equal(result.changes[0].path, `packages.${key}.allowedTargets`);
+    assert.equal(diffManifests(after, before).classification, "additive");
+  });
+}
+
+test("treats absent and empty allowedTargets as equivalent", () => {
+  const before = clone(rootManifest);
+  const key = firstPackageKey(before);
+  delete before.packages[key].allowedTargets;
+  const after = clone(before);
+  after.packages[key].allowedTargets = [];
+  assert.deepEqual(diffManifests(before, after).changes, []);
+  assert.deepEqual(diffManifests(after, before).changes, []);
+});
+
+test("retains classifications for changes between non-empty target lists", () => {
+  const before = clone(rootManifest);
+  const key = firstPackageKey(before);
+  before.packages[key].allowedTargets = ["external"];
+  const after = clone(before);
+  after.packages[key].allowedTargets.push("layer:build");
+  assert.equal(diffManifests(before, after).classification, "additive");
+  assert.equal(diffManifests(after, before).classification, "breaking");
+});
+
+test("CLI fails on newly restricted targets and passes when restrictions are removed", async (t) => {
+  const before = clone(rootManifest);
+  const key = "@phcdevworks/spectre-shell-router";
+  delete before.packages[key].allowedTargets;
+  const after = clone(before);
+  after.packages[key].allowedTargets = ["external"];
+  assert.equal(validateManifest(before).valid, true);
+  assert.equal(validateManifest(after).valid, true);
+  const dir = await mkdtemp(join(tmpdir(), "spectre-target-diff-"));
+  t.after(() => rm(dir, { recursive: true, force: true }));
+  const beforePath = join(dir, "before.json");
+  const afterPath = join(dir, "after.json");
+  await writeFile(beforePath, JSON.stringify(before));
+  await writeFile(afterPath, JSON.stringify(after));
+  await assert.rejects(
+    execFileAsync(process.execPath, [cliPath, beforePath, afterPath, "--json"]),
+    (error) => {
+      assert.equal(error.code, 1);
+      assert.equal(JSON.parse(error.stdout).classification, "breaking");
+      return true;
+    },
+  );
+  const { stdout } = await execFileAsync(process.execPath, [cliPath, afterPath, beforePath, "--json"]);
+  assert.equal(JSON.parse(stdout).classification, "additive");
 });

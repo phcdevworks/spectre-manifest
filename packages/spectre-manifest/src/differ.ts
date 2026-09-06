@@ -294,12 +294,23 @@ function diffPackageDefinition(
     },
   );
 
-  diffStringArray(
-    `${path}.allowedTargets`,
-    before.allowedTargets ?? [],
-    after.allowedTargets ?? [],
-    changes,
-    {
+  const beforeTargets = before.allowedTargets ?? [];
+  const afterTargets = after.allowedTargets ?? [];
+  // The validator treats an absent or empty list as unrestricted.
+  if (beforeTargets.length === 0 && afterTargets.length > 0) {
+    changes.push({
+      classification: "breaking",
+      path: `${path}.allowedTargets`,
+      message: `Package "${key}" now restricts allowed dependency targets, which may invalidate existing dependencies.`,
+    });
+  } else if (beforeTargets.length > 0 && afterTargets.length === 0) {
+    changes.push({
+      classification: "additive",
+      path: `${path}.allowedTargets`,
+      message: `Package "${key}" no longer restricts allowed dependency targets.`,
+    });
+  } else {
+    diffStringArray(`${path}.allowedTargets`, beforeTargets, afterTargets, changes, {
       added: (value) => ({
         classification: "additive",
         message: `Package "${key}" gained allowed dependency target "${value}".`,
@@ -308,8 +319,8 @@ function diffPackageDefinition(
         classification: "breaking",
         message: `Package "${key}" lost allowed dependency target "${value}", which may invalidate existing dependencies.`,
       }),
-    },
-  );
+    });
+  }
 
   if (before.description !== after.description) {
     changes.push({

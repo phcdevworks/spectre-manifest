@@ -23,7 +23,7 @@ export interface PackageCheckResult {
 
 interface PackageJson {
   name?: string;
-  exports?: Record<string, unknown> | string;
+  exports?: unknown;
   dependencies?: Record<string, string>;
   peerDependencies?: Record<string, string>;
 }
@@ -39,7 +39,27 @@ export async function checkPackageAgainstManifest(
 
   try {
     const raw = await readFile(packageJsonPath, "utf8");
-    packageJson = JSON.parse(raw) as PackageJson;
+    const parsed: unknown = JSON.parse(raw);
+    if (!isRecord(parsed)) {
+      throw new Error("Expected a JSON object.");
+    }
+    if (
+      parsed.name !== undefined &&
+      (typeof parsed.name !== "string" || parsed.name.trim().length === 0)
+    ) {
+      throw new Error("Expected name to be a non-empty string.");
+    }
+    for (const field of ["dependencies", "peerDependencies"] as const) {
+      const dependencies = parsed[field];
+      if (
+        dependencies !== undefined &&
+        (!isRecord(dependencies) ||
+          !Object.values(dependencies).every((version) => typeof version === "string"))
+      ) {
+        throw new Error(`Expected ${field} to be an object of version strings.`);
+      }
+    }
+    packageJson = parsed as PackageJson;
   } catch (error) {
     const message = error instanceof Error ? error.message : String(error);
 
@@ -57,7 +77,9 @@ export async function checkPackageAgainstManifest(
   }
 
   const packageName = packageJson.name ?? absolutePackagePath;
-  const entry = manifest.packages[packageName];
+  const entry = Object.hasOwn(manifest.packages, packageName)
+    ? manifest.packages[packageName]
+    : undefined;
 
   if (entry === undefined) {
     return {
@@ -75,15 +97,19 @@ export async function checkPackageAgainstManifest(
 
   const issues: PackageCheckIssue[] = [];
 
-  if (
-    typeof packageJson.exports === "object" &&
-    packageJson.exports !== null &&
-    !Array.isArray(packageJson.exports)
-  ) {
-    const actualExportKeys = new Set(Object.keys(packageJson.exports));
+  // Packages without exports retain the legacy package layout check behavior.
+  if (packageJson.exports !== undefined) {
+    const exports = packageJson.exports;
+    const subpaths =
+      isRecord(exports) && Object.keys(exports).some((key) => key.startsWith("."))
+        ? exports
+        : { ".": exports };
 
     for (const declaredExport of entry.exports) {
-      if (!actualExportKeys.has(declaredExport)) {
+      if (
+        !Object.hasOwn(subpaths, declaredExport) ||
+        !hasExportTarget(subpaths[declaredExport])
+      ) {
         issues.push({
           kind: "missing-export",
           path: `${packageName} exports`,
@@ -131,6 +157,21 @@ export async function checkPackageAgainstManifest(
     issues,
     entry,
   };
+}
+
+function isRecord(value: unknown): value is Record<string, unknown> {
+  return typeof value === "object" && value !== null && !Array.isArray(value);
+}
+
+// Check declared availability across conditions, without choosing a runtime condition.
+function hasExportTarget(value: unknown): boolean {
+  if (typeof value === "string") {
+    return value.startsWith("./");
+  }
+  if (Array.isArray(value)) {
+    return value.some(hasExportTarget);
+  }
+  return isRecord(value) && Object.values(value).some(hasExportTarget);
 }
 
 export function formatPackageCheckIssues(issues: PackageCheckIssue[]): string[] {

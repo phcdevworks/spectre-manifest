@@ -18,7 +18,7 @@ ecosystem, including packages in `project-design`, to validate their
 | Project team | `project-shell` |
 | Repository role | Spectre M (cross-cutting) manifest schema and contract tooling |
 | Package/artifact | `@phcdevworks/spectre-manifest` |
-| Current version/status | 1.1.0 |
+| Current version/status | 1.2.0 |
 
 ## Standard Workflow
 
@@ -138,6 +138,15 @@ npx spectre-manifest-check spectre.manifest.json ./path/to/your-package --json
 ```
 
 `spectre-manifest-check` reads the package's `package.json`, confirms it is registered in the manifest, verifies that all declared Spectre dependencies are present, and flags any undeclared ones. Exit code 0 means compliant; exit code 1 means issues were found or the package is not registered.
+
+It returns structured issues for malformed package metadata and checks declared
+exports when an `exports` field is present, including root shorthand and
+conditional targets. Null targets do not satisfy declared exports. See the
+[package usage documentation](packages/spectre-manifest/README.md) for details.
+
+`spectre-manifest-diff` treats an absent or empty `allowedTargets` list as
+unrestricted: introducing a non-empty list is breaking, and clearing it is
+additive. Breaking diffs exit with code 1.
 
 Import the published manifest document directly (no need to fetch or check out this repo):
 

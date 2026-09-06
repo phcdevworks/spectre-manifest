@@ -11,8 +11,8 @@ For every TODO item Claude Code completes, use this sequence in the same change:
 
 If implementation is incomplete or any required check fails, keep the TODO item open and do not describe the work as shipped.
 
-Primary AI maintainer: **Claude Code** (claude-sonnet-4-6, Anthropic)
-Human owner: PHCDevworks / brad.potts@coastdigitalgroup.com
+Primary AI maintainer: **Claude Code** (claude-sonnet-4-6)
+Human owner: PHCDevworks / Bradley Potts
 
 ## Git Access — Denied
 
