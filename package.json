@@ -4,22 +4,23 @@
   "description": "Workspace for the Spectre manifest package and schema tooling.",
   "type": "module",
   "author": "PHCDevworks",
-  "packageManager": "pnpm@11.25.0",
+  "packageManager": "pnpm@12.3.4",
   "engines": {
     "node": "^22.13.0 || >=24.0.0"
   },
   "devDependencies": {
-    "@types/node": "^26.4.1"
+    "@types/node": "^22.20.1"
   },
   "scripts": {
     "build": "pnpm --filter @phcdevworks/spectre-manifest build",
-    "typecheck": "pnpm --filter @phcdevworks/spectre-manifest typecheck",
+    "typecheck": "pnpm --filter @phcdevworks/spectre-manifest typecheck && pnpm --filter @phcdevworks/spectre-manifest exec tsc -p ../../tsconfig.json",
     "test": "pnpm --filter @phcdevworks/spectre-manifest build && pnpm --filter @phcdevworks/spectre-manifest test",
     "validate:manifest": "pnpm --filter @phcdevworks/spectre-manifest build && pnpm --filter @phcdevworks/spectre-manifest validate ../../spectre.manifest.json",
     "check:version-sync": "README_VERSION_PKG_PATH=packages/spectre-manifest/package.json node --experimental-strip-types scripts/check-readme-version.ts",
     "check": "pnpm verify",
-    "verify": "pnpm build && pnpm typecheck && pnpm test && pnpm validate:manifest && npm run check:version-sync",
+    "verify": "pnpm build && pnpm typecheck && pnpm test && pnpm validate:manifest && npm run check:version-sync && pnpm test:package",
     "release:propose": "node --experimental-strip-types scripts/propose-version.ts",
-    "reconcile": "node --experimental-strip-types scripts/reconcile-packages.ts"
+    "reconcile": "node --experimental-strip-types scripts/reconcile-packages.ts",
+    "test:package": "pnpm build && node --experimental-strip-types scripts/test-package.ts"
   }
 }

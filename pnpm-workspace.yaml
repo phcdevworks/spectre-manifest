@@ -1,4 +1,2 @@
 packages:
   - packages/*
-minimumReleaseAgeExclude:
-  - '@types/node@26.4.1'

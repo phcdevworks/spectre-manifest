@@ -61,10 +61,13 @@ corepack pnpm build               # compile TypeScript
 corepack pnpm typecheck           # type-check without emit
 corepack pnpm test                # build + run Node test suite (cli, validator, checker, differ)
 corepack pnpm validate:manifest   # build + validate spectre.manifest.json
-corepack pnpm verify              # build + typecheck + test + validate (full suite)
+corepack pnpm test:package        # pack + install + verify consumer imports/types/CLIs
+corepack pnpm verify              # full suite, README parity, and packed-install check
 ```
 
-> `pnpm verify` will fail in a non-TTY shell without `CI=true`. Use `corepack pnpm build && corepack pnpm typecheck && corepack pnpm test && corepack pnpm validate:manifest` as a workaround when needed.
+Use `CI=true corepack pnpm verify` in non-TTY shells. The gate includes package
+and root-script typechecking, README version parity, and a packed-install check
+that requires registry access for runtime dependencies.
 
 The workspace root `package.json` also exposes `npm run check`, which wraps
 `corepack pnpm verify` (`"check": "corepack pnpm verify"`). This is the
@@ -85,7 +88,7 @@ working step-by-step or debugging a single gate.
 | `packages/spectre-manifest/schema/spectre.manifest.schema.json` | JSON Schema (draft 2020-12)                      |
 | `packages/spectre-manifest/test/validator.test.mjs`             | Validator unit tests                             |
 | `packages/spectre-manifest/test/cli.test.mjs`                   | CLI integration tests                            |
-| `.github/workflows/ci.yml`                                      | CI — runs `pnpm verify` on Node 22 and 24        |
+| `.github/workflows/ci.yml`                                      | CI — runs `pnpm verify` on Node 22.13.0, 22.x, and 24.x |
 
 ## Architecture Rules (don't violate these)
 

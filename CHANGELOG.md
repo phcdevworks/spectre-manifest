@@ -4,6 +4,27 @@ All notable changes to this project will be documented here. The format follows 
 
 ## [Unreleased]
 
+## [1.3.0] - 2026-09-06
+
+**Release Title:** Toolchain and Packed Package Verification
+
+Contract change type: additive
+
+### Changed
+
+- Upgraded the pinned package manager to pnpm 12.3.4 and regenerated its lockfile; removed the obsolete Node 26 types release-age exception.
+- Pinned CI actions to reviewed release commits for checkout v7.0.1, setup-node v7.0.0, and pnpm/action-setup v6.1.0.
+- Aligned development type definitions with Node 22 and expanded CI to Node 22.13.0, current Node 22, and Node 24.
+
+### Added
+
+- Added a packed-install validation gate that checks public imports, TypeScript declarations, bundled schema and manifest data, and all three installed CLI commands from a temporary consumer.
+- Included root TypeScript tooling scripts in typechecking and documented the expanded verification gate.
+
+### Compatibility
+
+- `schemaVersion` remains `0.1`; runtime dependencies, public exports, manifest validation semantics, and supported Node versions are unchanged. These additions strengthen development and release validation. The packed-install gate requires registry access and runs without install lifecycle scripts.
+
 ## [1.2.0] - 2026-09-06
 
 **Release Title:** Package Check and Contract Diff Corrections
@@ -46,7 +67,8 @@ Release Title: Phase 0 - Initial Contract Authority Release
 - **CI**: Added `.github/workflows/ci.yml` — runs `pnpm verify` on Node 22 and 24 across push and PR events.
 - **Manifest Coverage**: Added manifest entries for all current Spectre packages across layers 1–7.
 
-[unreleased]: https://github.com/phcdevworks/spectre-manifest/compare/v1.2.0...HEAD
+[unreleased]: https://github.com/phcdevworks/spectre-manifest/compare/v1.3.0...HEAD
+[1.3.0]: https://github.com/phcdevworks/spectre-manifest/compare/v1.2.0...v1.3.0
 [1.2.0]: https://github.com/phcdevworks/spectre-manifest/compare/v1.1.0...v1.2.0
 [1.1.0]: https://github.com/phcdevworks/spectre-manifest/compare/1.0.0...1.1.0
 [1.0.0]: https://github.com/phcdevworks/spectre-manifest/tree/1.0.0

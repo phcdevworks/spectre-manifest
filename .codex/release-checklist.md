@@ -26,6 +26,8 @@ release or PR.
 - [ ] `corepack pnpm typecheck`
 - [ ] `corepack pnpm test`
 - [ ] `corepack pnpm validate:manifest`
+- [ ] `npm run check:version-sync`
+- [ ] `corepack pnpm test:package` (installed tarball imports, declarations, data, and CLIs)
 - [ ] Or `CI=true corepack pnpm verify`
 
 If any command cannot run, record the command, failure reason, and remaining

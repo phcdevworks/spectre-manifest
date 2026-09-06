@@ -92,8 +92,15 @@ pnpm build
 pnpm typecheck
 pnpm test
 pnpm validate:manifest
+pnpm test:package
 pnpm verify
 ```
+
+`pnpm typecheck` includes the root TypeScript scripts as well as package source.
+`pnpm verify` also checks README version parity and installs a packed tarball in
+a temporary consumer to exercise public imports, declarations, bundled data,
+and the installed CLIs. This install needs registry access and disables lifecycle
+scripts. CI runs the full gate on Node 22.13.0, current Node 22, and Node 24.
 
 ## Pull Requests
 

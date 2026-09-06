@@ -18,7 +18,7 @@ ecosystem, including packages in `project-design`, to validate their
 | Project team | `project-shell` |
 | Repository role | Spectre M (cross-cutting) manifest schema and contract tooling |
 | Package/artifact | `@phcdevworks/spectre-manifest` |
-| Current version/status | 1.2.0 |
+| Current version/status | 1.3.0 |
 
 ## Standard Workflow
 
@@ -190,10 +190,16 @@ pnpm verify
 Useful scripts:
 
 - `pnpm build` builds the package.
-- `pnpm typecheck` validates TypeScript without emitting files.
+- `pnpm typecheck` validates package source and root TypeScript scripts without emitting files.
 - `pnpm test` builds and runs the Node test suite.
 - `pnpm validate:manifest` validates `spectre.manifest.json`.
-- `pnpm verify` runs the standard workspace verification flow.
+- `pnpm test:package` builds and packs the package, installs the tarball into a temporary consumer, and checks public imports, declarations, bundled data, and all three installed CLIs.
+- `pnpm verify` runs the standard workspace verification flow, including README version parity and `test:package`.
+
+Development uses the pinned pnpm 12.3.4 version and Node 22 type definitions.
+CI runs on Node 22.13.0 (the supported minimum), current Node 22, and Node 24.
+The packed-install check needs registry access for runtime dependencies, disables
+install scripts, and removes its temporary consumer on completion or failure.
 
 AI-agent coordination starts in [AGENTS.md](./AGENTS.md), with companion
 guidance in [CLAUDE.md](./CLAUDE.md), [CODEX.md](./CODEX.md),
