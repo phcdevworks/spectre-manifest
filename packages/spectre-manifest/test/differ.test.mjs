@@ -310,3 +310,106 @@ test("CLI fails on newly restricted targets and passes when restrictions are rem
   const { stdout } = await execFileAsync(process.execPath, [cliPath, afterPath, beforePath, "--json"]);
   assert.equal(JSON.parse(stdout).classification, "additive");
 });
+
+for (const registry of ["packages", "layers"]) {
+  test(`handles own constructor entry in ${registry}`, () => {
+    const after = clone(rootManifest);
+    if (registry === "packages") {
+      after.packages.constructor = { role: "fixture", layer: "build", stability: "experimental", description: "Fixture", exports: ["."] };
+    } else {
+      after.layers.constructor = { title: "Fixture", description: "Fixture", order: 99 };
+      after.rules.dependencyDirection.push({ fromLayer: "constructor", allowedLayers: ["constructor"] });
+    }
+    assert.equal(validateManifest(after).valid, true);
+    const added = diffManifests(rootManifest, after);
+    assert.ok(added.changes.some(c => c.path === `${registry}.constructor` && c.classification === "additive"));
+    const removed = diffManifests(after, rootManifest);
+    assert.equal(removed.classification, "breaking");
+    assert.ok(removed.changes.some(c => c.path === `${registry}.constructor` && c.message.includes("removed")));
+    const modified = clone(after);
+    modified[registry].constructor.description = "Changed fixture";
+    assert.equal(diffManifests(after, modified).classification, "semantic");
+  });
+}
+
+const metadataCases = [
+  ["$schema", m => m, "$schema", "urn:fixture:schema"],
+  ["$id", m => m, "$id", "urn:fixture:manifest"],
+  ["system.packageManager", m => m.system, "packageManager", "pnpm@12.3.4"],
+  ["system.repository", m => m.system, "repository", "./fixture-repository"],
+  ["system.notes", m => m.system, "notes", ["Updated system guidance"]],
+  ["layer notes", m => Object.values(m.layers)[0], "notes", ["Updated layer guidance"]],
+  ["package notes", m => Object.values(m.packages)[0], "notes", ["Updated package guidance"]],
+  ["direction notes", m => m.rules.dependencyDirection[0], "notes", ["Updated direction guidance"]],
+  ["forbidden reason", m => m.rules.forbiddenImports[0], "reason", "Updated forbidden rationale"],
+  ["boundary reason", m => m.rules.boundaryConstraints[0], "reason", "Updated boundary rationale"],
+  ["entrypoint notes", m => m.ai.preferredEntrypoints[0], "notes", ["Updated entrypoint guidance"]],
+];
+for (const [label, select, field, value] of metadataCases) {
+  test(`reports ${label} changes as semantic in both directions`, () => {
+    const before = clone(rootManifest);
+    const after = clone(before);
+    select(after)[field] = value;
+    assert.equal(validateManifest(after).valid, true);
+    for (const [a, b] of [[before, after], [after, before]]) {
+      const result = diffManifests(a, b);
+      assert.equal(result.classification, "semantic");
+      assert.equal(result.changes.length, 1);
+      assert.ok(result.changes[0].path.endsWith(field));
+    }
+    if (field !== "reason") {
+      const absent = clone(after);
+      delete select(absent)[field];
+      assert.equal(validateManifest(absent).valid, true);
+      assert.equal(diffManifests(absent, after).classification, "semantic");
+      assert.equal(diffManifests(after, absent).classification, "semantic");
+    }
+  });
+}
+
+test("metadata matching preserves duplicate rules and ignores rule reordering", () => {
+  const before = clone(rootManifest);
+  const rule = clone(before.rules.forbiddenImports[0]);
+  before.rules.forbiddenImports.push({ ...rule, reason: "Additional rationale" });
+  const after = clone(before);
+  after.rules.forbiddenImports.at(-1).reason = "Changed additional rationale";
+  assert.equal(validateManifest(after).valid, true);
+  assert.equal(diffManifests(before, after).classification, "semantic");
+  const reordered = clone(before);
+  reordered.rules.forbiddenImports.reverse();
+  reordered.rules.boundaryConstraints.reverse();
+  reordered.ai.preferredEntrypoints.reverse();
+  assert.deepEqual(diffManifests(before, reordered).changes, []);
+});
+
+test("metadata changes do not hide a breaking export removal", () => {
+  const after = clone(rootManifest);
+  after.system.notes = ["Changed guidance"];
+  after.packages["@phcdevworks/spectre-manifest"].exports = ["."];
+  const result = diffManifests(rootManifest, after);
+  assert.equal(result.classification, "breaking");
+  assert.ok(result.changes.some(c => c.path === "system.notes" && c.classification === "semantic"));
+});
+
+test("CLI emits JSON for constructor removal and metadata-only changes", async (t) => {
+  const dir = await mkdtemp(join(tmpdir(), "spectre-diff-regression-"));
+  t.after(() => rm(dir, { recursive: true, force: true }));
+  const before = clone(rootManifest);
+  before.packages.constructor = { role: "fixture", layer: "build", stability: "experimental", description: "Fixture", exports: ["."] };
+  const beforePath = join(dir, "before.json");
+  const afterPath = join(dir, "after.json");
+  await writeFile(beforePath, JSON.stringify(before));
+  await writeFile(afterPath, JSON.stringify(rootManifest));
+  await assert.rejects(execFileAsync(process.execPath, [cliPath, beforePath, afterPath, "--json"]), error => {
+    assert.equal(error.code, 1);
+    const result = JSON.parse(error.stdout);
+    assert.equal(result.classification, "breaking");
+    assert.equal(result.changes[0].path, "packages.constructor");
+    return true;
+  });
+  const metadata = clone(rootManifest);
+  metadata.system.notes = ["Changed guidance"];
+  await writeFile(beforePath, JSON.stringify(metadata));
+  const { stdout } = await execFileAsync(process.execPath, [cliPath, beforePath, afterPath, "--json"]);
+  assert.equal(JSON.parse(stdout).classification, "semantic");
+});

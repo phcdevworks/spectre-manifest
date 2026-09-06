@@ -295,3 +295,31 @@ test("CLI returns JSON diagnostics for null package data", async (t) => {
     },
   );
 });
+
+for (const [label, exports, available] of [
+  ["blocking default first", { default: null, import: "./index.js" }, false],
+  ["available import first", { import: "./index.js", default: null }, true],
+  ["nested blocking default", { default: { default: null }, import: "./index.js" }, false],
+  ["empty default falls through", { default: {}, import: "./index.js" }, true],
+  ["empty array blocks default", { default: [], import: "./index.js" }, false],
+  ["unmatched array falls through", { default: [{}], import: "./index.js" }, true],
+  ["null array blocks default", { default: [null, {}], import: "./index.js" }, false],
+  ["array tries next target after blocked condition", [{ default: null, import: "./missing.js" }, "./index.js"], true],
+]) {
+  test(`conditional export availability matches Node: ${label}`, async (t) => {
+    const name = "@phcdevworks/spectre-shell-router";
+    const dir = await makeTempPackage({ name, type: "module", exports });
+    t.after(() => rm(dir, { recursive: true, force: true }));
+    await writeFile(join(dir, "index.js"), "export const ready = true;");
+    await writeFile(join(dir, "consumer.mjs"), `import { ready } from '${name}'; if (!ready) throw new Error('Missing export');`);
+    const result = await checkPackageAgainstManifest(rootManifest, dir);
+    assert.equal(result.valid, available);
+    if (available) {
+      await execFileAsync(process.execPath, [join(dir, "consumer.mjs")]);
+    } else {
+      assert.equal(result.issues[0].kind, "missing-export");
+      await assert.rejects(execFileAsync(process.execPath, [join(dir, "consumer.mjs")]),
+        (error) => error.code === 1 && /ERR_PACKAGE_PATH_NOT_EXPORTED/.test(error.stderr));
+    }
+  });
+}

@@ -18,7 +18,7 @@ ecosystem, including packages in `project-design`, to validate their
 | Project team | `project-shell` |
 | Repository role | Spectre M (cross-cutting) manifest schema and contract tooling |
 | Package/artifact | `@phcdevworks/spectre-manifest` |
-| Current version/status | 1.3.0 |
+| Current version/status | 1.4.0 |
 
 ## Standard Workflow
 
@@ -141,12 +141,17 @@ npx spectre-manifest-check spectre.manifest.json ./path/to/your-package --json
 
 It returns structured issues for malformed package metadata and checks declared
 exports when an `exports` field is present, including root shorthand and
-conditional targets. Null targets do not satisfy declared exports. See the
+conditional targets. Null targets do not satisfy declared exports, and a blocking
+default cannot be bypassed by a later condition. See the
 [package usage documentation](packages/spectre-manifest/README.md) for details.
 
 `spectre-manifest-diff` treats an absent or empty `allowedTargets` list as
 unrestricted: introducing a non-empty list is breaking, and clearing it is
 additive. Breaking diffs exit with code 1.
+
+Diffs also report metadata changes as semantic, including package-manager and
+repository fields, notes, and rule reasons. Package and layer names such as
+`constructor` are handled as ordinary registry entries.
 
 Import the published manifest document directly (no need to fetch or check out this repo):
 

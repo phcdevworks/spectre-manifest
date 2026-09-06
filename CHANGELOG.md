@@ -4,6 +4,23 @@ All notable changes to this project will be documented here. The format follows 
 
 ## [Unreleased]
 
+## [1.4.0] - 2026-09-06
+
+**Release Title:** Registry, Export, and Metadata Corrections
+
+Contract change type: semantic change
+
+### Fixed
+
+- Manifest diffs use own-property registry lookups so valid package and layer names such as `constructor` are detected on addition and removal without crashes.
+- Export availability checks honor blocking default conditions, nested unmatched conditions, and array fallbacks; a later target no longer bypasses an earlier blocking default.
+- Manifest diffs report previously omitted metadata as semantic changes: `$schema`, `$id`, system package-manager/repository fields, notes throughout the manifest, and forbidden-import/boundary-constraint reasons. Matching preserves duplicate entries and ignores registry reordering.
+
+### Validation and compatibility
+
+- Added regression coverage for registry-name collisions, metadata edits and CLI output, and conditional-export behavior verified against actual Node imports.
+- `schemaVersion` remains `0.1`: schema, exported types, and manifest validation semantics are unchanged. Checker and diff corrections may reject blocked exports that previously passed and report metadata changes that previously appeared identical.
+
 ## [1.3.0] - 2026-09-06
 
 **Release Title:** Toolchain and Packed Package Verification
@@ -67,7 +84,8 @@ Release Title: Phase 0 - Initial Contract Authority Release
 - **CI**: Added `.github/workflows/ci.yml` — runs `pnpm verify` on Node 22 and 24 across push and PR events.
 - **Manifest Coverage**: Added manifest entries for all current Spectre packages across layers 1–7.
 
-[unreleased]: https://github.com/phcdevworks/spectre-manifest/compare/v1.3.0...HEAD
+[unreleased]: https://github.com/phcdevworks/spectre-manifest/compare/v1.4.0...HEAD
+[1.4.0]: https://github.com/phcdevworks/spectre-manifest/compare/v1.3.0...v1.4.0
 [1.3.0]: https://github.com/phcdevworks/spectre-manifest/compare/v1.2.0...v1.3.0
 [1.2.0]: https://github.com/phcdevworks/spectre-manifest/compare/v1.1.0...v1.2.0
 [1.1.0]: https://github.com/phcdevworks/spectre-manifest/compare/1.0.0...1.1.0

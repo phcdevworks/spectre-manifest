@@ -33,6 +33,8 @@ export function diffManifests(
 ): ManifestDiffResult {
   const changes: ManifestChange[] = [];
 
+  diffMetadata("$schema", before.$schema, after.$schema, changes);
+  diffMetadata("$id", before.$id, after.$id, changes);
   diffSchemaVersion(before, after, changes);
   diffSystem(before, after, changes);
   diffLayers(before, after, changes);
@@ -77,6 +79,9 @@ function diffSystem(
   changes: ManifestChange[],
 ): void {
   const path = "system";
+  for (const field of ["packageManager", "repository", "notes"] as const) {
+    diffMetadata(`${path}.${field}`, before.system[field], after.system[field], changes);
+  }
 
   if (before.system.name !== after.system.name) {
     changes.push({
@@ -120,7 +125,7 @@ function diffLayers(
   const afterKeys = Object.keys(after.layers);
 
   for (const key of afterKeys) {
-    if (!(key in before.layers)) {
+    if (!Object.hasOwn(before.layers, key)) {
       changes.push({
         classification: "additive",
         path: `layers.${key}`,
@@ -130,7 +135,7 @@ function diffLayers(
   }
 
   for (const key of beforeKeys) {
-    if (!(key in after.layers)) {
+    if (!Object.hasOwn(after.layers, key)) {
       changes.push({
         classification: "breaking",
         path: `layers.${key}`,
@@ -150,6 +155,7 @@ function diffLayerDefinition(
   changes: ManifestChange[],
 ): void {
   const path = `layers.${key}`;
+  diffMetadata(`${path}.notes`, before.notes, after.notes, changes);
 
   if (before.order !== after.order) {
     changes.push({
@@ -194,7 +200,7 @@ function diffPackages(
   const afterKeys = Object.keys(after.packages);
 
   for (const key of afterKeys) {
-    if (!(key in before.packages)) {
+    if (!Object.hasOwn(before.packages, key)) {
       changes.push({
         classification: "additive",
         path: `packages.${key}`,
@@ -204,7 +210,7 @@ function diffPackages(
   }
 
   for (const key of beforeKeys) {
-    if (!(key in after.packages)) {
+    if (!Object.hasOwn(after.packages, key)) {
       changes.push({
         classification: "breaking",
         path: `packages.${key}`,
@@ -224,6 +230,7 @@ function diffPackageDefinition(
   changes: ManifestChange[],
 ): void {
   const path = `packages.${key}`;
+  diffMetadata(`${path}.notes`, before.notes, after.notes, changes);
 
   if (before.layer !== after.layer) {
     changes.push({
@@ -374,6 +381,8 @@ function diffDependencyDirectionRules(
       continue;
     }
 
+    diffMetadata(`${path}[${fromLayer}].notes`, beforeRule.notes, afterRule.notes, changes);
+
     const beforeAllowed = new Set(beforeRule.allowedLayers);
     const afterAllowed = new Set(afterRule.allowedLayers);
 
@@ -415,7 +424,8 @@ function diffForbiddenImportRules(
   changes: ManifestChange[],
 ): void {
   const path = "rules.forbiddenImports";
-  const key = (rule: ForbiddenImportRule) => `${rule.source} -> ${rule.target}`;
+  const key = (rule: ForbiddenImportRule) => JSON.stringify([rule.source, rule.target]);
+  diffGroupedMetadata(path, before, after, key, "reason", changes);
   const beforeKeys = new Set(before.map(key));
   const afterKeys = new Set(after.map(key));
 
@@ -446,7 +456,8 @@ function diffBoundaryConstraints(
   changes: ManifestChange[],
 ): void {
   const path = "rules.boundaryConstraints";
-  const key = (constraint: BoundaryConstraint) => `${constraint.scope}::${constraint.rule}`;
+  const key = (constraint: BoundaryConstraint) => JSON.stringify([constraint.scope, constraint.rule]);
+  diffGroupedMetadata(path, before, after, key, "reason", changes);
   const beforeKeys = new Set(before.map(key));
   const afterKeys = new Set(after.map(key));
 
@@ -477,7 +488,8 @@ function diffAiGuidance(
   changes: ManifestChange[],
 ): void {
   const path = "ai.preferredEntrypoints";
-  const key = (entrypoint: AiEntrypoint) => `${entrypoint.task}::${entrypoint.kind}::${entrypoint.entrypoint}`;
+  const key = (entrypoint: AiEntrypoint) => JSON.stringify([entrypoint.task, entrypoint.kind, entrypoint.entrypoint]);
+  diffGroupedMetadata(path, before.ai.preferredEntrypoints, after.ai.preferredEntrypoints, key, "notes", changes);
   const beforeKeys = new Set(before.ai.preferredEntrypoints.map(key));
   const afterKeys = new Set(after.ai.preferredEntrypoints.map(key));
 
@@ -549,6 +561,46 @@ function diffStringArray(
     if (!afterSet.has(value)) {
       const { classification, message } = describe.removed(value);
       changes.push({ classification, path, message });
+    }
+  }
+}
+
+function diffMetadata(
+  path: string,
+  before: unknown,
+  after: unknown,
+  changes: ManifestChange[],
+): void {
+  if (JSON.stringify(before) !== JSON.stringify(after)) {
+    changes.push({ classification: "semantic", path, message: `Metadata changed at "${path}".` });
+  }
+}
+
+// Compare metadata within matching identities. Grouping retains duplicate rules
+// and entrypoints while avoiding false differences from reordering the registry.
+function diffGroupedMetadata<T, K extends keyof T>(
+  path: string,
+  before: T[],
+  after: T[],
+  key: (entry: T) => string,
+  field: K,
+  changes: ManifestChange[],
+): void {
+  function group(entries: T[]): Map<string, string[]> {
+    const groups = new Map<string, string[]>();
+    for (const entry of entries) {
+      const id = key(entry);
+      const values = groups.get(id) ?? [];
+      values.push(JSON.stringify(entry[field]) ?? "undefined");
+      groups.set(id, values);
+    }
+    for (const values of groups.values()) values.sort();
+    return groups;
+  }
+  const beforeGroups = group(before);
+  for (const [id, values] of group(after)) {
+    if (beforeGroups.has(id)) {
+      diffMetadata(`${path}[${id}].${String(field)}`, beforeGroups.get(id), values, changes);
     }
   }
 }

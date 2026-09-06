@@ -64,8 +64,11 @@ The checker validates package metadata before inspecting it; malformed data retu
 structured issues, including with `--json`. When `exports` is present, declared
 exports must have a non-null target. String, array, and conditional root exports
 represent `.`; subpath maps are checked by their declared keys. Conditional targets
-are checked for declared availability, without selecting runtime conditions or
-checking files on disk. Packages without `exports` retain the legacy behavior of
+are checked for declared availability, respecting blocking `default` targets and
+nested fallthrough, without selecting runtime conditions or checking files on
+disk. For example, `{ "default": null, "import": "./index.js" }` has no available
+target because the default blocks the later import condition. Packages without
+`exports` retain the legacy behavior of
 skipping export checks.
 
 Diff two manifests and classify every change as additive, semantic, or breaking:
@@ -78,6 +81,13 @@ npx spectre-manifest-diff old.manifest.json new.manifest.json --json
 An absent or empty `allowedTargets` list imposes no target restriction. Changing
 it to a non-empty list is breaking; clearing the list is additive. The diff CLI
 exits with code 1 for breaking changes.
+
+Package and layer registry names are matched as own properties, so names such as
+`constructor` are handled as ordinary entries. Metadata edits are reported as
+semantic changes, including `$schema`, `$id`, system package-manager/repository
+fields, notes throughout the manifest, and rule reasons. Metadata additions,
+removals, and note ordering changes are visible; reordering otherwise identical
+rules or entrypoints does not create a metadata change.
 
 Import the published manifest document directly:
 

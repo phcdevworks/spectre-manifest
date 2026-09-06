@@ -165,13 +165,33 @@ function isRecord(value: unknown): value is Record<string, unknown> {
 
 // Check declared availability across conditions, without choosing a runtime condition.
 function hasExportTarget(value: unknown): boolean {
+  return inspectExportTarget(value).available;
+}
+
+// An unmatched condition can fall through to the next condition. A null target
+// blocks resolution instead. Arrays may try another entry after a null target.
+function inspectExportTarget(value: unknown): { available: boolean; unmatched: boolean } {
   if (typeof value === "string") {
-    return value.startsWith("./");
+    return { available: value.startsWith("./"), unmatched: false };
   }
   if (Array.isArray(value)) {
-    return value.some(hasExportTarget);
+    let unmatched = value.length > 0;
+    for (const target of value) {
+      const result = inspectExportTarget(target);
+      if (result.available) return result;
+      unmatched &&= result.unmatched;
+    }
+    return { available: false, unmatched };
   }
-  return isRecord(value) && Object.values(value).some(hasExportTarget);
+  if (isRecord(value)) {
+    for (const [condition, target] of Object.entries(value)) {
+      const result = inspectExportTarget(target);
+      if (result.available) return result;
+      if (condition === "default" && !result.unmatched) return result;
+    }
+    return { available: false, unmatched: true };
+  }
+  return { available: false, unmatched: false };
 }
 
 export function formatPackageCheckIssues(issues: PackageCheckIssue[]): string[] {
