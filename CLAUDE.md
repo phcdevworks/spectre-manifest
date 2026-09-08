@@ -88,7 +88,7 @@ working step-by-step or debugging a single gate.
 | `packages/spectre-manifest/schema/spectre.manifest.schema.json` | JSON Schema (draft 2020-12)                      |
 | `packages/spectre-manifest/test/validator.test.mjs`             | Validator unit tests                             |
 | `packages/spectre-manifest/test/cli.test.mjs`                   | CLI integration tests                            |
-| `.github/workflows/ci.yml`                                      | CI — runs `pnpm verify` on Node 22.13.0, 22.x, and 24.x |
+| `.github/workflows/ci.yml`                                      | CI — runs `pnpm verify` on Node 22.13.0, 22.x, 24.x, and 26.x; dependency audit on 24.x |
 
 ## Architecture Rules (don't violate these)
 

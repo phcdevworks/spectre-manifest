@@ -29,6 +29,7 @@ release or PR.
 - [ ] `npm run check:version-sync`
 - [ ] `corepack pnpm test:package` (installed tarball imports, declarations, data, and CLIs)
 - [ ] Or `CI=true corepack pnpm verify`
+- [ ] `corepack pnpm audit --audit-level high` (requires registry access)
 
 If any command cannot run, record the command, failure reason, and remaining
 risk in the final handoff.

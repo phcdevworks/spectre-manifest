@@ -100,7 +100,9 @@ pnpm verify
 `pnpm verify` also checks README version parity and installs a packed tarball in
 a temporary consumer to exercise public imports, declarations, bundled data,
 and the installed CLIs. This install needs registry access and disables lifecycle
-scripts. CI runs the full gate on Node 22.13.0, current Node 22, and Node 24.
+scripts. CI runs the full gate on Node 22.13.0, current Node 22, Node 24, and
+Node 26. The Node 24 job also runs `pnpm audit --audit-level high`; run this
+registry-dependent check when updating dependencies or preparing a release.
 
 ## Pull Requests
 

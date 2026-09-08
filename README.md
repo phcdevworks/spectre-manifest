@@ -18,7 +18,7 @@ ecosystem, including packages in `project-design`, to validate their
 | Project team | `project-shell` |
 | Repository role | Spectre M (cross-cutting) manifest schema and contract tooling |
 | Package/artifact | `@phcdevworks/spectre-manifest` |
-| Current version/status | 1.5.0 |
+| Current version/status | 1.6.0 |
 
 ## Standard Workflow
 
@@ -208,7 +208,9 @@ Useful scripts:
 Development uses the pinned pnpm 12.3.4 version, Node 26 type definitions at the
 workspace root, and Node 22 type definitions for the package and root-script
 typecheck. Supported runtime versions are unchanged.
-CI runs on Node 22.13.0 (the supported minimum), current Node 22, and Node 24.
+CI runs on Node 22.13.0 (the supported minimum), current Node 22, Node 24, and
+Node 26. The Node 24 job also runs `pnpm audit --audit-level high` to catch known
+high and critical dependency advisories; this check requires registry access.
 The packed-install check needs registry access for runtime dependencies, disables
 install scripts, and removes its temporary consumer on completion or failure.
 

@@ -4,6 +4,22 @@ All notable changes to this project will be documented here. The format follows 
 
 ## [Unreleased]
 
+## [1.6.0] - 2026-09-08
+
+**Release Title:** Dependency Audit and Runtime Coverage
+
+Contract change type: additive
+
+### Changed
+
+- Updated the workspace's transitive `fast-uri` resolution from 3.1.2 to 3.1.7 within the existing dependency range, clearing six high-severity dependency advisories from the workspace audit.
+- Expanded the full CI verification matrix to Node 26 alongside Node 22.13.0, current Node 22, and Node 24. Added a dependency audit on Node 24 that fails on high or critical advisories.
+- Updated contributor and release guidance for the audit and runtime coverage, and aligned the reusable session handoff with the direct-to-main release policy.
+
+### Compatibility
+
+- `schemaVersion` remains `0.1`; package source, exported types, direct dependency ranges, and supported runtime versions are unchanged. The lockfile refresh affects this workspace; consumers with existing lockfiles must refresh their own transitive dependency resolution to receive the patched dependency.
+
 ## [1.5.0] - 2026-09-08
 
 **Release Title:** Consumer Restriction Diff Corrections
@@ -101,7 +117,8 @@ Release Title: Phase 0 - Initial Contract Authority Release
 - **CI**: Added `.github/workflows/ci.yml` — runs `pnpm verify` on Node 22 and 24 across push and PR events.
 - **Manifest Coverage**: Added manifest entries for all current Spectre packages across layers 1–7.
 
-[unreleased]: https://github.com/phcdevworks/spectre-manifest/compare/v1.5.0...HEAD
+[unreleased]: https://github.com/phcdevworks/spectre-manifest/compare/v1.6.0...HEAD
+[1.6.0]: https://github.com/phcdevworks/spectre-manifest/compare/v1.5.0...v1.6.0
 [1.5.0]: https://github.com/phcdevworks/spectre-manifest/compare/v1.4.0...v1.5.0
 [1.4.0]: https://github.com/phcdevworks/spectre-manifest/compare/v1.3.0...v1.4.0
 [1.3.0]: https://github.com/phcdevworks/spectre-manifest/compare/v1.2.0...v1.3.0

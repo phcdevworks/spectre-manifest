@@ -19,5 +19,7 @@ Before marking work done:
   validate:manifest sequence.
 - Summarize changed files, verification, contract impact, and release risk.
 
-Do not create commits, tags, pushes, or releases unless Bradley explicitly asks.
+Follow AGENTS.md: commit intended changes with the configured human identity
+directly to main and immediately push. Cut releases for release-ready changes
+using CODEX.md Release Mechanics. Leave npm publishing to Bradley.
 ```

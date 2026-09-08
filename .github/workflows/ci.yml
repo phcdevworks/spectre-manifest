@@ -26,6 +26,7 @@ jobs:
           - 22.13.0
           - 22.x
           - 24.x
+          - 26.x
 
     steps:
       - name: Check out repository
@@ -45,3 +46,7 @@ jobs:
 
       - name: Run package checks
         run: pnpm verify
+
+      - name: Audit dependencies
+        if: matrix.node-version == '24.x'
+        run: pnpm audit --audit-level high
