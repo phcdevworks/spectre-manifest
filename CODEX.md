@@ -37,8 +37,9 @@ the loop, Codex acts as the release/control layer:
 ## Authority Boundaries
 
 - Codex has commit, push, and tag authority for its own scope of work
-  described in this file; do not cut releases or publish packages unless
-  Bradley explicitly requests that action.
+  described in this file. Per `AGENTS.md`, cut releases autonomously for
+  release-ready `[Unreleased]` changes using the Release Gate below. Package
+  publishing remains Bradley's sole authority.
 - Do not introduce runtime dependencies without explicit approval.
 - Do not override Claude Code's repository conventions unless they conflict with
   the public manifest contract or release safety.
@@ -100,15 +101,20 @@ Use `CI=true corepack pnpm verify` when possible.
 Once release-ready, Codex cuts the release:
 
 1. Run `npm run release:propose` for the semver bump proposal.
-2. Bump `package.json` to the proposed version.
+2. Bump `packages/spectre-manifest/package.json` to the proposed version and
+   update the `README.md` Repository Snapshot version to match. The workspace
+   root `package.json` is private and has no release version. Regenerate any
+   affected lockfile with the package manager; do not edit generated files.
 3. Move `[Unreleased]` notes into a new versioned entry:
    `## [<version>] - <YYYY-MM-DD>`, with a release title line in the format
    `**Release Title:** <short title>`, where `<short title>` is a concise
    summary of what shipped without a roadmap phase or version prefix. Confirm
    a `Contract change type: <additive|semantic change|breaking>`
    classification line is present and accurate for the release.
-4. Stage and commit the version bump and changelog update.
-5. Create the git tag: `git tag v<version>` (matching `package.json`
+4. Re-run `CI=true corepack pnpm verify` after the version and documentation
+   updates, then stage only intended paths, commit on `main` with the configured
+   human identity, and immediately push `main`.
+5. Create the git tag: `git tag v<version>` (matching `packages/spectre-manifest/package.json`
    exactly), then push the commit and tag.
 6. Publish the GitHub Release from that tag: `gh release create v<version>
    --title "<short title>" --notes-file`. The notes file must contain the

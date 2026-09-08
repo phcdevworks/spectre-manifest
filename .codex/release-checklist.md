@@ -47,5 +47,9 @@ risk in the final handoff.
 - [ ] Identify contract impact: none, additive, or breaking.
 - [ ] List verification commands and results.
 - [ ] Note any unrelated dirty files that were present before Codex edits.
-- [ ] Leave commits, tags, pushes, and releases for Bradley unless explicitly
-      asked to perform them.
+- [ ] Commit and immediately push intended changes directly to `main` with the
+      configured human identity, as required by `AGENTS.md`.
+- [ ] For release-ready changes, follow `CODEX.md` Release Mechanics, using
+      `packages/spectre-manifest/package.json` as the release version authority
+      and updating the README version before final verification.
+- [ ] Publish the git tag and repository release; leave npm publishing to Bradley.

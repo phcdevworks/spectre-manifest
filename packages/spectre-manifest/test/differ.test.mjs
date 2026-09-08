@@ -248,6 +248,73 @@ test("CLI --json emits machine-readable diff payload", async () => {
 });
 
 
+for (const consumers of [[], ["@phcdevworks/spectre-ui"]]) {
+  test(`classifies introducing consumers ${JSON.stringify(consumers)} as breaking`, () => {
+    const before = clone(rootManifest);
+    const key = "@phcdevworks/spectre-tokens";
+    delete before.packages[key].consumers;
+    const after = clone(before);
+    after.packages[key].consumers = consumers;
+    assert.equal(validateManifest(before).valid, true);
+    assert.equal(validateManifest(after).valid, false);
+    const result = diffManifests(before, after);
+    assert.equal(result.classification, "breaking");
+    assert.equal(result.changes.length, 1);
+    assert.equal(result.changes[0].path, `packages.${key}.consumers`);
+    assert.equal(diffManifests(after, before).classification, "additive");
+  });
+}
+
+test("classifies removing an allowed consumer as breaking and restoring it as additive", () => {
+  const before = clone(rootManifest);
+  const key = "@phcdevworks/spectre-tokens";
+  const after = clone(before);
+  after.packages[key].consumers.pop();
+  assert.equal(validateManifest(before).valid, true);
+  assert.equal(validateManifest(after).valid, false);
+  assert.equal(diffManifests(before, after).classification, "breaking");
+  assert.equal(diffManifests(after, before).classification, "additive");
+});
+
+test("consumer reordering and identical empty lists produce no changes", () => {
+  const before = clone(rootManifest);
+  const key = "@phcdevworks/spectre-tokens";
+  const after = clone(before);
+  after.packages[key].consumers.reverse();
+  assert.deepEqual(diffManifests(before, after).changes, []);
+  before.packages[key].consumers = [];
+  after.packages[key].consumers = [];
+  assert.deepEqual(diffManifests(before, after).changes, []);
+});
+
+test("CLI reports empty consumer restrictions as breaking between valid manifests", async (t) => {
+  const before = clone(rootManifest);
+  const key = "@phcdevworks/spectre-manifest";
+  delete before.packages[key].consumers;
+  const after = clone(before);
+  after.packages[key].consumers = [];
+  assert.equal(validateManifest(before).valid, true);
+  assert.equal(validateManifest(after).valid, true);
+  const dir = await mkdtemp(join(tmpdir(), "spectre-consumer-diff-"));
+  t.after(() => rm(dir, { recursive: true, force: true }));
+  const beforePath = join(dir, "before.json");
+  const afterPath = join(dir, "after.json");
+  await writeFile(beforePath, JSON.stringify(before));
+  await writeFile(afterPath, JSON.stringify(after));
+  await assert.rejects(
+    execFileAsync(process.execPath, [cliPath, beforePath, afterPath, "--json"]),
+    (error) => {
+      assert.equal(error.code, 1);
+      const result = JSON.parse(error.stdout);
+      assert.equal(result.classification, "breaking");
+      assert.equal(result.changes[0].path, `packages.${key}.consumers`);
+      return true;
+    },
+  );
+  const { stdout } = await execFileAsync(process.execPath, [cliPath, afterPath, beforePath, "--json"]);
+  assert.equal(JSON.parse(stdout).classification, "additive");
+});
+
 for (const unrestricted of [undefined, []]) {
   test(`classifies ${JSON.stringify(unrestricted)} targets becoming restricted as breaking`, () => {
     const before = clone(rootManifest);

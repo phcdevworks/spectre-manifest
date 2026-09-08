@@ -284,22 +284,38 @@ function diffPackageDefinition(
     },
   );
 
-  diffStringArray(
-    `${path}.consumers`,
-    before.consumers ?? [],
-    after.consumers ?? [],
-    changes,
-    {
-      added: (value) => ({
-        classification: "additive",
-        message: `Package "${key}" gained consumer "${value}".`,
-      }),
-      removed: (value) => ({
-        classification: "semantic",
-        message: `Package "${key}" lost consumer "${value}".`,
-      }),
-    },
-  );
+  // Unlike allowedTargets, an empty consumers list permits no consumers.
+  // Only an absent list leaves consumer declarations unrestricted.
+  if (before.consumers === undefined && after.consumers !== undefined) {
+    changes.push({
+      classification: "breaking",
+      path: `${path}.consumers`,
+      message: `Package "${key}" now restricts consumers, which may invalidate existing dependencies.`,
+    });
+  } else if (before.consumers !== undefined && after.consumers === undefined) {
+    changes.push({
+      classification: "additive",
+      path: `${path}.consumers`,
+      message: `Package "${key}" no longer restricts consumers.`,
+    });
+  } else {
+    diffStringArray(
+      `${path}.consumers`,
+      before.consumers ?? [],
+      after.consumers ?? [],
+      changes,
+      {
+        added: (value) => ({
+          classification: "additive",
+          message: `Package "${key}" gained consumer "${value}".`,
+        }),
+        removed: (value) => ({
+          classification: "breaking",
+          message: `Package "${key}" lost consumer "${value}", which may invalidate existing dependencies.`,
+        }),
+      },
+    );
+  }
 
   const beforeTargets = before.allowedTargets ?? [];
   const afterTargets = after.allowedTargets ?? [];

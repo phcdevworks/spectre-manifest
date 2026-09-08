@@ -82,6 +82,10 @@ An absent or empty `allowedTargets` list imposes no target restriction. Changing
 it to a non-empty list is breaking; clearing the list is additive. The diff CLI
 exits with code 1 for breaking changes.
 
+For `consumers`, only an absent list is unrestricted; `[]` permits no consumers.
+Introducing a consumer list or removing a listed consumer is breaking. Removing
+the restriction entirely or adding to an existing list is additive.
+
 Package and layer registry names are matched as own properties, so names such as
 `constructor` are handled as ordinary entries. Metadata edits are reported as
 semantic changes, including `$schema`, `$id`, system package-manager/repository

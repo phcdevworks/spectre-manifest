@@ -18,7 +18,7 @@ ecosystem, including packages in `project-design`, to validate their
 | Project team | `project-shell` |
 | Repository role | Spectre M (cross-cutting) manifest schema and contract tooling |
 | Package/artifact | `@phcdevworks/spectre-manifest` |
-| Current version/status | 1.4.0 |
+| Current version/status | 1.5.0 |
 
 ## Standard Workflow
 
@@ -149,6 +149,10 @@ default cannot be bypassed by a later condition. See the
 unrestricted: introducing a non-empty list is breaking, and clearing it is
 additive. Breaking diffs exit with code 1.
 
+For `consumers`, only an absent list is unrestricted; `[]` permits no consumers.
+Introducing a consumer list or removing a listed consumer is breaking. Removing
+the restriction entirely or adding to an existing list is additive.
+
 Diffs also report metadata changes as semantic, including package-manager and
 repository fields, notes, and rule reasons. Package and layer names such as
 `constructor` are handled as ordinary registry entries.
@@ -201,7 +205,9 @@ Useful scripts:
 - `pnpm test:package` builds and packs the package, installs the tarball into a temporary consumer, and checks public imports, declarations, bundled data, and all three installed CLIs.
 - `pnpm verify` runs the standard workspace verification flow, including README version parity and `test:package`.
 
-Development uses the pinned pnpm 12.3.4 version and Node 22 type definitions.
+Development uses the pinned pnpm 12.3.4 version, Node 26 type definitions at the
+workspace root, and Node 22 type definitions for the package and root-script
+typecheck. Supported runtime versions are unchanged.
 CI runs on Node 22.13.0 (the supported minimum), current Node 22, and Node 24.
 The packed-install check needs registry access for runtime dependencies, disables
 install scripts, and removes its temporary consumer on completion or failure.
