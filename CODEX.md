@@ -100,7 +100,12 @@ Use `CI=true corepack pnpm verify` when possible.
 
 Once release-ready, Codex cuts the release:
 
-1. Run `npm run release:propose` for the semver bump proposal.
+1. Check the published version with
+   `npm view @phcdevworks/spectre-manifest version`. If the package version is
+   already ahead of npm, that version is the single pending release: fold new
+   release-ready work into it and update its tag and repository release. Do not
+   propose or create another version until Bradley publishes the pending version.
+   Otherwise, run `npm run release:propose` for the semver bump proposal.
 2. Bump `packages/spectre-manifest/package.json` to the proposed version and
    update the `README.md` Repository Snapshot version to match. The workspace
    root `package.json` is private and has no release version. Regenerate any

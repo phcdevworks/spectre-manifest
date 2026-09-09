@@ -54,3 +54,6 @@ risk in the final handoff.
       `packages/spectre-manifest/package.json` as the release version authority
       and updating the README version before final verification.
 - [ ] Publish the git tag and repository release; leave npm publishing to Bradley.
+- [ ] Confirm the npm registry version before proposing a bump. If the package is
+      already ahead of npm, consolidate into that pending version instead of
+      stacking another repository release.

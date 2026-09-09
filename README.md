@@ -18,7 +18,7 @@ ecosystem, including packages in `project-design`, to validate their
 | Project team | `project-shell` |
 | Repository role | Spectre M (cross-cutting) manifest schema and contract tooling |
 | Package/artifact | `@phcdevworks/spectre-manifest` |
-| Current version/status | 1.5.0 |
+| Current version/status | 1.2.0 |
 
 ## Standard Workflow
 
