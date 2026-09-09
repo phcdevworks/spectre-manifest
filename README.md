@@ -205,9 +205,8 @@ Useful scripts:
 - `pnpm test:package` builds and packs the package, installs the tarball into a temporary consumer, and checks public imports, declarations, bundled data, and all three installed CLIs.
 - `pnpm verify` runs the standard workspace verification flow, including README version parity and `test:package`.
 
-Development uses the pinned pnpm 12.3.4 version, Node 26 type definitions at the
-workspace root, and Node 22 type definitions for the package and root-script
-typecheck. Supported runtime versions are unchanged.
+Development uses the pinned pnpm 12.3.4 version and Node 26 type definitions
+across the workspace. Supported runtime versions are unchanged.
 CI runs on Node 22.13.0 (the supported minimum), current Node 22, Node 24, and
 Node 26. The Node 24 job also runs `pnpm audit --audit-level high` to catch known
 high and critical dependency advisories; this check requires registry access.

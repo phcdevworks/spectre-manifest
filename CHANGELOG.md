@@ -13,7 +13,7 @@ Contract change type: semantic change
 ### Fixed
 
 - Manifest diffs distinguish an absent consumer list from an empty list. Introducing a consumer restriction or removing a listed consumer is breaking; removing the restriction or expanding an existing list is additive.
-- Synchronized the workspace lockfile with the root Node types upgrade to restore frozen installs and the verification gate. Retained Node 22 types for package and root-script typechecking, with a release-age exception scoped to the exact root types version.
+- Upgraded Node type definitions to 26 across the workspace and synchronized the lockfile to restore frozen installs and the verification gate, with a release-age exception scoped to the exact types version.
 - Corrected release guidance to version the published package, synchronize the README, and verify before committing and pushing directly to main.
 
 ### Changed
