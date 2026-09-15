@@ -1,10 +1,8 @@
 # @phcdevworks/spectre-manifest
 
-`@phcdevworks/spectre-manifest` is the manifest schema and contract tooling
-package of the Spectre system. It records package roles, layers, ownership
-boundaries, dependency rules, and AI/tooling guidance in one machine-readable
-source of truth, and validates each package's `spectre.manifest.json` against
-it.
+`@phcdevworks/spectre-manifest` defines the application and module metadata
+contracts of the Spectre platform. It gives Spectre tooling a consistent way
+to describe, validate, and integrate applications and their capabilities.
 
 Maintained by [PHCDevworks](https://go.phcdev.co). It is consumed as a
 `check:ecosystem` devDependency by every other package in the Spectre

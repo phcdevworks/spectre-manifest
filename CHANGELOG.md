@@ -4,6 +4,11 @@ All notable changes to this project will be documented here. The format follows 
 
 ## [Unreleased]
 
+### Changed
+
+- Standardized the published package summary against the approved PHCDevworks
+  product description.
+
 ## [1.2.0] - 2026-09-06
 
 **Release Title:** Contract Tooling and Validation Corrections
