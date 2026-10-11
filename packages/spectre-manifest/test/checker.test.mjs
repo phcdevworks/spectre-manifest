@@ -26,7 +26,7 @@ async function makeTempPackage(packageJson) {
 test("accepts a registered package with correct dependencies", async () => {
   const dir = await makeTempPackage({
     name: "@phcdevworks/spectre-ui",
-    exports: { ".": "./dist/index.js", "./tailwind": "./tailwind.js", "./index.css": "./index.css", "./base.css": "./base.css", "./components.css": "./components.css", "./utilities.css": "./utilities.css" },
+    exports: { ".": "./dist/index.js", "./index.css": "./index.css", "./base.css": "./base.css", "./components.css": "./components.css", "./utilities.css": "./utilities.css" },
     dependencies: { "@phcdevworks/spectre-tokens": "^2.0.0" },
   });
   const result = await checkPackageAgainstManifest(rootManifest, dir);
@@ -228,20 +228,22 @@ for (const [label, exports] of [
   });
 }
 
-for (const [label, exports] of [
-  ["string root", "./dist/index.js"],
-  ["conditional root", { import: "./dist/index.js" }],
-  ["null subpath", { ".": "./dist/index.js", "./schema": null }],
-  ["null conditional subpath", { ".": "./dist/index.js", "./schema": { default: null } }],
+for (const [label, exports, missing] of [
+  ["string root", "./dist/index.js", ["./schema", "./manifest"]],
+  ["conditional root", { import: "./dist/index.js" }, ["./schema", "./manifest"]],
+  ["null subpath", { ".": "./dist/index.js", "./schema": null, "./manifest": "./spectre.manifest.json" }, ["./schema"]],
+  ["null conditional subpath", { ".": "./dist/index.js", "./schema": { default: null }, "./manifest": "./spectre.manifest.json" }, ["./schema"]],
 ]) {
   test(`reports missing schema export with ${label}`, async (t) => {
     const dir = await makeTempPackage({ name: "@phcdevworks/spectre-manifest", exports });
     t.after(() => rm(dir, { recursive: true, force: true }));
     const result = await checkPackageAgainstManifest(rootManifest, dir);
     assert.equal(result.valid, false);
-    assert.equal(result.issues.length, 1);
-    assert.equal(result.issues[0].kind, "missing-export");
-    assert.match(result.issues[0].message, /"\.\/schema"/);
+    assert.equal(result.issues.length, missing.length);
+    missing.forEach((subpath, i) => {
+      assert.equal(result.issues[i].kind, "missing-export");
+      assert.ok(result.issues[i].message.includes(`"${subpath}"`));
+    });
   });
 }
 

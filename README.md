@@ -16,7 +16,61 @@ ecosystem, including packages in `project-design`, to validate their
 | Project team | `project-shell` |
 | Repository role | Spectre M (cross-cutting) manifest schema and contract tooling |
 | Package/artifact | `@phcdevworks/spectre-manifest` |
-| Current version/status | 1.2.0 |
+| Current version/status | 2.0.0 |
+
+## How It Works Day to Day
+
+There are two kinds of manifest file:
+
+- **Central manifest** — `spectre.manifest.json` in this repo. It lists every
+  Spectre package, its layer, its public exports, and which Spectre packages
+  it may depend on. It ships to npm as `@phcdevworks/spectre-manifest/manifest`.
+- **Satellite manifests** — each Spectre repo (`spectre-ui`, `spectre-shell`,
+  and so on) keeps its own copy of `spectre.manifest.json`. That repo's
+  `npm run check` runs `spectre-manifest-check` against it, so the repo fails
+  its own gate if its `package.json` drifts from its manifest entry.
+
+The satellites are checked automatically; the central manifest is not. When a
+package adds or removes exports or Spectre dependencies, its satellite gets
+updated in that repo and the central copy here falls behind. To catch that:
+
+```bash
+npm run reconcile   # compares central entries with each repo's satellite on GitHub main
+```
+
+`✓` means in sync. `△` lists the field that differs (`central` is this repo,
+`satellite` is the package repo). Copy the satellite value into
+`spectre.manifest.json`, run `npm run check`, and record the change under
+`[Unreleased]` in [CHANGELOG.md](CHANGELOG.md). Run `reconcile` after any
+batch of package releases across the ecosystem and before releasing this
+package.
+
+## Use It In Your Project So AI Knows Spectre
+
+Any app or website that uses Spectre packages can install the manifest so
+AI agents know what each package does, what it exports, and what the
+dependency rules are.
+
+1. Install it as a dev dependency:
+
+   ```bash
+   npm install -D @phcdevworks/spectre-manifest
+   ```
+
+2. Point your agents at it. Add this to the project's `CLAUDE.md` or
+   `AGENTS.md`:
+
+   ```markdown
+   ## Spectre Packages
+   Before choosing, importing, or adding any @phcdevworks package, read
+   node_modules/@phcdevworks/spectre-manifest/spectre.manifest.json —
+   use its `packages` (what each does, its exports), `rules`, and `ai`
+   sections. Import only the exports listed there.
+   ```
+
+Installing alone does nothing; step 2 is what makes agents read it. Do not
+add `spectre-manifest-check` to an app's gate — that check is for registered
+Spectre packages, and an app is not registered in the manifest.
 
 ## Standard Workflow
 
@@ -36,6 +90,7 @@ ecosystem, including packages in `project-design`, to validate their
 | Codex | [CODEX.md](CODEX.md) |
 | Copilot | [COPILOT.md](COPILOT.md) |
 | Jules | [JULES.md](JULES.md) |
+| Grok  | [GROK.md](GROK.md)   |
 | Roadmap | [ROADMAP.md](ROADMAP.md) |
 | Todo | [TODO.md](TODO.md) |
 | Changelog | [CHANGELOG.md](CHANGELOG.md) |
@@ -203,7 +258,7 @@ Useful scripts:
 - `pnpm test:package` builds and packs the package, installs the tarball into a temporary consumer, and checks public imports, declarations, bundled data, and all three installed CLIs.
 - `pnpm verify` runs the standard workspace verification flow, including README version parity and `test:package`.
 
-Development uses the pinned pnpm 12.3.4 version and Node 26 type definitions
+Development uses the pinned pnpm 12.11.2 version and Node 26 type definitions
 across the workspace. Supported runtime versions are unchanged.
 CI runs on Node 22.13.0 (the supported minimum), current Node 22, Node 24, and
 Node 26. The Node 24 job also runs `pnpm audit --audit-level high` to catch known
@@ -213,7 +268,7 @@ install scripts, and removes its temporary consumer on completion or failure.
 
 AI-agent coordination starts in [AGENTS.md](./AGENTS.md), with companion
 guidance in [CLAUDE.md](./CLAUDE.md), [CODEX.md](./CODEX.md),
-[COPILOT.md](./COPILOT.md), [JULES.md](./JULES.md), and
+[COPILOT.md](./COPILOT.md), [JULES.md](./JULES.md), [GROK.md](./GROK.md), and
 [.github/copilot-instructions.md](./.github/copilot-instructions.md).
 
 ### Troubleshooting
@@ -232,10 +287,12 @@ repository. Codex handles releases, including cutting tagged releases and
 GitHub Releases, and production stabilization. Jules handles small, bounded
 automated maintenance. GitHub Copilot provides development support.
 
-All AI agents with repository access (Claude Code, Codex, Copilot, Jules)
-have commit, push, and tag authority in this repository. Publishing to npm
-remains Bradley Potts's sole authority. See [AGENTS.md](AGENTS.md) for the
-full commit-policy and release-authority grant.
+Claude Code has no git access; it validates its work and hands off to Codex
+(or Bradley Potts) to commit. Codex, Copilot, and Jules have commit, push, and
+tag authority; Grok has commit and push authority only. Only Codex cuts
+releases, and only when Bradley Potts asks. Publishing to npm remains Bradley
+Potts's sole authority. See [AGENTS.md](AGENTS.md) for the full commit-policy
+and release-authority grant.
 
 **Protected from automated change:** `packages/spectre-manifest/schema/spectre.manifest.schema.json`,
 `packages/spectre-manifest/src/types.ts`, `packages/spectre-manifest/src/index.ts`,

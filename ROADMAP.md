@@ -27,8 +27,8 @@ this file does not restate delivered work.
 ## What's Next
 
 No active phase is currently open. New schema fields, validation rules, or
-tooling open on demand, when a downstream repo surfaces a concrete gap — see
-[TODO.md](TODO.md).
+tooling can be planned proactively, without waiting for a downstream request
+— see [TODO.md](TODO.md).
 
 ---
 

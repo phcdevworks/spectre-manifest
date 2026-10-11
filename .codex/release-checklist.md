@@ -50,7 +50,8 @@ risk in the final handoff.
 - [ ] Note any unrelated dirty files that were present before Codex edits.
 - [ ] Commit and immediately push intended changes directly to `main` with the
       configured human identity, as required by `AGENTS.md`.
-- [ ] For release-ready changes, follow `CODEX.md` Release Mechanics, using
+- [ ] Only when Bradley Potts says to get this repo ready for release, follow
+      `CODEX.md` Release Mechanics, using
       `packages/spectre-manifest/package.json` as the release version authority
       and updating the README version before final verification.
 - [ ] Publish the git tag and repository release; leave npm publishing to Bradley.

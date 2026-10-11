@@ -37,8 +37,9 @@ the loop, Codex acts as the release/control layer:
 ## Authority Boundaries
 
 - Codex has commit, push, and tag authority for its own scope of work
-  described in this file. Per `AGENTS.md`, cut releases autonomously for
-  release-ready `[Unreleased]` changes using the Release Gate below. Package
+  described in this file. Per `AGENTS.md`, a commit request commits and
+  pushes only; cut a release (using the Release Gate below) only when Bradley
+  Potts says to get this repo ready for release. Package
   publishing remains Bradley's sole authority.
 - Do not introduce runtime dependencies without explicit approval.
 - Do not override Claude Code's repository conventions unless they conflict with
@@ -98,7 +99,8 @@ Use `CI=true corepack pnpm verify` when possible.
 
 ### Release Mechanics
 
-Once release-ready, Codex cuts the release:
+When Bradley Potts says to get this repo ready for release, Codex cuts the
+release:
 
 1. Check the published version with
    `npm view @phcdevworks/spectre-manifest version`. If the package version is

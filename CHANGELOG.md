@@ -4,10 +4,31 @@ All notable changes to this project will be documented here. The format follows 
 
 ## [Unreleased]
 
+## [2.0.0] - 2026-10-12
+
+**Release Title:** Manifest Registry and Workflow Alignment
+
 ### Changed
 
 - Standardized the published package summary against the approved PHCDevworks
   product description.
+- Re-synced the central `spectre.manifest.json` registry with the published
+  packages: removed the retired `./tailwind` export from `spectre-ui` (5.5.0),
+  added 31 new subpath exports to `spectre-components` (1.23.0) and 51 new
+  component exports to `spectre-ui-astro` (4.12.0), added this package's
+  `./manifest` export to its own entry, and set `system.version` to `1.2.0`.
+  `npm run reconcile` now reports all packages in sync.
+- Documented the central/satellite manifest workflow and `npm run reconcile`
+  in the README, plus how apps install the manifest and point AI agents at it.
+- Aligned `@types/node` to `^26.6.5` across the workspace and regenerated
+  `pnpm-lock.yaml` so frozen-lockfile installs succeed under pnpm 12.11.2.
+- Updated checker test fixtures for the registered `./manifest` export and the
+  retired `spectre-ui` `./tailwind` export.
+
+Contract change type: breaking. Manifest consumers must stop treating
+`@phcdevworks/spectre-ui/tailwind` as an available export. `schemaVersion`
+remains `0.1` because the schema, types, and validation behavior are unchanged;
+this release corrects registry data to match the already-published packages.
 
 ## [1.2.0] - 2026-09-06
 
@@ -69,7 +90,8 @@ Release Title: Phase 0 - Initial Contract Authority Release
 - **CI**: Added `.github/workflows/ci.yml` — runs `pnpm verify` on Node 22 and 24 across push and PR events.
 - **Manifest Coverage**: Added manifest entries for all current Spectre packages across layers 1–7.
 
-[unreleased]: https://github.com/phcdevworks/spectre-manifest/compare/v1.2.0...HEAD
+[unreleased]: https://github.com/phcdevworks/spectre-manifest/compare/v2.0.0...HEAD
+[2.0.0]: https://github.com/phcdevworks/spectre-manifest/compare/v1.2.0...v2.0.0
 [1.2.0]: https://github.com/phcdevworks/spectre-manifest/compare/v1.1.0...v1.2.0
 [1.1.0]: https://github.com/phcdevworks/spectre-manifest/compare/1.0.0...1.1.0
 [1.0.0]: https://github.com/phcdevworks/spectre-manifest/tree/1.0.0

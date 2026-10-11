@@ -20,6 +20,6 @@ Before marking work done:
 - Summarize changed files, verification, contract impact, and release risk.
 
 Follow AGENTS.md: commit intended changes with the configured human identity
-directly to main and immediately push. Cut releases for release-ready changes
-using CODEX.md Release Mechanics. Leave npm publishing to Bradley.
+directly to main and immediately push. Cut a release (CODEX.md Release Mechanics)
+only when Bradley Potts says to get this repo ready for release. Leave npm publishing to Bradley.
 ```
